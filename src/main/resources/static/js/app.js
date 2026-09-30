@@ -9,7 +9,7 @@ function sourceLink(source,label) {
 }
 function setBusy(busy) {
   $('report').setAttribute('aria-busy',String(busy)); $('loading').hidden=!busy; $('analyze-button').disabled=busy || !destinations.length;
-  $('analyze-button').textContent=busy?'단서 찾는 중…':'탐험 시작 →';
+  $('analyze-button').textContent=busy?'후기 불러오는 중…':'후기 살펴보기 →';
 }
 function renderResult(data) {
   const result=$('result'); result.replaceChildren();
@@ -129,8 +129,8 @@ async function analyze(scroll=true) {
 function renderDestinations() {
   const cards=$('cards');cards.replaceChildren();
   destinations.filter(d=>activeRegion==='전체'||d.region===activeRegion).forEach(d=>{
-    const card=node('article','card');const top=node('div','card-top');const stage=String(destinations.indexOf(d)+1).padStart(2,'0'); top.append(node('span','card-tag',d.region),node('span','card-number','STAGE '+stage)); const scene=node('div','stage-scene');scene.setAttribute('aria-hidden','true');const scenery={sokcho:'market',gyeongju:'temple',jeonju:'village',busan:'beach',jeju:'island',gangneung:'coast'};scene.classList.add(scenery[d.slug] || 'coast'); card.append(scene,top,node('h3','',d.name),node('p','',d.categories));
-    const button=node('button','destination-button','스테이지 입장 →');button.type='button';button.setAttribute('aria-label',d.name+' 가격 정보 탐험하기');button.addEventListener('click',()=>{$('destination').value=d.slug;renderDestinations();analyze();});card.classList.toggle('selected',d.slug===$('destination').value);card.append(button);cards.append(card);
+    const card=node('article','card');const top=node('div','card-top');top.append(node('span','card-tag',d.region)); const scene=node('div','destination-scene');scene.setAttribute('aria-hidden','true');const scenery={sokcho:'market',gyeongju:'temple',jeonju:'village',busan:'beach',jeju:'island',gangneung:'coast'};scene.classList.add(scenery[d.slug] || 'coast'); card.append(scene,top,node('h3','',d.name),node('p','',d.categories));
+    const button=node('button','destination-button','관광지 선택 →');button.type='button';button.setAttribute('aria-label',d.name+' 후기 살펴보기');button.addEventListener('click',()=>{$('destination').value=d.slug;renderDestinations();analyze();});card.classList.toggle('selected',d.slug===$('destination').value);card.append(button);cards.append(card);
   });
 }
 async function initialize() {
