@@ -5,7 +5,7 @@
 ## 사용 기술
 
 - Java 17 이상 (Java 25 사용 가능)
-- Spring Boot 3.5.16, Spring Web, Thymeleaf
+- Spring Boot 3.5.16, Spring Web, Thymeleaf, Spring Security
 - HTML, CSS, 기본 JavaScript (별도 Node.js 설치 불필요)
 - Spring Data JPA, MySQL 8
 - Gemini API + Google Search grounding (키 설정 시 사용)
@@ -40,7 +40,7 @@ $env:DB_PASSWORD="본인의 MySQL 비밀번호"
 .\mvnw.cmd spring-boot:run
 ```
 
-브라우저에서 **http://localhost:8080** 을 엽니다. 기본 실행은 실제 MySQL에 연결합니다. 첫 실행 시 JPA가 `destination`, `evidence`, `price_mention` 테이블을 만들고, 관광지 6곳과 검토 자료 2건을 저장합니다. 다시 실행해도 같은 자료가 중복 생성되지 않습니다.
+브라우저에서 **http://localhost:8080** 을 엽니다. 기본 실행은 실제 MySQL에 연결합니다. 첫 실행 시 JPA가 관광지·검토 자료 및 커뮤니티 테이블을 만들고, 관광지 6곳과 검토 자료 2건을 저장합니다. 다시 실행해도 같은 자료가 중복 생성되지 않습니다. 상단 **경험 공유** 또는 **http://localhost:8080/community** 에서 커뮤니티를 이용합니다.
 
 IntelliJ의 Run Configuration 환경변수에서 `DB_USERNAME`, `DB_PASSWORD`를 설정한 뒤 `TouristAttractionApplication`을 실행해도 됩니다.
 
@@ -82,6 +82,7 @@ $env:GEMINI_MODEL="gemini-2.5-flash"
 | 기능 | 주소 |
 |---|---|
 | 관광지·연도 선택 및 결과 화면 | `GET /` |
+| 회원가입·로그인·후기·제보·질문·댓글 | `GET /community` |
 | MySQL 관광지 목록 | `GET /api/destinations` |
 | 수동 검토 30건·주제별 근거 | `GET /data/sokcho-review-pilot.json` |
 | AI 연결 여부 | `GET /api/status` |
@@ -127,7 +128,23 @@ src/main/resources/
 .\mvnw.cmd test
 ```
 
-테스트만 H2 임시 데이터베이스를 사용합니다. 기본 실행은 MySQL입니다. 검토 자료 조회, 다른 지역·연도로 예시가 섞이지 않는지, 입력 검증, 초기 데이터 중복 방지, 출처가 없는 AI 응답 차단을 확인합니다. 실제 MySQL 접속과 외부 AI 유료 호출은 사용자의 환경에서 추가 확인해야 합니다.
+테스트만 H2 임시 데이터베이스를 사용합니다. 기본 실행은 MySQL입니다. 검토 자료 조회, 다른 지역·연도로 예시가 섞이지 않는지, 입력 검증, 초기 데이터 중복 방지, 출처가 없는 AI 응답 차단을 확인합니다. 커뮤니티에서는 실제 세션 로그인과 CSRF 토큰 교체, BCrypt 비밀번호, 본인 글·댓글 권한, 검색·페이지 구분, 관리자 숨김, 사진 형식·소유권·공개 범위를 확인합니다. 실제 MySQL 접속과 외부 AI 유료 호출은 사용자의 환경에서 추가 확인해야 합니다.
+
+## 여행 경험 공유
+
+후기·정보 제보·질문을 관광지와 분류별로 나누고 제목·내용을 검색합니다. 음식 외에도 숙박, 주차, 교통, 입장·체험, 쇼핑, 대여, 편의시설, 기타 경험을 작성할 수 있습니다. 회원가입 후 글과 댓글을 작성하며 공개 화면의 작성자는 모두 **익명**입니다. 본인 아이디는 로그인 상태 표시에서만 확인합니다.
+
+본인 글은 수정·삭제, 본인 댓글은 삭제할 수 있습니다. 관리자는 글 숨김·다시 공개·삭제 및 댓글 삭제를 할 수 있으며 다른 사람 글의 내용은 수정할 수 없습니다. 사진 한 장은 JPG·PNG, 5MB 이하로 첨부합니다. 사진은 서버의 `uploads/community` 폴더에, 회원·글·댓글·사진 메타데이터는 MySQL에 저장합니다. DB와 업로드 폴더를 함께 보관해야 사진이 유지됩니다.
+
+관리자 계정이 필요하면 **아직 사용하지 않은 아이디**로 환경변수를 설정한 뒤 앱을 시작합니다. 기본 관리자 계정은 없습니다.
+
+```powershell
+$env:APP_ADMIN_LOGIN="travel_admin"
+$env:APP_ADMIN_PASSWORD="직접 정한 8자 이상의 비밀번호"
+.\mvnw.cmd spring-boot:run
+```
+
+계정은 DB에 저장되므로 다음 실행부터 두 관리자 환경변수는 지워도 됩니다. 기존 일반회원 아이디는 자동 승격하지 않으며, 기존 관리자 비밀번호도 환경변수로 변경되지 않습니다. 비밀번호는 8~64자, UTF-8 기준 72바이트 이하입니다. 사진 경로는 `APP_UPLOAD_DIR`로 바꿀 수 있습니다. 자세한 구조와 API는 [커뮤니티 구현 안내](docs/community.md)에 정리했습니다. 커뮤니티 글은 현재 AI 분석 결과에 자동 합산하지 않습니다.
 
 ## 로컬 LLM용 후기 추출 프롬프트
 

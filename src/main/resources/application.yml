@@ -9,9 +9,17 @@ spring:
     hibernate:
       ddl-auto: update
     open-in-view: false
+  servlet:
+    multipart:
+      max-file-size: 5MB
+      max-request-size: 6MB
   thymeleaf:
     cache: false
 server:
+  servlet:
+    session:
+      cookie:
+        same-site: lax
   port: ${PORT:8080}
   error:
     include-message: never
