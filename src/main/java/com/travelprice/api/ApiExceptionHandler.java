@@ -10,5 +10,5 @@ public class ApiExceptionHandler {
     @ExceptionHandler(ApiException.class)
     ResponseEntity<?> api(ApiException e) { return ResponseEntity.status(e.getStatus()).body(Map.of("error",e.getMessage())); }
     @ExceptionHandler({MethodArgumentNotValidException.class,HttpMessageNotReadableException.class})
-    ResponseEntity<?> validation(Exception e) { return ResponseEntity.badRequest().body(Map.of("error","관광지와 연도를 다시 선택해주세요.")); }
+    ResponseEntity<?> validation(Exception e) { return ResponseEntity.badRequest().body(Map.of("error","입력 내용을 확인해주세요. 관광지, 날짜, 후기 본문을 확인해주세요.")); }
 }

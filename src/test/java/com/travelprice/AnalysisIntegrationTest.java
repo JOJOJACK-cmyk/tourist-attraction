@@ -45,10 +45,20 @@ class AnalysisIntegrationTest {
         assertThat(evidence.count()).isEqualTo(2);
         assertThat(prices.count()).isEqualTo(2);
     }
+    @Test void invalidLocalReviewsAreRejectedBeforeCallingOllama() throws Exception {
+        for(String body: new String[]{
+            "{\"destinationId\":\"sokcho\",\"body\":\"\"}",
+            "{\"destinationId\":\"unknown\",\"body\":\"후기\"}",
+            "{\"destinationId\":\"sokcho\",\"publishedAt\":\"2100-01-01\",\"body\":\"후기\"}"
+        })
+            mvc.perform(post("/api/reviews/extract").contentType(MediaType.APPLICATION_JSON).content(body))
+                    .andExpect(status().isBadRequest());
+    }
     @Test void homeAndStaticFilesAreServed() throws Exception {
         mvc.perform(get("/")).andExpect(status().isOk()).andExpect(content().string(org.hamcrest.Matchers.containsString("여행지 경험과 가격 단서")));
         mvc.perform(get("/css/style.css")).andExpect(status().isOk());
         mvc.perform(get("/js/app.js")).andExpect(status().isOk());
+        mvc.perform(get("/js/local-review.js")).andExpect(status().isOk());
         mvc.perform(get("/data/sokcho-review-pilot.json")).andExpect(status().isOk())
                 .andExpect(jsonPath("$.sources.length()").value(30))
                 .andExpect(jsonPath("$.themes.length()").value(10))

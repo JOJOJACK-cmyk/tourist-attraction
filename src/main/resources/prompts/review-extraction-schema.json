@@ -1,0 +1,180 @@
+{
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "experiences",
+    "limitations"
+  ],
+  "properties": {
+    "experiences": {
+      "type": "array",
+      "maxItems": 20,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "source_id",
+          "category",
+          "topic",
+          "sentiment",
+          "experience_type",
+          "summary",
+          "support",
+          "place",
+          "item",
+          "condition",
+          "reason",
+          "alternative",
+          "check_before_visit",
+          "published_at",
+          "visited_at",
+          "uncertainties"
+        ],
+        "properties": {
+          "source_id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1200
+          },
+          "category": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1200,
+            "enum": [
+              "food",
+              "lodging",
+              "parking",
+              "transport",
+              "admission",
+              "shopping",
+              "rental",
+              "amenities",
+              "other"
+            ]
+          },
+          "topic": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1200,
+            "enum": [
+              "value_satisfaction",
+              "spending_regret",
+              "unexpected_cost",
+              "experience_condition",
+              "satisfying_alternative",
+              "price_information",
+              "service_quality",
+              "facility_condition",
+              "access_convenience",
+              "crowding"
+            ]
+          },
+          "sentiment": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1200,
+            "enum": [
+              "positive",
+              "negative",
+              "mixed",
+              "neutral"
+            ]
+          },
+          "experience_type": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1200,
+            "enum": [
+              "direct",
+              "hearsay",
+              "repost",
+              "unclear"
+            ]
+          },
+          "summary": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1200
+          },
+          "support": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1200
+          },
+          "place": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "maxLength": 1200
+          },
+          "item": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "maxLength": 1200
+          },
+          "condition": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "maxLength": 1200
+          },
+          "reason": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "maxLength": 1200
+          },
+          "alternative": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "maxLength": 1200
+          },
+          "check_before_visit": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "maxLength": 1200
+          },
+          "published_at": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "maxLength": 1200
+          },
+          "visited_at": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "maxLength": 1200
+          },
+          "uncertainties": {
+            "type": "array",
+            "maxItems": 20,
+            "items": {
+              "type": "string",
+              "maxLength": 1200
+            }
+          }
+        }
+      }
+    },
+    "limitations": {
+      "type": "array",
+      "maxItems": 20,
+      "items": {
+        "type": "string",
+        "maxLength": 1200
+      }
+    }
+  }
+}

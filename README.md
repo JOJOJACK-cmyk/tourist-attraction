@@ -137,4 +137,30 @@ src/main/resources/
 - 입력 메시지 준비: `ReviewPromptProvider`
 - 사용법과 가상 입력·출력 예시: [후기 추출 안내](docs/ai/review-extraction.md)
 
-작성자 이름 대신 출처 ID를 사용하고, 단순 감상과 지출·방문·이용 판단에 도움이 되는 경험을 구분합니다. 출력에 `category`를 포함하고 `check_before_visit`으로 방문 전 확인 사항을 정리합니다. 현재는 프롬프트와 메시지 준비까지만 구현했으며 Ollama 호출과 추출 결과의 화면 반영은 아직 연결하지 않았습니다.
+작성자 이름 대신 출처 ID를 사용하고, 단순 감상과 지출·방문·이용 판단에 도움이 되는 경험을 구분합니다. 출력에 `category`를 포함하고 `check_before_visit`으로 방문 전 확인 사항을 정리합니다. Ollama 연결과 단일 후기 분석 화면을 제공합니다. 수집·원본 중복 제거·여러 후기의 자동 집계는 아직 구현하지 않았습니다.
+
+## Ollama로 후기 분석하기 — Windows
+
+Ollama와 Spring Boot를 같은 컴퓨터에서 실행합니다. 기본 모델은 `gemma12b:latest`, 주소는 `http://localhost:11434`입니다.
+
+```powershell
+git pull origin main
+$env:OLLAMA_MODEL="gemma12b:latest"
+$env:OLLAMA_BASE_URL="http://localhost:11434"
+.\mvnw.cmd spring-boot:run
+```
+
+기존 MySQL 환경변수도 설정되어 있어야 합니다. IntelliJ에서는 Run Configuration의 환경변수에 같은 값을 넣고 앱을 재시작합니다. Ollama 앱 실행 후 `ollama list`와 `Invoke-RestMethod http://localhost:11434/api/tags`로 확인할 수 있습니다.
+
+사이트 하단 ‘이 후기에서 알아둘 점은?’에 후기 **한 편**을 붙여 넣고 분석합니다. Gemini 웹 검색 버튼과 별개이며 로컬 모델은 인터넷 글을 자동 수집하지 않습니다. 본문은 최대 4,000자, 작성일은 모르면 비워둡니다. 수동 검토 자료 30건은 그대로 유지됩니다. 입력과 분석 결과를 DB에 저장하지 않습니다.
+
+- 모델 변경: `OLLAMA_MODEL`을 설치된 정확한 이름으로 설정.
+- 응답 제한 시간: `OLLAMA_TIMEOUT_SECONDS` (기본 300초).
+- 컨텍스트 크기: `OLLAMA_CONTEXT_SIZE` (기본 16384). 메모리 사용이 부담되면 낮추고 더 짧은 본문으로 테스트합니다.
+- 서버 연결/모델 확인: `GET /api/reviews/status`.
+- 단일 후기 추출: `POST /api/reviews/extract` (`destinationId`, `publishedAt`, `body`).
+- 시스템 프롬프트와 출력 JSON 스키마를 전달하고 서버에서 구조·허용값·출처 ID·날짜를 확인합니다. 이는 내용의 사실성이나 익명화의 완전성을 보증하지 않습니다.
+- 로컬 모델의 동시에 실행되는 분석은 1건으로 제한합니다.
+- 테스트는 모의 Ollama 서버를 사용합니다. 사용자 PC의 실제 Gemma 추출 품질과 속도는 실행 후 확인이 필요합니다.
+
+Ollama 공식 문서: https://docs.ollama.com/api/chat · https://docs.ollama.com/capabilities/structured-outputs
