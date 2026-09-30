@@ -22,21 +22,21 @@ class AnalysisIntegrationTest {
     @Autowired EvidenceRepository evidence;
     @Autowired PriceMentionRepository prices;
     @Test void sampleIsReadFromDatabaseWithPricesAndSources() throws Exception {
-        mvc.perform(post("/api/analysis").contentType(MediaType.APPLICATION_JSON).content("{\"destinationId\":\"sokcho\",\"year\":2026,\"quarter\":3,\"mode\":\"sample\"}"))
+        mvc.perform(post("/api/analysis").contentType(MediaType.APPLICATION_JSON).content("{\"destinationId\":\"sokcho\",\"year\":2026,\"mode\":\"sample\"}"))
                 .andExpect(status().isOk()).andExpect(jsonPath("$.kind").value("reviewed_sample"))
                 .andExpect(jsonPath("$.prices.length()").value(2)).andExpect(jsonPath("$.sources.length()").value(2));
     }
-    @Test void sampleDoesNotLeakIntoAnotherPlaceOrQuarter() throws Exception {
-        for(String body: new String[]{"{\"destinationId\":\"jeju\",\"year\":2026,\"quarter\":3,\"mode\":\"sample\"}","{\"destinationId\":\"sokcho\",\"year\":2026,\"quarter\":2,\"mode\":\"sample\"}"})
+    @Test void sampleDoesNotLeakIntoAnotherPlaceOrYear() throws Exception {
+        for(String body: new String[]{"{\"destinationId\":\"jeju\",\"year\":2026,\"mode\":\"sample\"}","{\"destinationId\":\"sokcho\",\"year\":2025,\"mode\":\"sample\"}"})
             mvc.perform(post("/api/analysis").contentType(MediaType.APPLICATION_JSON).content(body)).andExpect(status().isOk()).andExpect(jsonPath("$.kind").value("empty")).andExpect(jsonPath("$.sources.length()").value(0));
     }
     @Test void invalidAndFutureSelectionsAreRejected() throws Exception {
-        for(String body:new String[]{"{\"destinationId\":\"unknown\",\"year\":2026,\"quarter\":3,\"mode\":\"sample\"}","{\"destinationId\":\"sokcho\",\"year\":2026,\"quarter\":5,\"mode\":\"sample\"}","{\"destinationId\":\"sokcho\",\"year\":2100,\"quarter\":1,\"mode\":\"sample\"}"})
+        for(String body:new String[]{"{\"destinationId\":\"unknown\",\"year\":2026,\"mode\":\"sample\"}","{\"destinationId\":\"sokcho\",\"year\":2019,\"mode\":\"sample\"}","{\"destinationId\":\"sokcho\",\"year\":2100,\"mode\":\"sample\"}"})
             mvc.perform(post("/api/analysis").contentType(MediaType.APPLICATION_JSON).content(body)).andExpect(status().isBadRequest());
     }
     @Test void missingKeyHasAnHonestUnavailableState() throws Exception {
         mvc.perform(get("/api/status")).andExpect(jsonPath("$.liveAvailable").value(false));
-        mvc.perform(post("/api/analysis").contentType(MediaType.APPLICATION_JSON).content("{\"destinationId\":\"sokcho\",\"year\":2026,\"quarter\":3,\"mode\":\"live\"}"))
+        mvc.perform(post("/api/analysis").contentType(MediaType.APPLICATION_JSON).content("{\"destinationId\":\"sokcho\",\"year\":2026,\"mode\":\"live\"}"))
                 .andExpect(status().isServiceUnavailable());
     }
     @Test void startupIsIdempotent() {
@@ -53,6 +53,8 @@ class AnalysisIntegrationTest {
                 .andExpect(jsonPath("$.sources.length()").value(30))
                 .andExpect(jsonPath("$.themes.length()").value(10))
                 .andExpect(jsonPath("$.dateFrom").value("2025-01-20"))
-                .andExpect(jsonPath("$.dateTo").value("2026-09-13"));
+                .andExpect(jsonPath("$.dateTo").value("2026-09-13"))
+                .andExpect(jsonPath("$.sources[0].author").doesNotExist())
+                .andExpect(jsonPath("$.sources[0].title").value("익명 후기 1"));
     }
 }

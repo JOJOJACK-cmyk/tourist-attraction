@@ -7,7 +7,7 @@ import static org.assertj.core.api.Assertions.*;
 class GeminiSearchClientTest {
     private final ObjectMapper mapper=new ObjectMapper();
     private final GeminiSearchClient client=new GeminiSearchClient(mapper,"","gemini-2.5-flash");
-    private final AnalysisRequest selection=new AnalysisRequest("sokcho",2026,3,"live");
+    private final AnalysisRequest selection=new AnalysisRequest("sokcho",2026,"live");
     @Test void unsupportedAnswersAndUnsafeSourcesAreRejected() throws Exception {
         var noSources=mapper.readTree("{\"candidates\":[{\"content\":{\"parts\":[{\"text\":\"근거 없는 결론\"}]}}]}");
         assertThatThrownBy(()->client.parseResponse(noSources,selection)).isInstanceOf(ApiException.class);
