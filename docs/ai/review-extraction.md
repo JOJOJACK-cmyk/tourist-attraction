@@ -2,7 +2,7 @@
 
 ## 포함된 파일
 
-- `src/main/resources/prompts/review-extraction-system.txt`: 소비 판단 중심 시스템 프롬프트.
+- `src/main/resources/prompts/review-extraction-system.txt`: 지출·방문·이용 판단 중심 시스템 프롬프트.
 - `src/main/java/com/travelprice/service/ReviewPromptProvider.java`: 리소스를 UTF-8로 읽고 system/user 메시지를 만든다. JAR로 실행해도 클래스패스에서 읽는다.
 
 후기마다 경험을 먼저 추출하고, 원본 중복 제거 후 상품·장소·조건별로 종합하는 흐름을 위한 준비다. 프롬프트와 입력 메시지 준비까지만 구현했다. Ollama 호출, 모델 응답 검증, 중복 제거, 경험 집계와 화면 연결은 아직 구현하지 않았다. 기존 화면은 수동 검토 자료를 사용한다.
@@ -42,6 +42,7 @@ var messages = reviewPromptProvider.messages(
   "experiences": [
     {
       "source_id": "example-001",
+      "category": "food",
       "topic": "value_satisfaction",
       "sentiment": "positive",
       "experience_type": "direct",
@@ -51,7 +52,7 @@ var messages = reviewPromptProvider.messages(
       "condition": "두 사람이 나눠 먹음",
       "reason": "크기와 양이 충분하고 지불한 가격에 만족함",
       "alternative": null,
-      "check_before_purchase": null,
+      "check_before_visit": null,
       "published_at": "2026-09-01",
       "visited_at": null,
       "support": "작성자는 술빵의 양이 둘이 먹기에 충분했고 가격에도 만족했다고 설명했다.",
@@ -66,4 +67,37 @@ var messages = reviewPromptProvider.messages(
 
 ## 모델 연결 시 확인할 점
 
-프롬프트는 요청이지 결과 보증이 아니다. 연결 단계에서는 JSON 파싱, 허용된 주제·감정 값, 입력 출처 ID 일치, 익명 처리, 날짜와 근거를 검증해야 한다. 실패한 응답을 정상 분석처럼 화면에 표시하지 않는다. 실제 로컬 모델을 사용한 추출 품질 검증은 아직 하지 않았다.
+프롬프트는 요청이지 결과 보증이 아니다. 연결 단계에서는 JSON 파싱, 허용된 영역·주제·감정 값, 입력 출처 ID 일치, 익명 처리, 날짜와 근거를 검증해야 한다. 실패한 응답을 정상 분석처럼 화면에 표시하지 않는다. 실제 로컬 모델을 사용한 추출 품질 검증은 아직 하지 않았다.
+
+## 음식점 외 판단 범위
+
+영역과 판단 주제를 분리한다. 같은 주차 후기라도 요금 만족, 이동 불편, 만차 대기는 서로 다른 경험이다. 무료 화장실·휴식 공간 등도 비용이 없다는 이유로 제외하지 않는다.
+
+| 영역 | category | 추출할 경험 예시 |
+|---|---|---|
+| 숙박 | lodging | 추가 요금, 청결, 소음, 응대, 예약 내용과 실제 차이 |
+| 주차 | parking | 요금·할인 안내, 정산, 만차, 목적지까지 거리 |
+| 교통 | transport | 택시·버스 이용 비용, 대기, 환승, 이동 편의 |
+| 입장·체험 | admission | 비용 대비 만족, 대기, 실제 이용 시간, 별도 유료 항목 |
+| 쇼핑 | shopping | 가격 대비 품질·구성, 구매 후회, 안내와 실제 차이 |
+| 대여 | rental | 요금·추가 비용, 장비 상태, 이용 조건 |
+| 편의시설 | amenities | 화장실 청결, 쉴 곳, 유아차·휠체어 이용 편의 |
+| 음식 | food | 가격 대비 만족, 대기 후 후회, 포장 조건 |
+
+표의 내용은 분류 예시다. 특정 관광지에서 실제 발생한 문제로 취급하지 않는다. 시장 단위 분석과 도시 단위 분석의 포함 범위를 구분하며, 관련 없는 주변 숙박 후기를 시장의 평가로 합치지 않는다.
+
+### 비음식 후기 입력 예시 — 가상 자료
+
+```json
+{
+  "destination": "예시 관광지",
+  "source_id": "example-parking-001",
+  "published_at": "2026-09-01",
+  "body": "주차장에서 관광지 입구까지 오르막이 길어서 유아차를 끌고 이동하기 힘들었다. 현장 화장실은 깨끗해서 만족했다."
+}
+```
+
+이 글에서는 `category=parking, topic=access_convenience, sentiment=negative`와
+`category=amenities, topic=facility_condition, sentiment=positive`를 따로 추출할 수 있다.
+주차 요금·방문일·다른 이동 수단은 언급이 없으므로 만들지 않는다.
+`check_before_visit`에는 해당 경험에 근거한 방문 전 확인 사항을 넣는다.
