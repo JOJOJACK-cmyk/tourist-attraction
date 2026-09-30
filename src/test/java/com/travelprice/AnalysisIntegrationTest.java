@@ -46,8 +46,13 @@ class AnalysisIntegrationTest {
         assertThat(prices.count()).isEqualTo(2);
     }
     @Test void homeAndStaticFilesAreServed() throws Exception {
-        mvc.perform(get("/")).andExpect(status().isOk()).andExpect(content().string(org.hamcrest.Matchers.containsString("관광지 가격 분위기")));
+        mvc.perform(get("/")).andExpect(status().isOk()).andExpect(content().string(org.hamcrest.Matchers.containsString("여행지 경험과 가격 단서")));
         mvc.perform(get("/css/style.css")).andExpect(status().isOk());
         mvc.perform(get("/js/app.js")).andExpect(status().isOk());
+        mvc.perform(get("/data/sokcho-review-pilot.json")).andExpect(status().isOk())
+                .andExpect(jsonPath("$.sources.length()").value(30))
+                .andExpect(jsonPath("$.themes.length()").value(10))
+                .andExpect(jsonPath("$.dateFrom").value("2025-01-20"))
+                .andExpect(jsonPath("$.dateTo").value("2026-09-13"));
     }
 }

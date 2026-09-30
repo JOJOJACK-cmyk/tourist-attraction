@@ -6,8 +6,8 @@
   <meta name="description" content="관광지와 분기를 선택해 가격 관련 이야기와 근거를 살펴보세요.">
   <title>여행물가 탐험대 | 지갑을 지켜라!</title>
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="/css/style.css?v=arcade-4">
-  <script src="/js/app.js?v=arcade-1" defer></script>
+  <link rel="stylesheet" href="/css/style.css?v=reviews-30">
+  <script src="/js/app.js?v=reviews-30" defer></script>
 </head>
 <body>
   <a class="skip-link" href="#report">가격 정보로 바로 가기</a>
@@ -15,7 +15,7 @@
     <div class="topbar"><a class="brand" href="#top"><span class="brand-mark" aria-hidden="true">₩</span>여행물가 탐험대</a><nav aria-label="주요 메뉴"><a href="#destinations">스테이지 선택</a><a class="nav-pill" href="#about">플레이 가이드</a></nav></div>
     <div class="hero-content"><span class="eyebrow">PLAYER 1 · TRAVEL PRICE QUEST</span>
       <h1>여행은 즐겁게.<br><span class="gold-text">지갑은 안전하게!</span></h1>
-      <p class="hero-copy">여행지의 가격 단서를 모으는 작은 모험.<br>가격과 후기, 출처를 확인하고 나만의 여행을 준비하세요.</p>
+      <p class="hero-copy">여행지의 가격 단서를 모으는 작은 모험.<br>반복된 만족과 불편, 출처를 확인하고 여행을 준비하세요.</p>
       <div class="quest-banner"><span>MAIN QUEST</span> 여행 전, 가격 단서 찾기 <a href="#destinations">스테이지 둘러보기 ↓</a></div>
       <form id="analysis-form" class="explore-form">
         <div class="selection-fields">
@@ -23,7 +23,7 @@
           <label>02 · 탐색 기간<select id="period" name="period" required></select></label>
           <button class="primary" id="analyze-button" type="submit" disabled>탐험 시작 →</button>
         </div>
-        <div class="mode-row"><label><input type="radio" name="mode" value="sample" checked> 검토 자료 예시</label><label><input id="live-mode" type="radio" name="mode" value="live" disabled> AI 웹 검색</label></div>
+        <div class="mode-row"><label><input type="radio" name="mode" value="sample" checked> 검토 후기·자료</label><label><input id="live-mode" type="radio" name="mode" value="live" disabled> AI 웹 검색</label></div>
       </form>
       <p class="hint" id="connection-note">연결 상태를 확인하고 있어요.</p>
     </div>
@@ -34,7 +34,7 @@
       <div class="filters" aria-label="지역 선택" id="filters"></div><div class="cards" id="cards"></div>
     </section>
     <section class="wrap report-section" id="report" aria-labelledby="report-heading" aria-busy="false">
-      <div class="report-heading"><div><span class="eyebrow">QUEST LOG · 탐험 기록</span><h2 id="report-heading">관광지 가격 분위기</h2><p class="section-note" id="report-period"></p></div><span class="report-label" id="result-kind">검토 자료 예시</span></div>
+      <div class="report-heading"><div><span class="eyebrow">QUEST LOG · 탐험 기록</span><h2 id="report-heading">여행지 경험과 가격 단서</h2><p class="section-note" id="report-period"></p></div><span class="report-label" id="result-kind">검토 자료 예시</span></div>
       <p id="error" class="error" role="alert" hidden></p>
       <p id="loading" class="loading" role="status" hidden>가격 관련 자료와 출처를 확인하고 있어요. 잠시 기다려주세요.</p>
       <div id="result" aria-live="polite"></div>
