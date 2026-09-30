@@ -9,7 +9,7 @@ function sourceLink(source,label) {
 }
 function setBusy(busy) {
   $('report').setAttribute('aria-busy',String(busy)); $('loading').hidden=!busy; $('analyze-button').disabled=busy || !destinations.length;
-  $('analyze-button').textContent=busy?'살펴보는 중…':'분위기 살펴보기';
+  $('analyze-button').textContent=busy?'단서 찾는 중…':'탐험 시작 →';
 }
 function renderResult(data) {
   const result=$('result'); result.replaceChildren();
@@ -44,7 +44,8 @@ async function analyze(scroll=true) {
   const mode=document.querySelector('input[name="mode"]:checked').value;
   const chosen=destinations.find(d=>d.slug===destinationId);
   $('report-period').textContent=`${chosen.name} · ${year}년 ${quarter}분기`; $('result').replaceChildren();$('error').hidden=true;setBusy(true);
-  if(scroll)$('report').scrollIntoView({behavior:'smooth',block:'start'});
+  renderDestinations();
+  if(scroll)$('report').scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'});
   try {
     const response=await fetch('/api/analysis',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({destinationId,year,quarter,mode}),signal:pending.signal});
     const data=await response.json();if(current!==requestId)return;if(!response.ok)throw new Error(data.error || '자료를 불러오지 못했습니다.');renderResult(data);
@@ -54,8 +55,8 @@ async function analyze(scroll=true) {
 function renderDestinations() {
   const cards=$('cards');cards.replaceChildren();
   destinations.filter(d=>activeRegion==='전체'||d.region===activeRegion).forEach(d=>{
-    const card=node('article','card');const top=node('div','card-top');top.append(node('span','card-tag',d.region));card.append(top,node('h3','',d.name),node('p','',d.categories));
-    const button=node('button','destination-button','분기별 분위기 보기');button.type='button';button.addEventListener('click',()=>{$('destination').value=d.slug;analyze();});card.append(button);cards.append(card);
+    const card=node('article','card');const top=node('div','card-top');const stage=String(destinations.indexOf(d)+1).padStart(2,'0'); top.append(node('span','card-tag',d.region),node('span','card-number','STAGE '+stage)); const scene=node('div','stage-scene');scene.setAttribute('aria-hidden','true');const scenery={sokcho:'market',gyeongju:'temple',jeonju:'village',busan:'beach',jeju:'island',gangneung:'coast'};scene.classList.add(scenery[d.slug] || 'coast'); card.append(scene,top,node('h3','',d.name),node('p','',d.categories));
+    const button=node('button','destination-button','스테이지 입장 →');button.type='button';button.setAttribute('aria-label',d.name+' 가격 정보 탐험하기');button.addEventListener('click',()=>{$('destination').value=d.slug;renderDestinations();analyze();});card.classList.toggle('selected',d.slug===$('destination').value);card.append(button);cards.append(card);
   });
 }
 async function initialize() {
@@ -72,5 +73,6 @@ async function initialize() {
     renderDestinations();await analyze(false);
   } catch(error) {$('connection-note').textContent=error.message;$('error').textContent=error.message;$('error').hidden=false;}
 }
+$('destination').addEventListener('change',renderDestinations);
 $('analysis-form').addEventListener('submit',event=>{event.preventDefault();analyze();});
 initialize();
