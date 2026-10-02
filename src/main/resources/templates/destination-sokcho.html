@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#172b48">
+  <meta name="description" content="속초관광수산시장의 대표 먹거리, 젓갈과 건어물, 시장 골목과 주변 볼거리, 위치와 방문 정보를 한눈에 살펴보세요.">
+  <title>속초관광수산시장 소개 | 여행물가</title>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/css/style.css?v=attraction-1">
+</head>
+<body class="attraction-page">
+  <a class="skip-link" href="#market-about">시장 소개로 바로 가기</a>
+  <header class="hero" id="top"><div class="wrap">
+    <div class="topbar"><a class="brand" href="/"><span class="brand-mark" aria-hidden="true">₩</span>여행물가</a><nav aria-label="주요 메뉴"><a href="/#destinations">관광지 선택</a><a class="nav-pill" href="/#report">종합 후기</a><a class="nav-pill" href="/community">경험 공유</a><a th:if="${admin}" href="/admin/reviews">후기 분석 관리</a></nav></div>
+    <div class="attraction-hero">
+      <div><span class="eyebrow">관광지 소개 · 강원 속초</span><h1>속초관광수산시장</h1><p class="attraction-alias">속초중앙시장이라는 이름으로도 만나는 곳</p><p class="attraction-lead">닭강정 한 상자, 바다를 담은 젓갈,<br>골목마다 다른 재미를 발견하는 시장 여행.</p><div class="attraction-tags"><span>대표 먹거리</span><span>수산물·젓갈</span><span>전통시장 구경</span></div><a class="primary attraction-button" href="#market-food">무엇부터 먹어볼까요? ↓</a></div>
+      <div class="attraction-postcard" aria-hidden="true"><div class="destination-scene market"></div><span>골목을 따라, 속초의 맛을 따라</span><strong>안녕, 속초!</strong></div>
+    </div>
+  </div></header>
+  <main class="wrap attraction-main">
+    <nav class="attraction-tabs" aria-label="시장 소개 목차"><a href="#market-about">시장 특징</a><a href="#market-food">대표 먹거리</a><a href="#market-gifts">특산품·선물</a><a href="#market-walk">둘러보기</a><a href="#market-visit">방문 정보</a></nav>
+    <section class="attraction-section" id="market-about" aria-labelledby="about-title">
+      <div class="section-head"><div><span class="eyebrow">어떤 곳인가요?</span><h2 id="about-title">먹거리만 보고 나오기 아쉬운 곳</h2></div></div>
+      <p class="attraction-description">수산물과 생활용품을 파는 상가, 먹거리 골목이 함께 있는 속초의 전통시장입니다. 한 가지 메뉴를 먹는 여행도, 골목을 돌아보며 장을 보는 여행도 즐길 수 있어요.</p>
+      <div class="attraction-grid">
+        <article class="attraction-card"><span class="attraction-icon" aria-hidden="true">🐟</span><h3>바다와 가까운 시장</h3><p>활어와 젓갈, 건어물을 만날 수 있고 상가 지하에는 회센터가 있어요.</p></article>
+        <article class="attraction-card"><span class="attraction-icon" aria-hidden="true">🧺</span><h3>골목마다 다른 풍경</h3><p>닭강정과 순대뿐 아니라 청과, 방앗간과 젓갈 가게까지. 먹거리 뒤의 일상도 구경해 보세요.</p></article>
+        <article class="attraction-card"><span class="attraction-icon" aria-hidden="true">☂️</span><h3>비가림이 있는 골목</h3><p>시장 골목에는 비가림 시설이 있어요. 우천 시에도 둘러볼 수 있지만 주차장과 주변 이동에는 우산을 챙겨 주세요.</p></article>
+      </div>
+    </section>
+    <section class="attraction-section" id="market-food" aria-labelledby="food-title">
+      <div class="section-head"><div><span class="eyebrow">오늘은 뭘 먹을까?</span><h2 id="food-title">속초시장 대표 먹거리</h2></div><p class="section-note">한 끼 식사부터 가벼운 간식까지</p></div>
+      <div class="attraction-grid attraction-food-grid">
+        <article class="attraction-card"><span class="attraction-icon" aria-hidden="true">🍗</span><span class="card-tag">포장 먹거리</span><h3>닭강정</h3><p>튀긴 닭고기에 달콤하고 매콤한 양념을 버무린 메뉴. 닭전골목에서 만날 수 있어요.</p><p class="attraction-tip">고르기 전에 · 매운맛과 뼈 유무, 상자 크기를 확인해 보세요.</p></article>
+        <article class="attraction-card"><span class="attraction-icon" aria-hidden="true">🦑</span><span class="card-tag">지역 별미</span><h3>오징어순대</h3><p>오징어 몸통에 채소 등 속재료를 채운 음식. 계란물을 입히거나 누룽지 식감을 더한 메뉴도 있어요.</p><p class="attraction-tip">고르기 전에 · 조리 방식과 한 접시 구성을 살펴보세요.</p></article>
+        <article class="attraction-card"><span class="attraction-icon" aria-hidden="true">🍲</span><span class="card-tag">든든한 식사</span><h3>순대·순대국</h3><p>시장 순대골목에서는 아바이순대와 순대국 같은 식사 메뉴를 찾아볼 수 있어요.</p><p class="attraction-tip">고르기 전에 · 단품과 모둠, 식사 포함 여부를 확인해 보세요.</p></article>
+        <article class="attraction-card"><span class="attraction-icon" aria-hidden="true">🍤</span><span class="card-tag">골목 간식</span><h3>해산물 튀김</h3><p>새우와 오징어 등 여러 가지 튀김을 골라 먹는 재미. 조금씩 맛보고 싶을 때 살펴볼 메뉴예요.</p><p class="attraction-tip">고르기 전에 · 낱개와 묶음 가격을 함께 보세요.</p></article>
+        <article class="attraction-card"><span class="attraction-icon" aria-hidden="true">🍣</span><span class="card-tag">수산물 식사</span><h3>활어회</h3><p>상가 지하 회센터에서 만나는 메뉴. 먹거리 골목과는 또 다른 시장의 모습을 볼 수 있어요.</p><p class="attraction-tip">고르기 전에 · 회와 식사에 드는 총금액을 물어보세요.</p></article>
+        <article class="attraction-card"><span class="attraction-icon" aria-hidden="true">🍞</span><span class="card-tag">달콤한 마무리</span><h3>막걸리술빵</h3><p>시장에서 찾아볼 수 있는 간식 중 하나. 먹거리 구경을 마친 뒤 빵 한 조각으로 마무리해 보세요.</p><p class="attraction-tip">고르기 전에 · 판매 단위와 포장 가능 여부를 확인해 보세요.</p></article>
+      </div>
+    </section>
+    <section class="attraction-section" id="market-gifts" aria-labelledby="gifts-title">
+      <div class="section-head"><div><span class="eyebrow">여행의 맛을 집으로</span><h2 id="gifts-title">특산품과 가져갈 만한 선물</h2></div></div>
+      <div class="attraction-grid attraction-gift-grid">
+        <article class="attraction-card"><span class="attraction-icon" aria-hidden="true">🫙</span><h3>젓갈</h3><p>명란을 비롯한 젓갈류는 시장에서 둘러볼 만한 식품이에요. 종류와 양을 비교하며 골라보세요.</p><p class="attraction-tip">체크 · 용량, 원산지, 보관 방법, 냉장 포장</p></article>
+        <article class="attraction-card"><span class="attraction-icon" aria-hidden="true">🐠</span><h3>건어물</h3><p>말린 생선과 아구포 같은 건어물도 만날 수 있어요. 집에서 먹을 반찬이나 안주를 찾을 때 살펴보세요.</p><p class="attraction-tip">체크 · 중량, 포장 단위, 원산지, 보관 방법</p></article>
+        <article class="attraction-card"><span class="attraction-icon" aria-hidden="true">🎁</span><h3>포장 먹거리</h3><p>닭강정이나 시장 간식은 여행 중 나눠 먹을 선택지가 됩니다. 이동 시간에 맞는 포장을 가게에 물어보세요.</p><p class="attraction-tip">체크 · 먹을 인원, 이동 시간, 포장 크기</p></article>
+      </div>
+      <p class="attraction-inline-note">시장에서 파는 상품의 원산지는 품목마다 달라요. 선물을 고를 때는 상품 표시를 함께 살펴보세요.</p>
+    </section>
+    <section class="attraction-section" id="market-walk" aria-labelledby="walk-title">
+      <div class="section-head"><div><span class="eyebrow">골목도 여행이니까</span><h2 id="walk-title">이름을 알면 더 재미있는 시장 구경</h2></div></div>
+      <div class="attraction-alleys">
+        <article><h3>닭전골목</h3><p>닭강정 가게를 찾아보는 골목</p></article><article><h3>순대골목</h3><p>순대와 순대국 등 식사 메뉴</p></article><article><h3>젓갈·어시장골목</h3><p>젓갈과 수산물을 둘러보는 곳</p></article><article><h3>청과골목</h3><p>채소와 과일을 파는 시장의 일상</p></article><article><h3>고추골목</h3><p>고추와 기름, 방앗간을 만나는 곳</p></article>
+      </div>
+      <div class="attraction-route"><h3>가볍게 둘러보는 순서</h3><p>처음 방문한다면 이렇게 즐겨보세요.</p><ol><li><strong>시장 한 바퀴</strong><span>메뉴와 골목 분위기를 먼저 살펴보기</span></li><li><strong>먹거리 고르기</strong><span>식사 하나, 간식 하나 나눠 즐기기</span></li><li><strong>선물 둘러보기</strong><span>젓갈·건어물의 용량과 포장 비교하기</span></li><li><strong>주변 여행 이어가기</strong><span>아바이마을이나 영금정으로 이동하기</span></li></ol></div>
+      <h3 class="subheading">시장과 함께 둘러볼 곳</h3>
+      <div class="attraction-grid attraction-nearby-grid"><article class="attraction-card"><h3>아바이마을·갯배</h3><p>속초의 실향민 문화와 음식 이야기를 만나는 곳. 줄을 당겨 움직이는 갯배도 이곳의 특징이에요.</p><a class="attraction-text-link" href="https://map.naver.com/p/search/속초%20아바이마을" target="_blank" rel="noopener noreferrer">위치 보기 ↗</a></article><article class="attraction-card"><h3>영금정</h3><p>먹거리 여행 뒤에 바다 풍경도 보고 싶다면. 바다 위 정자와 동명해교를 함께 둘러볼 수 있어요.</p><a class="attraction-text-link" href="https://map.naver.com/p/search/속초%20영금정" target="_blank" rel="noopener noreferrer">위치 보기 ↗</a></article></div>
+    </section>
+    <section class="attraction-section" id="market-visit" aria-labelledby="visit-title">
+      <div class="section-head"><div><span class="eyebrow">가기 전에 챙겨볼 것</span><h2 id="visit-title">위치와 방문 정보</h2></div></div>
+      <div class="attraction-visit"><dl><div><dt>주소</dt><dd>강원특별자치도 속초시 중앙로147번길 12</dd></div><div><dt>문의</dt><dd><a href="tel:0336333501">033-633-3501</a></dd></div><div><dt>영업·휴무</dt><dd>점포마다 달라요. 방문할 가게의 영업시간을 확인해 주세요.</dd></div><div><dt>주차</dt><dd>시장 주차장을 이용할 수 있어요. 요금과 주차권 적용은 현장 안내·구매 점포에서 확인해 주세요.</dd></div></dl><div class="attraction-map-card"><span class="attraction-icon" aria-hidden="true">📍</span><h3>지도에서 길 찾기</h3><p>출발지에서 시장까지의 이동과 주차장 위치를 확인해 보세요.</p><a class="primary attraction-button" href="https://map.naver.com/p/search/속초관광수산시장" target="_blank" rel="noopener noreferrer">네이버 지도 ↗</a><a class="attraction-text-link" href="https://map.kakao.com/?q=속초관광수산시장" target="_blank" rel="noopener noreferrer">카카오맵 ↗</a></div></div>
+    </section>
+    <section class="attraction-review-callout" aria-labelledby="review-link-title"><div><span class="eyebrow">소개를 봤다면, 이제 후기도</span><h2 id="review-link-title">다녀온 사람들은 어땠을까요?</h2><p>속초시장의 칭찬·불만과 주요 이슈를 함께 살펴보세요.</p></div><div class="attraction-callout-actions"><a class="primary attraction-button" href="/#report">속초 종합 후기 보기 →</a><a class="attraction-text-link" href="/community">내 경험도 나누기 →</a></div></section>
+    <div class="attraction-sources"><span>소개 정보 · 확인 2026.10.02</span><a href="https://korean.visitkorea.or.kr/detail/ms_detail.do?cotid=cf3c29c0-0fbe-44e2-8f2f-c8ff92f781a0" target="_blank" rel="noopener noreferrer">한국관광공사 ↗</a><a href="https://www.sokcho.go.kr/ct/tour/pleasure/shopping?contentSeq=131" target="_blank" rel="noopener noreferrer">속초시 관광 ↗</a><a href="#top" aria-label="페이지 맨 위로">맨 위로 ↑</a></div>
+  </main>
+</body>
+</html>

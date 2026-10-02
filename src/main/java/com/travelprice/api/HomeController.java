@@ -12,6 +12,8 @@ public class HomeController {
     public boolean admin(Authentication auth) { var member=members.current(auth); return member!=null && member.isAdmin(); }
     @GetMapping("/")
     public String home() { return "index"; }
+    @GetMapping("/destinations/sokcho")
+    public String sokchoIntroduction() { return "destination-sokcho"; }
     @GetMapping("/community")
     public String community() { return "community"; }
     @GetMapping("/admin/reviews")

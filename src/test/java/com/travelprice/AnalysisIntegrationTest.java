@@ -55,6 +55,15 @@ class AnalysisIntegrationTest {
             mvc.perform(post("/api/reviews/extract").with(user("admin").roles("ADMIN")).with(csrf()).contentType(MediaType.APPLICATION_JSON).content(body))
                     .andExpect(status().isBadRequest());
     }
+    @Test void sokchoIntroductionIsPublicAndLinksToTravelPlanning() throws Exception {
+        mvc.perform(get("/destinations/sokcho")).andExpect(status().isOk())
+                .andExpect(view().name("destination-sokcho"))
+                .andExpect(content().string(org.hamcrest.Matchers.containsString("속초시장 대표 먹거리")))
+                .andExpect(content().string(org.hamcrest.Matchers.containsString("특산품과 가져갈 만한 선물")))
+                .andExpect(content().string(org.hamcrest.Matchers.containsString("중앙로147번길 12")))
+                .andExpect(content().string(org.hamcrest.Matchers.containsString("href=\"/#report\"")))
+                .andExpect(content().string(org.hamcrest.Matchers.not(org.hamcrest.Matchers.containsString("후기 분석 관리"))));
+    }
     @Test void homeAndStaticFilesAreServed() throws Exception {
         mvc.perform(get("/")).andExpect(status().isOk()).andExpect(content().string(org.hamcrest.Matchers.containsString("여행지 종합 후기")));
         mvc.perform(get("/css/style.css")).andExpect(status().isOk());
