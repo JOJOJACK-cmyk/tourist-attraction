@@ -32,7 +32,10 @@ class SocialLoginIntegrationTest {
     @Autowired CommunityCommentRepository comments;
     @Autowired CommunityPhotoRepository photos;
     @Autowired PasswordEncoder encoder;
-    @BeforeEach void cleanup(){comments.deleteAll();posts.deleteAll();photos.deleteAll();members.deleteAll();}
+    @Autowired ChatMessageRepository chatMessages;
+    @Autowired ChatMembershipRepository chatMemberships;
+    @Autowired ChatRoomRepository chatRooms;
+    @BeforeEach void cleanup(){chatMessages.deleteAll();chatMemberships.deleteAll();chatRooms.deleteAll();comments.deleteAll();posts.deleteAll();photos.deleteAll();members.deleteAll();}
     @Test void identitiesAreStableSeparateAndAlwaysNewRegularMembers(){
         var first=social.resolve("google","12345");var again=social.resolve("google","12345");
         var other=social.resolve("kakao","12345");var caseSensitive=social.resolve("google","abc");var capital=social.resolve("google","ABC");

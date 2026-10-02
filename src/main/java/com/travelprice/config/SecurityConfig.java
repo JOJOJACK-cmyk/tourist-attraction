@@ -42,6 +42,7 @@ public class SecurityConfig {
         http.securityContext(c->c.securityContextRepository(contexts))
             .csrf(c->c.csrfTokenRepository(tokens).ignoringRequestMatchers("/api/analysis"))
             .authorizeHttpRequests(a->a.requestMatchers("/admin/**","/api/reviews/**","/js/local-review.js").hasRole("ADMIN")
+                .requestMatchers("/api/chat/**","/ws/chat").authenticated()
                 .requestMatchers(HttpMethod.GET,"/api/community/**").permitAll()
                 .requestMatchers("/api/community/**").authenticated().anyRequest().permitAll())
             .requestCache(c->c.disable())

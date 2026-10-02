@@ -30,8 +30,11 @@ class CommunityIntegrationTest {
     @Autowired CommunityCommentRepository comments;
     @Autowired CommunityPhotoRepository photos;
     @Autowired PasswordEncoder encoder;
+    @Autowired ChatMessageRepository chatMessages;
+    @Autowired ChatMembershipRepository chatMemberships;
+    @Autowired ChatRoomRepository chatRooms;
     @BeforeEach void setup(){
-        comments.deleteAll();posts.deleteAll();photos.deleteAll();members.deleteAll();
+        chatMessages.deleteAll();chatMemberships.deleteAll();chatRooms.deleteAll();comments.deleteAll();posts.deleteAll();photos.deleteAll();members.deleteAll();
         members.save(new Member("alice",encoder.encode("password123"),Member.Role.MEMBER));
         members.save(new Member("bob",encoder.encode("password123"),Member.Role.MEMBER));
         members.save(new Member("admin",encoder.encode("password123"),Member.Role.ADMIN));
