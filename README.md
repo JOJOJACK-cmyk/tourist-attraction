@@ -1,6 +1,6 @@
 # 여행물가 — 관광지 가격 정보 탐색기
 
-관광지와 연도를 선택해 온라인에서 언급된 가격·반응·근거를 살펴보는 개인 프로젝트입니다. 아기자기한 픽셀 해변 배경, 관광지 선택, 연도별 후기 정보 화면을 포함합니다. 게임 표현 대신 관광지·후기 중심 문구를 사용합니다. 제목·본문·버튼·가격·날짜·출처에는 KOHI배움 웹폰트를 사용합니다. 픽셀 풍경은 프로젝트에 포함된 SVG라 외부 이미지 서비스 없이 표시됩니다. 폰트는 눈누가 제공하는 고정 버전 jsDelivr 웹폰트 주소에서 불러오며, 연결이 안 되면 시스템 글꼴을 사용합니다.
+관광지와 연도를 선택해 온라인에서 언급된 가격·반응·근거를 살펴보는 개인 프로젝트입니다. 아기자기한 픽셀 해변 배경, 관광지 선택, 연도별 후기 정보 화면을 포함합니다. 게임 표현 대신 관광지·후기 중심 문구를 사용합니다. 제목·본문·버튼·가격·날짜·출처에는 Pretendard 웹폰트를 사용합니다. 픽셀 풍경은 프로젝트에 포함된 SVG라 외부 이미지 서비스 없이 표시됩니다. 폰트는 Pretendard 공식 저장소의 고정 버전 jsDelivr 웹폰트 주소에서 불러오며, 연결이 안 되면 시스템 글꼴을 사용합니다.
 
 ## 사용 기술
 
@@ -185,9 +185,9 @@ Ollama 공식 문서: https://docs.ollama.com/api/chat · https://docs.ollama.co
 
 ## 사이트 글꼴
 
-한국보건복지인재원의 **KOHI배움**을 모든 화면에 적용합니다. 한 가지 굵기를 제공하므로 `font-synthesis: none`으로 인위적인 굵기·기울임을 만들지 않습니다. 본문은 16px, 기본 줄간격 1.75이며 제목의 과도한 음수 자간을 제거했습니다. `font-display: swap`으로 로딩 중에도 글을 읽을 수 있습니다.
+**Pretendard v1.3.9**를 모든 화면에 적용합니다. 본문은 16px(첫 화면 소개는 17px), 굵기 400, 줄간격 1.7이며 제목은 굵기 700입니다. 실제 Regular/Bold 웹폰트 두 개를 불러옵니다. `font-display: swap`으로 로딩 중에도 글을 읽을 수 있고, CDN 연결이 안 되면 시스템 글꼴로 표시합니다.
 
 - 웹폰트 CSS: `src/main/resources/static/css/style.css`
-- 배포·사용 안내: https://noonnu.cc/font_page/813
-- 제작사 배포 페이지: https://csp.kohi.or.kr/user/bbs/BD_selectBbs.do?q_bbsCode=1070&q_bbscttSn=20211118135429370
-- 폰트 파일을 프로젝트에 복사·변형하지 않고 공개 웹폰트를 참조합니다. 배포 안내에 따라 무료로 사용하며 폰트 파일의 상업적 거래와 임의 변형은 하지 않습니다.
+- 제작자·공식 배포: https://github.com/orioncactus/pretendard
+- 저작권: Copyright (c) 2021 Kil Hyung-jin, with Reserved Font Name Pretendard.
+- 라이선스: SIL Open Font License 1.1 (공식 저장소의 LICENSE 파일 참조).
