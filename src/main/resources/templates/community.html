@@ -4,7 +4,7 @@
   <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
   <title>질문·자유 게시판 | 여행물가</title>
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="/css/style.css?v=chat-1">
+  <link rel="stylesheet" href="/css/style.css?v=support-1">
   <script src="/js/community.js?v=social-1" defer></script>
 </head>
 <body>
@@ -60,5 +60,6 @@
       <form id="comment-form" class="community-form" hidden><label>댓글<textarea id="comment-body" required maxlength="2000" rows="3" placeholder="경험이나 도움이 될 이야기를 남겨주세요."></textarea></label><button id="save-comment" class="primary" type="submit">댓글 남기기</button></form>
     </section>
   </div></main>
+<th:block th:replace="~{fragments/support :: footer}"></th:block>
 </body>
 </html>

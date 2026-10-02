@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org"><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>그룹 채팅방 | 여행물가</title>
-<link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="/css/style.css?v=chat-1"><script src="/js/chat.js?v=chat-1" defer></script>
+<link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="/css/style.css?v=support-1"><script src="/js/chat.js?v=chat-1" defer></script>
 </head><body class="chat-page"><a class="skip-link" href="#chat-main">채팅방으로 바로 가기</a>
 <header class="hero community-hero"><div class="wrap"><div class="topbar"><a class="brand" href="/"><span class="brand-mark" aria-hidden="true">₩</span>여행물가</a><nav aria-label="주요 메뉴"><a href="/">관광지 보기</a><a class="nav-pill" href="/community">커뮤니티</a><a class="nav-pill" href="/chat" aria-current="page">채팅방</a><a th:if="${admin}" href="/admin/reviews">후기 분석 관리</a></nav></div><div class="community-intro"><span class="eyebrow">같이 떠나는 사람들과</span><h1>우리 여행 이야기를<br>한곳에서 나눠요.</h1><p>그룹 채팅방을 만들고 초대 링크로 친구를 불러보세요.</p></div></div></header>
 <main id="chat-main"><div class="wrap community-wrap">
@@ -19,4 +19,5 @@
 <details class="chat-participants"><summary id="chat-member-count">참여자</summary><div id="chat-participant-list"></div></details>
 <button id="chat-older" class="filter" type="button" hidden>이전 대화 불러오기</button><div id="chat-messages" class="chat-messages" role="log" aria-label="채팅 대화" aria-live="polite" aria-relevant="additions"></div>
 <form id="chat-message-form" class="chat-message-form"><label class="sr-only" for="chat-message">메시지</label><textarea id="chat-message" required maxlength="1000" rows="2" placeholder="여행 이야기를 나눠보세요." disabled></textarea><button id="chat-send" class="primary" type="submit" disabled>보내기</button></form><p class="small">Enter로 보내기 · Shift+Enter로 줄바꿈</p></div>
-</section></div></div></div></main></body></html>
+</section></div></div></div></main><th:block th:replace="~{fragments/support :: footer}"></th:block>
+</body></html>

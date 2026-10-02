@@ -240,3 +240,11 @@ Ollama 공식 문서: https://docs.ollama.com/api/chat · https://docs.ollama.co
 새 Maven 의존성은 `spring-boot-starter-websocket`입니다. `git pull` 후 IntelliJ Maven 새로고침 및 앱 재시작이 필요합니다. 채팅 데이터 테이블은 기존 MySQL에 JPA update로 추가됩니다. 소셜 로그인 인증 키 없이 일반 로그인으로 사용할 수 있습니다. 두 계정 테스트는 일반 창과 시크릿 창으로 진행합니다.
 
 사용법·API·권한·배포 범위: [그룹 채팅 안내](docs/group-chat.md). JavaScript 검증: `node src/test/js/chat.test.cjs`. 서버 테스트에는 모의 호출뿐 아니라 실제 HTTP 세션과 WebSocket 연결 간 전달·격리·연결 차단 검증이 포함됩니다. 기록은 DB에 저장하고 실시간 배포는 현재 단일 서버 인스턴스 내에서 수행합니다.
+
+## 자율 후원 화면 · 모의 결제
+
+공개 화면 하단의 **커피 한 잔으로 응원하기 ☕** 또는 `/support`에서 로그인 없이 모의 후원을 체험합니다. 테스트 금액 선택 → 확인 → 완료·취소·실패 흐름을 제공하며, 모의 주문과 상태는 DB에 저장합니다. 중복 요청·금액 변경·다른 세션 접근을 검사합니다.
+
+이 기능은 실제 결제사 샌드박스와도 연결하지 않은 **로컬 모의 결제**입니다. 실제 돈·카드·계좌를 다루지 않고 화면과 API에 DEMO를 표시합니다. 게시판·채팅은 계속 무료입니다. 별도 인증 키 없이 사용할 수 있습니다.
+
+사용법과 범위: [후원 체험 안내](docs/support-demo.md). JavaScript 검증: `node src/test/js/support.test.cjs`.
