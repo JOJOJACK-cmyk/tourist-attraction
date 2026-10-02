@@ -1,112 +1,79 @@
 (() => {
-  const categories={food:'음식',lodging:'숙박',parking:'주차',transport:'교통',admission:'입장·체험',shopping:'쇼핑',rental:'대여',amenities:'편의시설',other:'기타'};
-  const topics={value_satisfaction:'가격 대비 만족',spending_regret:'소비 후회',unexpected_cost:'추가 비용',experience_condition:'이용 조건',satisfying_alternative:'다른 선택',price_information:'요금·정산 안내',service_quality:'응대',facility_condition:'시설 상태',access_convenience:'접근·이동',crowding:'혼잡·대기'};
-  const tones={positive:'만족 단서',negative:'주의 단서',mixed:'조건에 따른 차이',neutral:'참고할 점'};
-  const unique=items=>[...new Set(items.map(e=>e.source_id))];
+  const count=items=>new Set(items.map(e=>e.source_id)).size;
   const node=(tag,cls,text)=>{const el=document.createElement(tag);el.className=cls;if(text!==undefined)el.textContent=text;return el;};
   function select(data,pilot){
     const ids=new Set(data.sources.map(s=>'pilot-'+s.id));
     const reviews=pilot.reviews.filter(r=>ids.has(r.source_id));
-    const experiences=reviews.flatMap(r=>r.analysis.experiences);
-    return {reviews,experiences,coverage:Object.keys(categories).map(category=>({category,count:unique(experiences.filter(e=>e.category===category)).length}))};
+    return {reviews,experiences:reviews.flatMap(r=>r.analysis.experiences)};
   }
-  function group(items){
-    const groups=new Map();
-    items.forEach(e=>{
-      const key=JSON.stringify([e.category,e.place,e.item,e.topic,e.sentiment]);
-      if(!groups.has(key))groups.set(key,{category:e.category,place:e.place,item:e.item,topic:e.topic,sentiment:e.sentiment,experiences:[]});
-      groups.get(key).experiences.push(e);
-    });
-    return [...groups.values()].map(g=>({...g,count:unique(g.experiences).length})).sort((a,b)=>b.count-a.count||a.item.localeCompare(b.item,'ko'));
-  }
-  function questions(experiences){
-    const cards=[];
-    const bread=experiences.filter(e=>e.item==='술빵'&&e.topic==='experience_condition');
-    if(bread.length){
-      const negative=bread.filter(e=>e.sentiment==='negative');
-      const positive=bread.filter(e=>e.sentiment==='positive'&&/식은|차가|재가열/.test(e.condition||''));
-      let description=negative.length?'식은 뒤 맛·질감이 아쉬웠다는 요약 '+unique(negative).length+'건이 있어요.':'먹는 시점과 온도에 따라 만족한 경험이 나왔어요.';
-      if(positive.length)description+=' 식거나 재가열한 상태에 만족한 요약도 '+unique(positive).length+'건 있어요.';
-      cards.push({title:'술빵은 바로 먹을까, 포장할까?',description,check:'먹을 시점과 포장 여부를 먼저 생각해보세요.',experiences:bread});
-    }
-    const waiting=experiences.filter(e=>e.item==='술빵'&&e.topic==='crowding');
+  function aggregate(data,pilot){
+    const {reviews,experiences}=select(data,pilot);
+    const positive=experiences.filter(e=>e.sentiment==='positive');
+    const negative=experiences.filter(e=>e.sentiment==='negative');
+    const themes=(items,definitions)=>definitions.map(([label,predicate])=>({label,count:count(items.filter(predicate))})).filter(t=>t.count).sort((a,b)=>b.count-a.count);
+    const praise=themes(positive,[
+      ['술빵 양·가격 만족',e=>e.item==='술빵'&&e.topic==='value_satisfaction'],
+      ['누룽지 오징어순대 식감',e=>e.item==='누룽지 오징어순대'&&['experience_condition','value_satisfaction'].includes(e.topic)],
+      ['포장 먹거리 만족',e=>e.category==='food'&&/포장/.test(e.condition||'')],
+      ['빠른 구매·회전',e=>e.category==='food'&&e.topic==='crowding'],
+      ['회 신선도·식감',e=>['회','회·초밥'].includes(e.item)&&e.topic==='experience_condition'],
+      ['젓갈 구매·서비스 만족',e=>e.category==='shopping'],
+      ['평일 주차 여유',e=>e.category==='parking'&&e.topic==='crowding'],
+      ['따뜻한 술빵 맛·질감',e=>e.item==='술빵'&&e.topic==='experience_condition'&&/갓|직후|따뜻/.test(e.condition||'')]
+    ]);
+    const complaints=themes(negative,[
+      ['긴 대기 부담',e=>e.category==='food'&&e.topic==='crowding'],
+      ['식은 술빵 맛·질감',e=>e.item==='술빵'&&e.topic==='experience_condition'],
+      ['일부 간식 가격 부담',e=>e.category==='food'&&e.topic==='spending_regret'],
+      ['오징어순대 조리 상태 지적',e=>e.item==='일반 오징어순대'&&e.topic==='experience_condition']
+    ]);
+    const issues=[];
+    const waiting=experiences.filter(e=>e.category==='food'&&e.topic==='crowding');
     if(waiting.length){
-      const slow=waiting.filter(e=>e.sentiment==='negative'),fast=waiting.filter(e=>e.sentiment==='positive');
-      const parts=[];if(slow.length)parts.push('긴 대기 부담 '+unique(slow).length+'건');if(fast.length)parts.push('빠른 구매·회전 '+unique(fast).length+'건');
-      cards.push({title:'술빵 줄, 얼마나 기다릴까?',description:parts.length?parts.join(' · ')+'. 줄이 길다는 관찰과 실제 기다린 경험은 달라요.':'대기를 언급한 요약이 있지만 만족·불만까지는 확인되지 않았어요.',check:'줄 서기 전에 수령 예상 시간과 남은 일정을 확인해보세요.',experiences:waiting});
+      const bad=count(waiting.filter(e=>e.sentiment==='negative')),good=count(waiting.filter(e=>e.sentiment==='positive'));
+      const parts=[];if(bad)parts.push('대기 부담 '+bad+'건');if(good)parts.push('빠른 구매·회전 '+good+'건');
+      issues.push({title:'인기 먹거리 대기',text:parts.length?parts.join(' · ')+'. 방문 상황에 따라 반응이 달랐어요.':'대기 언급이 있지만 칭찬·불만 판단은 아직 어려워요.',count:count(waiting)});
     }
-    const cost=experiences.filter(e=>['value_satisfaction','spending_regret','unexpected_cost'].includes(e.topic));
-    if(cost.length){
-      const items=[...new Set(cost.map(e=>e.item))];
-      cards.push({title:'가격은 어떤 품목부터 확인할까?',description:items.join(' · ')+'에 대한 가격·구성 평가가 있어요. 품목마다 판단 근거를 따로 볼 수 있어요.',check:'판매 단위·양·구성·총액을 함께 확인해보세요.',experiences:cost});
+    const bread=experiences.filter(e=>e.item==='술빵'&&e.topic==='experience_condition');
+    const coldBad=count(bread.filter(e=>e.sentiment==='negative'));
+    const coldGood=count(bread.filter(e=>e.sentiment==='positive'&&/식은|차가|재가열/.test(e.condition||'')));
+    if(coldBad||coldGood){
+      const parts=[];if(coldBad)parts.push('식은 뒤 아쉬움 '+coldBad+'건');if(coldGood)parts.push('식거나 재가열해도 만족 '+coldGood+'건');
+      issues.push({title:coldBad&&coldGood?'식은 술빵에 대한 호불호':'술빵을 먹는 시점',text:parts.join(' · ')+'.',count:count(bread.filter(e=>e.sentiment==='negative'||(e.sentiment==='positive'&&/식은|차가|재가열/.test(e.condition||''))))});
     }
-    const parking=experiences.filter(e=>e.category==='parking');
-    if(parking.length)cards.push({title:'주차권은 구매할 가게에서 받을 수 있을까?',description:'가게마다 주차권 제공이 달랐다는 요약과 평일 주차 여유를 언급한 요약이 있어요. '+unique(parking).length+'건의 개별 자료예요.',check:'구매할 가게의 주차권 제공 여부와 적용 조건을 확인해보세요.',experiences:parking});
-    return cards;
-  }
-  function evidence(items,data){
-    const details=node('details','decision-evidence');
-    details.append(node('summary','','근거 요약 '+unique(items).length+'건 보기'));
-    const sourceIds=unique(items);
-    sourceIds.forEach(id=>{
-      const source=data.sources.find(s=>'pilot-'+s.id===id);if(!source)return;
-      const card=node('article','decision-source');
-      card.append(node('p','small','익명 후기 '+source.id+' · 작성일 '+source.date));
-      items.filter(e=>e.source_id===id).forEach(e=>{
-        const line=node('p','',e.summary);card.append(line);
-        if(e.condition)card.append(node('p','small','조건 · '+e.condition));
-      });
-      const limitations=data.promptPilot?.reviews.find(r=>r.source_id===id)?.analysis.limitations||[];
-      limitations.forEach(text=>card.append(node('p','small',text)));
-      try{const url=new URL(source.url);if(url.protocol==='https:'){const link=node('a','source-link','원문 보기');link.href=url.href;link.target='_blank';link.rel='noopener noreferrer';card.append(link);}}catch{}
-      details.append(card);
-    });
-    return details;
+    const price=negative.filter(e=>e.topic==='spending_regret');
+    if(price.length)issues.push({title:'일부 간식 가격 부담',text:[...new Set(price.map(e=>e.item))].join('·')+'에서 가격 부담이 언급됐어요.',count:count(price)});
+    const parking=experiences.filter(e=>e.category==='parking'&&e.topic==='price_information');
+    if(parking.length)issues.push({title:'가게별 주차권 제공 차이',text:'구매한 가게에 따라 주차권 제공이 달랐다는 개별 언급이 있어요.',count:count(parking)});
+    const summary=[];
+    if(praise.length)summary.push(praise.slice(0,2).map(t=>t.label).join(', ')+'에 칭찬이 모였어요.');
+    if(complaints.length)summary.push(complaints.slice(0,2).map(t=>t.label).join(', ')+'이 주요 불만이에요.');
+    return {total:reviews.length,praiseCount:count(positive),complaintCount:count(negative),praise,complaints,issues,summary:summary.join(' ')||'아직 종합할 만한 칭찬·불만이 충분하지 않아요.'};
   }
   function render(data,pilot,target){
-    const selected=select(data,pilot);
-    const section=node('section','decision-section');
-    section.append(node('h3','subheading','방문 전에 먼저 정할 것'));
-    const cards=node('div','decision-grid');
-    questions(selected.experiences).forEach(q=>{
-      const card=node('article','decision-card');
-      card.append(node('h4','',q.title),node('p','',q.description),node('p','decision-check',q.check),evidence(q.experiences,data));cards.append(card);
+    const overview=aggregate(data,pilot);
+    const summary=node('article','summary-panel');
+    summary.append(node('span','confidence','후기 종합'),node('h3','',data.title),node('p','summary-text',overview.summary));
+    const stats=node('div','review-stats');
+    [[overview.total,'전체 후기','total'],[overview.praiseCount,'칭찬 언급','positive'],[overview.complaintCount,'불만 언급','negative']].forEach(([value,label,tone])=>{
+      const card=node('div','review-stat '+tone);card.append(node('strong','',value+'건'),node('span','',label));stats.append(card);
     });
-    if(!cards.children.length)cards.append(node('p','local-empty','이 연도의 요약에서 방문 선택에 도움이 될 구체적인 단서를 찾지 못했어요.'));
-    section.append(cards);
-    const coverage=node('div','decision-coverage');
-    coverage.append(node('h3','subheading','관심 있는 경험만 보기'));
-    const filters=node('div','filters');filters.setAttribute('aria-label','경험 영역 선택');
-    const results=node('div','decision-signals');
-    const paint=category=>{
-      results.replaceChildren();
-      const groups=group(selected.experiences.filter(e=>category==='all'||e.category===category));
-      if(!groups.length){results.append(node('p','local-empty','선택한 연도에는 '+(categories[category]||'이 영역')+' 판단에 쓸 근거가 없어요. 다른 연도나 전체 검토를 선택해보세요.'));return;}
-      ['positive','negative','mixed','neutral'].forEach(tone=>{
-        const subset=groups.filter(g=>g.sentiment===tone);if(!subset.length)return;
-        const column=node('section','decision-tone '+tone);column.append(node('h4','',tones[tone]));
-        const grid=node('div','decision-grid');
-        subset.forEach(g=>{
-          const card=node('article','decision-signal');
-          card.append(node('span','card-tag',categories[g.category]+' · '+topics[g.topic]),node('h5','',g.item+(g.place?' · '+g.place:'')),node('p','small','관련 요약 '+g.count+'건'));
-          const cases=[...new Set(g.experiences.map(e=>e.summary))];cases.slice(0,2).forEach(text=>card.append(node('p','',text)));
-          const checks=[...new Set(g.experiences.map(e=>e.check_before_visit).filter(Boolean))];if(checks.length)card.append(node('p','decision-check',checks[0]));
-          card.append(evidence(g.experiences,data));grid.append(card);
-        });column.append(grid);results.append(column);
-      });
-    };
-    const choices=[{category:'all',count:selected.reviews.length},...selected.coverage];
-    choices.forEach(({category,count})=>{
-      const button=node('button','filter',(category==='all'?'전체':categories[category])+' '+count);button.type='button';button.setAttribute('aria-pressed',String(category==='all'));
-      button.addEventListener('click',()=>{[...filters.children].forEach(b=>b.setAttribute('aria-pressed',String(b===button)));paint(category);});filters.append(button);
-    });
-    coverage.append(filters,node('p','small','영역별 숫자는 해당 경험이 있는 요약 게시물 수예요. 한 글은 여러 영역에 포함될 수 있어요.'));
-    section.append(coverage);
-    const extraction=node('details','all-reviews');extraction.append(node('summary','','추출한 경험 '+selected.experiences.length+'개 살펴보기'),results);section.append(extraction);paint('all');
-    // Category selection opens the selected results without replacing the useful questions above.
-    [...filters.children].forEach(button=>button.addEventListener('click',()=>{extraction.open=true;}));
-    const provenance=node('details','comparison-note');provenance.append(node('summary','','분석 정보'),node('p','',pilot.provenance),node('p','small','분석일 '+pilot.generatedAt+' · 선택한 입력 '+selected.reviews.length+'건'));
-    pilot.limitations.forEach(text=>provenance.append(node('p','small',text)));section.append(provenance);target.append(section);
+    summary.append(stats,node('p','report-meta','후기 작성일 '+data.dateFrom+' ~ '+data.dateTo),node('p','small','한 후기에 칭찬과 불만이 함께 포함될 수 있어요.'));
+    target.append(summary);
+    const columns=node('div','overview-columns');
+    [[overview.praise,'어떤 칭찬이 많았나','positive'],[overview.complaints,'어떤 불만이 있었나','negative']].forEach(([themes,title,tone])=>{
+      const column=node('section','overview-keywords '+tone);column.append(node('h3','',title));
+      if(!themes.length)column.append(node('p','small','이 기간에는 뚜렷한 '+(tone==='positive'?'칭찬':'불만')+' 언급이 없어요.'));
+      const list=node('ul','overview-theme-list');themes.slice(0,6).forEach(theme=>{
+        const row=node('li','overview-theme');row.append(node('span','',theme.label),node('strong','',theme.count+'건'));list.append(row);
+      });column.append(list);columns.append(column);
+    });target.append(columns);
+    if(overview.issues.length){
+      const section=node('section','overview-issues');section.append(node('h3','subheading','주요 이슈'));
+      const grid=node('div','overview-issue-grid');overview.issues.forEach(issue=>{
+        const card=node('article','overview-issue');card.append(node('span','card-tag',issue.count===1?'개별 언급 1건':'관련 언급 '+issue.count+'건'),node('h4','',issue.title),node('p','',issue.text));grid.append(card);
+      });section.append(grid);target.append(section);
+    }
   }
-  window.ReviewInsights={select,group,questions,render};
+  window.ReviewInsights={select,aggregate,render};
 })();

@@ -6,9 +6,9 @@
   <meta name="description" content="관광지와 연도를 선택해 가격 관련 이야기와 근거를 살펴보세요.">
   <title>여행물가 | 여행 전 살펴보는 가격과 후기</title>
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="/css/style.css?v=prompt-1">
-  <script src="/js/review-insights.js?v=prompt-1" defer></script>
-  <script src="/js/app.js?v=prompt-1" defer></script>
+  <link rel="stylesheet" href="/css/style.css?v=overview-1">
+  <script src="/js/review-insights.js?v=overview-1" defer></script>
+  <script src="/js/app.js?v=overview-1" defer></script>
 </head>
 <body>
   <a class="skip-link" href="#report">가격 정보로 바로 가기</a>
@@ -16,7 +16,7 @@
     <div class="topbar"><a class="brand" href="#top"><span class="brand-mark" aria-hidden="true">₩</span>여행물가</a><nav aria-label="주요 메뉴"><a href="#destinations">관광지 선택</a><a class="nav-pill" href="#report">후기 보기</a><a class="nav-pill" href="/community">경험 공유</a><a th:if="${admin}" href="/admin/reviews">후기 분석 관리</a></nav></div>
     <div class="hero-content"><span class="eyebrow">여행 전, 가격과 후기를 함께</span>
       <h1>여행은 즐겁게.<br><span class="gold-text">지갑은 안전하게!</span></h1>
-      <p class="hero-copy">여행지에서 만족했던 선택과 아쉬웠던 경험.<br>반복된 만족과 불편, 출처를 확인하고 여행을 준비하세요.</p>
+      <p class="hero-copy">여행지에서 만족했던 선택과 아쉬웠던 경험.<br>칭찬과 불만, 주요 이슈를 한눈에 보고 여행을 준비하세요.</p>
       <div class="guide-banner"><span>여행 준비</span> 후기에서 여행에 필요한 정보 찾기 <a href="#destinations">관광지 둘러보기 ↓</a></div>
       <form id="analysis-form" class="explore-form">
         <div class="selection-fields">
@@ -35,7 +35,7 @@
       <div class="filters" aria-label="지역 선택" id="filters"></div><div class="cards" id="cards"></div>
     </section>
     <section class="wrap report-section" id="report" aria-labelledby="report-heading" aria-busy="false">
-      <div class="report-heading"><div><span class="eyebrow">여행 정보</span><h2 id="report-heading">여행지 경험과 가격 단서</h2><p class="section-note" id="report-period"></p></div><span class="report-label" id="result-kind">검토 자료 예시</span></div>
+      <div class="report-heading"><div><span class="eyebrow">여행 정보</span><h2 id="report-heading">여행지 종합 후기</h2><p class="section-note" id="report-period"></p></div><span class="report-label" id="result-kind">검토 자료 예시</span></div>
       <p id="error" class="error" role="alert" hidden></p>
       <p id="loading" class="loading" role="status" hidden>가격 관련 자료와 출처를 확인하고 있어요. 잠시 기다려주세요.</p>
       <div id="result" aria-live="polite"></div>

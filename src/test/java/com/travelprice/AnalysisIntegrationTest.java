@@ -56,7 +56,7 @@ class AnalysisIntegrationTest {
                     .andExpect(status().isBadRequest());
     }
     @Test void homeAndStaticFilesAreServed() throws Exception {
-        mvc.perform(get("/")).andExpect(status().isOk()).andExpect(content().string(org.hamcrest.Matchers.containsString("여행지 경험과 가격 단서")));
+        mvc.perform(get("/")).andExpect(status().isOk()).andExpect(content().string(org.hamcrest.Matchers.containsString("여행지 종합 후기")));
         mvc.perform(get("/css/style.css")).andExpect(status().isOk());
         mvc.perform(get("/js/app.js")).andExpect(status().isOk());
         mvc.perform(get("/js/review-insights.js")).andExpect(status().isOk());
