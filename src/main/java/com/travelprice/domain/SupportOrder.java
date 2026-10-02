@@ -20,7 +20,19 @@ public class SupportOrder {
     public String getPaymentKey(){return paymentKey;}
     public boolean isConfirming(){return confirmationStartedAt!=null&&status==Status.READY;}
     public void configure(String mode){paymentMode=mode;}
-    public void beginConfirmation(String key){paymentKey=key;confirmationStartedAt=Instant.now();}
+    @Column(length=16) private String paymentProvider;
+    @Column(length=20) private String merchantCid;
+    @Column(length=64) private String approvalTokenHash;
+    @Column(length=2048) private String redirectPcUrl;
+    @Column(length=2048) private String redirectMobileUrl;
+    public String getPaymentProvider(){return paymentProvider;}
+    public String getMerchantCid(){return merchantCid;}
+    public String getApprovalTokenHash(){return approvalTokenHash;}
+    public String getRedirectPcUrl(){return redirectPcUrl;}
+    public String getRedirectMobileUrl(){return redirectMobileUrl;}
+    public void configureKakao(String mode,String cid){configure(mode);paymentProvider="KAKAOPAY";merchantCid=cid;}
+    public void ready(String tid,String pc,String mobile){paymentKey=tid;redirectPcUrl=pc;redirectMobileUrl=mobile;}
+    public void beginConfirmation(String hash){approvalTokenHash=hash;confirmationStartedAt=Instant.now();}
     protected SupportOrder(){}
     public SupportOrder(String owner,String request,int amount,Instant now){id=UUID.randomUUID().toString();ownerKey=owner;requestKey=request;this.amount=amount;status=Status.READY;createdAt=now;expiresAt=now.plus(Duration.ofMinutes(20));}
     public String getId(){return id;}public String getOwnerKey(){return ownerKey;}public int getAmount(){return amount;}public Status getStatus(){return status;}public Instant getCreatedAt(){return createdAt;}public Instant getCompletedAt(){return completedAt;}

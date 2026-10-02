@@ -33,6 +33,7 @@ app:
     timeout-seconds: ${OLLAMA_TIMEOUT_SECONDS:300}
     context-size: ${OLLAMA_CONTEXT_SIZE:16384}
   payments:
-    mode: ${TOSS_PAYMENT_MODE:TEST}
-    client-key: ${TOSS_CLIENT_KEY:}
-    secret-key: ${TOSS_SECRET_KEY:}
+    mode: ${KAKAOPAY_PAYMENT_MODE:TEST}
+    cid: ${KAKAOPAY_CID:TC0ONETIME}
+    secret-key: ${KAKAOPAY_SECRET_KEY:}
+    site-url: ${PAYMENT_SITE_URL:http://localhost:8080}

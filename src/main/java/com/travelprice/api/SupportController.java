@@ -13,6 +13,8 @@ public class SupportController {
     @PostMapping @ResponseStatus(HttpStatus.CREATED)public OrderView create(@Valid @RequestBody CreateInput input,HttpServletRequest request){return support.create(input,owner(request,true));}
     @GetMapping("/{id}")public OrderView detail(@PathVariable String id,HttpServletRequest request){return support.detail(id,owner(request,false));}
     @GetMapping("/config")public ConfigView config(){return support.config();}
+    @PostMapping("/{id}/ready")public ReadyView ready(@PathVariable String id,@RequestBody ReadyInput input,HttpServletRequest request){return support.ready(id,input,owner(request,false));}
+    @PostMapping("/{id}/reconcile")public OrderView reconcile(@PathVariable String id,HttpServletRequest request){return support.reconcile(id,owner(request,false));}
     @PostMapping("/{id}/confirm")public OrderView confirm(@PathVariable String id,@Valid @RequestBody ConfirmInput input,HttpServletRequest request){return support.confirm(id,input,owner(request,false));}
     private String owner(HttpServletRequest request,boolean create){
         var session=request.getSession(create);if(session==null)return null;
