@@ -59,6 +59,11 @@ class AnalysisIntegrationTest {
         mvc.perform(get("/")).andExpect(status().isOk()).andExpect(content().string(org.hamcrest.Matchers.containsString("여행지 경험과 가격 단서")));
         mvc.perform(get("/css/style.css")).andExpect(status().isOk());
         mvc.perform(get("/js/app.js")).andExpect(status().isOk());
+        mvc.perform(get("/js/review-insights.js")).andExpect(status().isOk());
+        mvc.perform(get("/data/sokcho-prompt-pilot.json")).andExpect(status().isOk())
+                .andExpect(jsonPath("$.kind").value("assistant_prompt_pilot"))
+                .andExpect(jsonPath("$.reviews.length()").value(30))
+                .andExpect(jsonPath("$.reviews[5].analysis.experiences[1].category").value("parking"));
         mvc.perform(get("/js/local-review.js").with(user("admin").roles("ADMIN"))).andExpect(status().isOk());
         mvc.perform(get("/data/sokcho-review-pilot.json")).andExpect(status().isOk())
                 .andExpect(jsonPath("$.sources.length()").value(30))

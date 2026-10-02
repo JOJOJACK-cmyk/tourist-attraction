@@ -191,3 +191,16 @@ Ollama 공식 문서: https://docs.ollama.com/api/chat · https://docs.ollama.co
 - 제작자·공식 배포: https://github.com/orioncactus/pretendard
 - 저작권: Copyright (c) 2021 Kil Hyung-jin, with Reserved Font Name Pretendard.
 - 라이선스: SIL Open Font License 1.1 (공식 저장소의 LICENSE 파일 참조).
+
+## 시스템 프롬프트 적용 예시 — 속초 30건
+
+기존 검토 요약 30건을 시스템 프롬프트 형식으로 분석한 **저장된 예시**를 메인 화면에 연결했습니다. 실제 Ollama 호출이나 새 후기 30건 수집 결과가 아닙니다. 30개 출처별 분석에서 경험 57개를 추출했으며, 음식·주차·쇼핑의 근거가 있습니다. 단순 감상만 있는 2건은 경험 배열을 비웠습니다.
+
+관광지에서 속초를 선택하면 먼저 **바로 먹을지 포장할지**, **술빵 대기**, **품목별 가격 확인**, 해당 연도에 자료가 있을 때 **주차권 확인**을 볼 수 있습니다. 음식·숙박·주차 등 9개 영역으로 필터링하며 근거가 없는 영역은 자료 없음으로 표시합니다. 각 질문에서 관련 요약과 원문을 펼쳐볼 수 있습니다. 기존 주제별 검토도 별도 펼침 영역에 유지합니다.
+
+- 저장 결과: `src/main/resources/static/data/sokcho-prompt-pilot.json`
+- 화면 구성: `src/main/resources/static/js/review-insights.js`
+- 상세 해석: [프롬프트 적용 예시 안내](docs/ai/sokcho-prompt-pilot.md)
+- JavaScript 검증(개발 시 Node.js 사용): `node src/test/js/review-insights.test.cjs`
+
+기본 연도 2026에는 주차 근거가 없습니다. 2025 또는 전체 검토를 선택하면 주차 요약 1건을 확인할 수 있습니다. 후기의 작성 연도에 맞춰 질문·영역별 수·세부 경험·근거 링크를 함께 필터링합니다. 모델 연결은 계속 관리자 전용이며, 공개 이용자는 저장된 분석 자료를 읽습니다.

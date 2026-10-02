@@ -1,0 +1,1509 @@
+{
+  "kind": "assistant_prompt_pilot",
+  "destinationId": "sokcho",
+  "generatedAt": "2026-10-02",
+  "inputKind": "stored_review_summaries",
+  "promptPath": "prompts/review-extraction-system.txt",
+  "promptVersion": "repository-2026-10-02",
+  "provenance": "저장된 후기 요약 30건을 시스템 프롬프트에 맞춰 분석한 예시입니다. 실제 Ollama 호출 결과나 원문 재수집 결과가 아닙니다.",
+  "reviews": [
+    {
+      "source_id": "pilot-1",
+      "sourceId": 1,
+      "published_at": "2025-01-20",
+      "input_kind": "reviewed_summary",
+      "analysis": {
+        "experiences": [
+          {
+            "source_id": "pilot-1",
+            "category": "food",
+            "topic": "value_satisfaction",
+            "sentiment": "positive",
+            "experience_type": "unclear",
+            "place": null,
+            "item": "술빵",
+            "summary": "술빵의 크기에 비해 가격이 만족스러웠다는 평가",
+            "condition": null,
+            "reason": "크기와 가격을 함께 비교",
+            "alternative": null,
+            "check_before_visit": "가격과 실제 크기·구성을 함께 확인",
+            "published_at": "2025-01-20",
+            "visited_at": null,
+            "support": "술빵 크기 대비 가격 만족, 누룽지 식감 만족. 일부 튀김 가격 부담과 속재료 취향 아쉬움. 대기는 있었지만 구매가 빠른 경우도 있음.",
+            "uncertainties": [
+              "저장된 검토 요약을 입력으로 사용해 직접 경험 여부와 방문일을 원문에서 다시 확인하지 않았습니다."
+            ]
+          },
+          {
+            "source_id": "pilot-1",
+            "category": "food",
+            "topic": "experience_condition",
+            "sentiment": "positive",
+            "experience_type": "unclear",
+            "place": null,
+            "item": "누룽지 오징어순대",
+            "summary": "누룽지의 식감에 만족",
+            "condition": "누룽지 식감을 기대한 선택",
+            "reason": null,
+            "alternative": null,
+            "check_before_visit": null,
+            "published_at": "2025-01-20",
+            "visited_at": null,
+            "support": "술빵 크기 대비 가격 만족, 누룽지 식감 만족. 일부 튀김 가격 부담과 속재료 취향 아쉬움. 대기는 있었지만 구매가 빠른 경우도 있음.",
+            "uncertainties": [
+              "저장된 검토 요약을 입력으로 사용해 직접 경험 여부와 방문일을 원문에서 다시 확인하지 않았습니다."
+            ]
+          },
+          {
+            "source_id": "pilot-1",
+            "category": "food",
+            "topic": "spending_regret",
+            "sentiment": "negative",
+            "experience_type": "unclear",
+            "place": null,
+            "item": "튀김",
+            "summary": "일부 튀김 가격을 부담스럽게 평가",
+            "condition": null,
+            "reason": null,
+            "alternative": null,
+            "check_before_visit": "튀김의 판매 단위·수량과 주문 총액 확인",
+            "published_at": "2025-01-20",
+            "visited_at": null,
+            "support": "술빵 크기 대비 가격 만족, 누룽지 식감 만족. 일부 튀김 가격 부담과 속재료 취향 아쉬움. 대기는 있었지만 구매가 빠른 경우도 있음.",
+            "uncertainties": [
+              "저장된 검토 요약을 입력으로 사용해 직접 경험 여부와 방문일을 원문에서 다시 확인하지 않았습니다."
+            ]
+          },
+          {
+            "source_id": "pilot-1",
+            "category": "food",
+            "topic": "crowding",
+            "sentiment": "positive",
+            "experience_type": "unclear",
+            "place": null,
+            "item": "시장 먹거리",
+            "summary": "대기가 있었지만 구매가 빠른 경우도 있었음",
+            "condition": null,
+            "reason": null,
+            "alternative": null,
+            "check_before_visit": "줄 길이와 실제 수령 예상 시간 확인",
+            "published_at": "2025-01-20",
+            "visited_at": null,
+            "support": "술빵 크기 대비 가격 만족, 누룽지 식감 만족. 일부 튀김 가격 부담과 속재료 취향 아쉬움. 대기는 있었지만 구매가 빠른 경우도 있음.",
+            "uncertainties": [
+              "저장된 검토 요약을 입력으로 사용해 직접 경험 여부와 방문일을 원문에서 다시 확인하지 않았습니다."
+            ]
+          }
+        ],
+        "limitations": []
+      }
+    },
+    {
+      "source_id": "pilot-2",
+      "sourceId": 2,
+      "published_at": "2026-05-31",
+      "input_kind": "reviewed_summary",
+      "analysis": {
+        "experiences": [
+          {
+            "source_id": "pilot-2",
+            "category": "food",
+            "topic": "crowding",
+            "sentiment": "positive",
+            "experience_type": "unclear",
+            "place": null,
+            "item": "술빵",
+            "summary": "약 10분 대기 후 구매했고 회전이 빨랐다는 경험",
+            "condition": "해당 후기의 구매 당시",
+            "reason": null,
+            "alternative": null,
+            "check_before_visit": "방문 시점의 실제 수령 예상 시간 확인",
+            "published_at": "2026-05-31",
+            "visited_at": null,
+            "support": "술빵 구매 약 10분, 회전 빠름. 식혀 먹어 따뜻할 때보다 아쉬웠다는 경험.",
+            "uncertainties": [
+              "저장된 검토 요약을 입력으로 사용해 직접 경험 여부와 방문일을 원문에서 다시 확인하지 않았습니다."
+            ]
+          },
+          {
+            "source_id": "pilot-2",
+            "category": "food",
+            "topic": "experience_condition",
+            "sentiment": "negative",
+            "experience_type": "unclear",
+            "place": null,
+            "item": "술빵",
+            "summary": "식혀 먹었을 때 따뜻할 때보다 아쉬웠다는 경험",
+            "condition": "식힌 뒤 먹음",
+            "reason": null,
+            "alternative": null,
+            "check_before_visit": "바로 먹을지 포장 후 먹을지 고려",
+            "published_at": "2026-05-31",
+            "visited_at": null,
+            "support": "술빵 구매 약 10분, 회전 빠름. 식혀 먹어 따뜻할 때보다 아쉬웠다는 경험.",
+            "uncertainties": [
+              "저장된 검토 요약을 입력으로 사용해 직접 경험 여부와 방문일을 원문에서 다시 확인하지 않았습니다."
+            ]
+          }
+        ],
+        "limitations": []
+      }
+    },
+    {
+      "source_id": "pilot-3",
+      "sourceId": 3,
+      "published_at": "2025-04-08",
+      "input_kind": "reviewed_summary",
+      "analysis": {
+        "experiences": [
+          {
+            "source_id": "pilot-3",
+            "category": "food",
+            "topic": "experience_condition",
+            "sentiment": "positive",
+            "experience_type": "unclear",
+            "place": null,
+            "item": "누룽지 오징어순대",
+            "summary": "누룽지 오징어순대 식감에 만족",
+            "condition": null,
+            "reason": null,
+            "alternative": null,
+            "check_before_visit": null,
+            "published_at": "2025-04-08",
+            "visited_at": null,
+            "support": "누룽지 오징어순대 식감 만족. 디저트 가격이 높게 느껴져 재구매 고민.",
+            "uncertainties": [
+              "저장된 검토 요약을 입력으로 사용해 직접 경험 여부와 방문일을 원문에서 다시 확인하지 않았습니다."
+            ]
+          },
+          {
+            "source_id": "pilot-3",
+            "category": "food",
+            "topic": "spending_regret",
+            "sentiment": "negative",
+            "experience_type": "unclear",
+            "place": null,
+            "item": "디저트",
+            "summary": "디저트 가격을 높게 느껴 재구매를 고민",
+            "condition": null,
+            "reason": null,
+            "alternative": null,
+            "check_before_visit": "가격과 원하는 양을 확인한 뒤 구매 여부 결정",
+            "published_at": "2025-04-08",
+            "visited_at": null,
+            "support": "누룽지 오징어순대 식감 만족. 디저트 가격이 높게 느껴져 재구매 고민.",
+            "uncertainties": [
+              "저장된 검토 요약을 입력으로 사용해 직접 경험 여부와 방문일을 원문에서 다시 확인하지 않았습니다."
+            ]
+          }
+        ],
+        "limitations": []
+      }
+    },
+    {
+      "source_id": "pilot-4",
+      "sourceId": 4,
+      "published_at": "2026-07-16",
+      "input_kind": "reviewed_summary",
+      "analysis": {
+        "experiences": [
+          {
+            "source_id": "pilot-4",
+            "category": "food",
+            "topic": "value_satisfaction",
+            "sentiment": "positive",
+            "experience_type": "unclear",
+            "place": null,
+            "item": "누룽지 오징어순대",
+            "summary": "식감·맛과 지불한 가격을 함께 평가하며 만족",
+            "condition": null,
+            "reason": null,
+            "alternative": null,
+            "check_before_visit": null,
+            "published_at": "2026-07-16",
+            "visited_at": null,
+            "support": "정성껏 구운 누룽지 오징어순대의 식감·맛·가격 대비 만족, 포장 후 재가열 경험.",
+            "uncertainties": [
+              "저장된 검토 요약을 입력으로 사용해 직접 경험 여부와 방문일을 원문에서 다시 확인하지 않았습니다."
+            ]
+          },
+          {
+            "source_id": "pilot-4",
+            "category": "food",
+            "topic": "experience_condition",
+            "sentiment": "positive",
+            "experience_type": "unclear",
+            "place": null,
+            "item": "누룽지 오징어순대",
+            "summary": "포장 후 재가열해 이용한 경험",
+            "condition": "포장 후 재가열",
+            "reason": null,
+            "alternative": null,
+            "check_before_visit": "바로 먹을지 포장 후 이용할지 확인",
+            "published_at": "2026-07-16",
+            "visited_at": null,
+            "support": "정성껏 구운 누룽지 오징어순대의 식감·맛·가격 대비 만족, 포장 후 재가열 경험.",
+            "uncertainties": [
+              "저장된 검토 요약을 입력으로 사용해 직접 경험 여부와 방문일을 원문에서 다시 확인하지 않았습니다."
+            ]
+          }
+        ],
+        "limitations": []
+      }
+    },
+    {
+      "source_id": "pilot-5",
+      "sourceId": 5,
+      "published_at": "2026-04-18",
+      "input_kind": "reviewed_summary",
+      "analysis": {
+        "experiences": [
+          {
+            "source_id": "pilot-5",
+            "category": "food",
+            "topic": "experience_condition",
+            "sentiment": "positive",
+            "experience_type": "unclear",
+            "place": null,
+            "item": "닭강정",
+            "summary": "닭강정 맛과 포장 편의에 만족",
+            "condition": "포장 이용",
+            "reason": null,
+            "alternative": null,
+            "check_before_visit": null,
+            "published_at": "2026-04-18",
+            "visited_at": null,
+            "support": "닭강정 맛과 포장 편의 만족. 회전은 빠르지만 인기 시간 대기를 아쉬움으로 언급.",
+            "uncertainties": [
+              "저장된 검토 요약을 입력으로 사용해 직접 경험 여부와 방문일을 원문에서 다시 확인하지 않았습니다."
+            ]
+          },
+          {
+            "source_id": "pilot-5",
+            "category": "food",
+            "topic": "crowding",
+            "sentiment": "negative",
+            "experience_type": "unclear",
+            "place": null,
+            "item": "닭강정",
+            "summary": "인기 시간대 대기를 아쉬움으로 언급",
+            "condition": "인기 시간대",
+            "reason": null,
+            "alternative": null,
+            "check_before_visit": "주문 전 수령 예상 시간 확인",
+            "published_at": "2026-04-18",
+            "visited_at": null,
+            "support": "닭강정 맛과 포장 편의 만족. 회전은 빠르지만 인기 시간 대기를 아쉬움으로 언급.",
+            "uncertainties": [
+              "저장된 검토 요약을 입력으로 사용해 직접 경험 여부와 방문일을 원문에서 다시 확인하지 않았습니다."
+            ]
+          },
+          {
+            "source_id": "pilot-5",
+            "category": "food",
+            "topic": "crowding",
+            "sentiment": "positive",
+            "experience_type": "unclear",
+            "place": null,
+            "item": "닭강정",
+            "summary": "대기가 있어도 회전은 빨랐다고 평가",
+            "condition": null,
+            "reason": null,
+            "alternative": null,
+            "check_before_visit": null,
+            "published_at": "2026-04-18",
+            "visited_at": null,
+            "support": "닭강정 맛과 포장 편의 만족. 회전은 빠르지만 인기 시간 대기를 아쉬움으로 언급.",
+            "uncertainties": [
+              "저장된 검토 요약을 입력으로 사용해 직접 경험 여부와 방문일을 원문에서 다시 확인하지 않았습니다."
+            ]
+          }
+        ],
+        "limitations": []
+      }
+    },
+    {
+      "source_id": "pilot-6",
+      "sourceId": 6,
+      "published_at": "2025-07-16",
+      "input_kind": "reviewed_summary",
+      "analysis": {
+        "experiences": [
+          {
+            "source_id": "pilot-6",
+            "category": "food",
+            "topic": "spending_regret",
+            "sentiment": "negative",
+            "experience_type": "unclear",
+            "place": null,
+            "item": "분식",
+            "summary": "일부 분식 가격이 부담스럽고 맛의 호불호가 있었음",
+            "condition": null,
+            "reason": null,
+            "alternative": null,
+            "check_before_visit": "판매 단위·구성과 가격 확인",
+            "published_at": "2025-07-16",
+            "visited_at": null,
+            "support": "일부 분식 가격 부담과 맛의 호불호. 술빵 줄 관찰, 평일 주차 여유. 가게별 주차권 제공 차이.",
+            "uncertainties": [
+              "저장된 검토 요약을 입력으로 사용해 직접 경험 여부와 방문일을 원문에서 다시 확인하지 않았습니다."
+            ]
+          },
+          {
+            "source_id": "pilot-6",
+            "category": "parking",
+            "topic": "crowding",
+            "sentiment": "positive",
+            "experience_type": "unclear",
+            "place": null,
+            "item": "시장 주차",
+            "summary": "평일 방문 때 주차 공간이 여유로웠다는 경험",
+            "condition": "평일 방문",
+            "reason": null,
+            "alternative": null,
+            "check_before_visit": "본인 방문 시간대의 주차 가능 여부 확인",
+            "published_at": "2025-07-16",
+            "visited_at": null,
+            "support": "일부 분식 가격 부담과 맛의 호불호. 술빵 줄 관찰, 평일 주차 여유. 가게별 주차권 제공 차이.",
+            "uncertainties": [
+              "저장된 검토 요약을 입력으로 사용해 직접 경험 여부와 방문일을 원문에서 다시 확인하지 않았습니다."
+            ]
+          },
+          {
+            "source_id": "pilot-6",
+            "category": "parking",
+            "topic": "price_information",
+            "sentiment": "neutral",
+            "experience_type": "unclear",
+            "place": null,
+            "item": "시장 주차권",
+            "summary": "가게마다 주차권 제공이 달랐다는 정보",
+            "condition": null,
+            "reason": null,
+            "alternative": null,
+            "check_before_visit": "구매할 가게의 주차권 제공 여부와 적용 조건 확인",
+            "published_at": "2025-07-16",
+            "visited_at": null,
+            "support": "일부 분식 가격 부담과 맛의 호불호. 술빵 줄 관찰, 평일 주차 여유. 가게별 주차권 제공 차이.",
+            "uncertainties": [
+              "저장된 검토 요약을 입력으로 사용해 직접 경험 여부와 방문일을 원문에서 다시 확인하지 않았습니다."
+            ]
+          }
+        ],
+        "limitations": [
+          "술빵 줄은 관찰 내용이며 직접 기다린 경험으로 계산하지 않았습니다."
+        ]
+      }
+    },
+    {
+      "source_id": "pilot-7",
+      "sourceId": 7,
+      "published_at": "2026-08-01",
+      "input_kind": "reviewed_summary",
+      "analysis": {
+        "experiences": [
+          {
+            "source_id": "pilot-7",
+            "category": "food",
+            "topic": "experience_condition",
+            "sentiment": "positive",
+            "experience_type": "unclear",
+            "place": "현대아바이순대",
+            "item": "일반 오징어순대",
+            "summary": "부드러운 식감과 즉석 튀김에 만족",
+            "condition": "즉석 조리",
+            "reason": null,
+            "alternative": null,
+            "check_before_visit": null,
+            "published_at": "2026-08-01",
+            "visited_at": null,
+            "support": "현대아바이순대의 부드러운 식감과 즉석 튀김 만족. 일반 오징어순대로 누룽지 항목과 분리.",
+            "uncertainties": [
+              "저장된 검토 요약을 입력으로 사용해 직접 경험 여부와 방문일을 원문에서 다시 확인하지 않았습니다."
+            ]
+          }
+        ],
+        "limitations": []
+      }
+    },
+    {
+      "source_id": "pilot-8",
+      "sourceId": 8,
+      "published_at": "2026-02-23",
+      "input_kind": "reviewed_summary",
+      "analysis": {
+        "experiences": [
+          {
+            "source_id": "pilot-8",
+            "category": "food",
+            "topic": "value_satisfaction",
+            "sentiment": "positive",
+            "experience_type": "unclear",
+            "place": "시장 지하 회센터",
+            "item": "회 세트",
+            "summary": "지하 회센터 세트 구성과 가격 대비 만족",
+            "condition": null,
+            "reason": null,
+            "alternative": null,
+            "check_before_visit": "주문할 세트의 구성과 총액 확인",
+            "published_at": "2026-02-23",
+            "visited_at": null,
+            "support": "지하 회센터 세트 구성과 가격 대비 만족, 회 신선도·식감 만족.",
+            "uncertainties": [
+              "저장된 검토 요약을 입력으로 사용해 직접 경험 여부와 방문일을 원문에서 다시 확인하지 않았습니다."
+            ]
+          },
+          {
+            "source_id": "pilot-8",
+            "category": "food",
+            "topic": "experience_condition",
+            "sentiment": "positive",
+            "experience_type": "unclear",
+            "place": "시장 지하 회센터",
+            "item": "회",
+            "summary": "회 신선도와 식감에 만족",
+            "condition": null,
+            "reason": null,
+            "alternative": null,
+            "check_before_visit": null,
+            "published_at": "2026-02-23",
+            "visited_at": null,
+            "support": "지하 회센터 세트 구성과 가격 대비 만족, 회 신선도·식감 만족.",
+            "uncertainties": [
+              "저장된 검토 요약을 입력으로 사용해 직접 경험 여부와 방문일을 원문에서 다시 확인하지 않았습니다."
+            ]
+          }
+        ],
+        "limitations": []
+      }
+    },
+    {
+      "source_id": "pilot-9",
+      "sourceId": 9,
+      "published_at": "2025-07-21",
+      "input_kind": "reviewed_summary",
+      "analysis": {
+        "experiences": [
+          {
+            "source_id": "pilot-9",
+            "category": "shopping",
+            "topic": "experience_condition",
+            "sentiment": "positive",
+            "experience_type": "unclear",
+            "place": "황부자젓갈",
+            "item": "젓갈",
+            "summary": "젓갈 맛과 포장에 만족",
+            "condition": "포장 구매",
+            "reason": null,
+            "alternative": null,
+            "check_before_visit": null,
+            "published_at": "2025-07-21",
+            "visited_at": null,
+            "support": "젓갈 맛, 포장과 재주문 서비스 만족. 택배 재구매 내용은 시장 방문 경험과 구분.",
+            "uncertainties": [
+              "저장된 검토 요약을 입력으로 사용해 직접 경험 여부와 방문일을 원문에서 다시 확인하지 않았습니다."
+            ]
+          },
+          {
+            "source_id": "pilot-9",
+            "category": "shopping",
+            "topic": "service_quality",
+            "sentiment": "positive",
+            "experience_type": "unclear",
+            "place": "황부자젓갈",
+            "item": "젓갈",
+            "summary": "재주문 서비스에 만족",
+            "condition": "택배 재구매",
+            "reason": null,
+            "alternative": null,
+            "check_before_visit": "방문 구매와 택배 재구매 서비스를 구분해 확인",
+            "published_at": "2025-07-21",
+            "visited_at": null,
+            "support": "젓갈 맛, 포장과 재주문 서비스 만족. 택배 재구매 내용은 시장 방문 경험과 구분.",
+            "uncertainties": [
+              "저장된 검토 요약을 입력으로 사용해 직접 경험 여부와 방문일을 원문에서 다시 확인하지 않았습니다."
+            ]
+          }
+        ],
+        "limitations": [
+          "택배 재구매 서비스는 방문 당시 응대와 구분합니다."
+        ]
+      }
+    },
+    {
+      "source_id": "pilot-10",
+      "sourceId": 10,
+      "published_at": "2025-02-20",
+      "input_kind": "reviewed_summary",
+      "analysis": {
+        "experiences": [
+          {
+            "source_id": "pilot-10",
+            "category": "food",
+            "topic": "experience_condition",
+            "sentiment": "positive",
+            "experience_type": "unclear",
+            "place": null,
+            "item": "누룽지 오징어순대",
+            "summary": "누룽지 오징어순대의 바삭함에 만족",
+            "condition": null,
+            "reason": null,
+            "alternative": null,
+            "check_before_visit": null,
+            "published_at": "2025-02-20",
+            "visited_at": null,
+            "support": "누룽지 오징어순대 바삭함 만족. 줄은 길었지만 미리 주문받아 포장이 빨랐음.",
+            "uncertainties": [
+              "저장된 검토 요약을 입력으로 사용해 직접 경험 여부와 방문일을 원문에서 다시 확인하지 않았습니다."
+            ]
+          },
+          {
+            "source_id": "pilot-10",
+            "category": "food",
+            "topic": "crowding",
+            "sentiment": "positive",
+            "experience_type": "unclear",
+            "place": null,
+            "item": "누룽지 오징어순대",
+            "summary": "긴 줄에도 미리 주문받아 포장 수령이 빨랐음",
+            "condition": "미리 주문을 받는 방식",
+            "reason": null,
+            "alternative": null,
+            "check_before_visit": "주문 방식과 수령 예상 시간 확인",
+            "published_at": "2025-02-20",
+            "visited_at": null,
+            "support": "누룽지 오징어순대 바삭함 만족. 줄은 길었지만 미리 주문받아 포장이 빨랐음.",
+            "uncertainties": [
+              "저장된 검토 요약을 입력으로 사용해 직접 경험 여부와 방문일을 원문에서 다시 확인하지 않았습니다."
+            ]
+          }
+        ],
+        "limitations": []
+      }
+    },
+    {
+      "source_id": "pilot-11",
+      "sourceId": 11,
+      "published_at": "2026-09-13",
+      "input_kind": "reviewed_summary",
+      "analysis": {
+        "experiences": [
+          {
+            "source_id": "pilot-11",
+            "category": "food",
+            "topic": "experience_condition",
+            "sentiment": "positive",
+            "experience_type": "unclear",
+            "place": "민영활어공장",
+            "item": "회·초밥",
+            "summary": "포장 후 신선도와 식감에 만족",
+            "condition": "포장 후 이용",
+            "reason": null,
+            "alternative": null,
+            "check_before_visit": null,
+            "published_at": "2026-09-13",
+            "visited_at": null,
+            "support": "민영활어공장 회·초밥 포장 후 식감과 신선도 만족. 회무침 상호·지역 부분은 확인 유보.",
+            "uncertainties": [
+              "저장된 검토 요약을 입력으로 사용해 직접 경험 여부와 방문일을 원문에서 다시 확인하지 않았습니다."
+            ]
+          }
+        ],
+        "limitations": [
+          "상호·지역이 혼재한 회무침 내용은 제외했습니다."
+        ]
+      }
+    },
+    {
+      "source_id": "pilot-12",
+      "sourceId": 12,
+      "published_at": "2026-08-28",
+      "input_kind": "reviewed_summary",
+      "analysis": {
+        "experiences": [
+          {
+            "source_id": "pilot-12",
+            "category": "food",
+            "topic": "experience_condition",
+            "sentiment": "positive",
+            "experience_type": "unclear",
+            "place": "똑이네튀김",
+            "item": "누룽지 오징어순대",
+            "summary": "숙소로 포장해 먹으며 바삭함에 만족",
+            "condition": "숙소에서 포장 음식 이용",
+            "reason": null,
+            "alternative": null,
+            "check_before_visit": "포장 후 먹을 시점과 장소 고려",
+            "published_at": "2026-08-28",
+            "visited_at": null,
+            "support": "똑이네 누룽지 오징어순대 바삭함과 숙소 포장 만족. 주말 대기줄 관찰.",
+            "uncertainties": [
+              "저장된 검토 요약을 입력으로 사용해 직접 경험 여부와 방문일을 원문에서 다시 확인하지 않았습니다."
+            ]
+          },
+          {
+            "source_id": "pilot-12",
+            "category": "food",
+            "topic": "crowding",
+            "sentiment": "neutral",
+            "experience_type": "unclear",
+            "place": "똑이네튀김",
+            "item": "누룽지 오징어순대",
+            "summary": "주말 대기줄을 관찰",
+            "condition": "주말",
+            "reason": null,
+            "alternative": null,
+            "check_before_visit": "방문 시점의 대기 상황 확인",
+            "published_at": "2026-08-28",
+            "visited_at": null,
+            "support": "똑이네 누룽지 오징어순대 바삭함과 숙소 포장 만족. 주말 대기줄 관찰.",
+            "uncertainties": [
+              "저장된 검토 요약을 입력으로 사용해 직접 경험 여부와 방문일을 원문에서 다시 확인하지 않았습니다."
+            ]
+          }
+        ],
+        "limitations": []
+      }
+    },
+    {
+      "source_id": "pilot-13",
+      "sourceId": 13,
+      "published_at": "2026-08-23",
+      "input_kind": "reviewed_summary",
+      "analysis": {
+        "experiences": [],
+        "limitations": [
+          "고소하다는 감상만으로 지출·방문 판단에 도움되는 요소를 추출하지 않았습니다. 다른 식당 경험은 제외했습니다."
+        ]
+      }
+    },
+    {
+      "source_id": "pilot-14",
+      "sourceId": 14,
+      "published_at": "2025-11-21",
+      "input_kind": "reviewed_summary",
+      "analysis": {
+        "experiences": [
+          {
+            "source_id": "pilot-14",
+            "category": "food",
+            "topic": "value_satisfaction",
+            "sentiment": "positive",
+            "experience_type": "unclear",
+            "place": null,
+            "item": "술빵",
+            "summary": "술빵의 크기·맛·가성비에 만족",
+            "condition": null,
+            "reason": null,
+            "alternative": null,
+            "check_before_visit": null,
+            "published_at": "2025-11-21",
+            "visited_at": null,
+            "support": "속초 술빵의 크기·맛·가성비 만족, 주말 30~40분 대기. 강릉 무침회 부분은 제외.",
+            "uncertainties": [
+              "저장된 검토 요약을 입력으로 사용해 직접 경험 여부와 방문일을 원문에서 다시 확인하지 않았습니다."
+            ]
+          },
+          {
+            "source_id": "pilot-14",
+            "category": "food",
+            "topic": "crowding",
+            "sentiment": "negative",
+            "experience_type": "unclear",
+            "place": null,
+            "item": "술빵",
+            "summary": "주말 약 30~40분 대기 경험",
+            "condition": "주말 방문",
+            "reason": null,
+            "alternative": null,
+            "check_before_visit": "줄 서기 전 수령 예상 시간과 남은 일정 확인",
+            "published_at": "2025-11-21",
+            "visited_at": null,
+            "support": "속초 술빵의 크기·맛·가성비 만족, 주말 30~40분 대기. 강릉 무침회 부분은 제외.",
+            "uncertainties": [
+              "저장된 검토 요약을 입력으로 사용해 직접 경험 여부와 방문일을 원문에서 다시 확인하지 않았습니다."
+            ]
+          }
+        ],
+        "limitations": []
+      }
+    },
+    {
+      "source_id": "pilot-15",
+      "sourceId": 15,
+      "published_at": "2025-06-22",
+      "input_kind": "reviewed_summary",
+      "analysis": {
+        "experiences": [
+          {
+            "source_id": "pilot-15",
+            "category": "food",
+            "topic": "crowding",
+            "sentiment": "positive",
+            "experience_type": "unclear",
+            "place": null,
+            "item": "술빵",
+            "summary": "약 10분 대기했고 회전이 빨랐다는 경험",
+            "condition": null,
+            "reason": null,
+            "alternative": null,
+            "check_before_visit": null,
+            "published_at": "2025-06-22",
+            "visited_at": null,
+            "support": "술빵 양 만족, 약 10분 대기와 빠른 회전. 따뜻할 때 먹으며 시장 구경.",
+            "uncertainties": [
+              "저장된 검토 요약을 입력으로 사용해 직접 경험 여부와 방문일을 원문에서 다시 확인하지 않았습니다."
+            ]
+          },
+          {
+            "source_id": "pilot-15",
+            "category": "food",
+            "topic": "experience_condition",
+            "sentiment": "positive",
+            "experience_type": "unclear",
+            "place": null,
+            "item": "술빵",
+            "summary": "따뜻할 때 먹으며 시장을 구경한 경험",
+            "condition": "구매 직후 따뜻할 때 먹음",
+            "reason": null,
+            "alternative": null,
+            "check_before_visit": "바로 먹을지 나중에 먹을지 고려",
+            "published_at": "2025-06-22",
+            "visited_at": null,
+            "support": "술빵 양 만족, 약 10분 대기와 빠른 회전. 따뜻할 때 먹으며 시장 구경.",
+            "uncertainties": [
+              "저장된 검토 요약을 입력으로 사용해 직접 경험 여부와 방문일을 원문에서 다시 확인하지 않았습니다."
+            ]
+          }
+        ],
+        "limitations": []
+      }
+    },
+    {
+      "source_id": "pilot-16",
+      "sourceId": 16,
+      "published_at": "2026-02-15",
+      "input_kind": "reviewed_summary",
+      "analysis": {
+        "experiences": [],
+        "limitations": [
+          "간식 추천만으로 가격 대비 만족을 추정하지 않았습니다."
+        ]
+      }
+    },
+    {
+      "source_id": "pilot-17",
+      "sourceId": 17,
+      "published_at": "2026-07-08",
+      "input_kind": "reviewed_summary",
+      "analysis": {
+        "experiences": [
+          {
+            "source_id": "pilot-17",
+            "category": "food",
+            "topic": "crowding",
+            "sentiment": "negative",
+            "experience_type": "unclear",
+            "place": null,
+            "item": "술빵",
+            "summary": "긴 대기줄을 부담스럽게 표현",
+            "condition": null,
+            "reason": null,
+            "alternative": null,
+            "check_before_visit": "수령 예상 시간과 기다릴 수 있는 시간 확인",
+            "published_at": "2026-07-08",
+            "visited_at": null,
+            "support": "갓 만든 술빵 맛 만족. 긴 대기줄을 부담으로 표현.",
+            "uncertainties": [
+              "저장된 검토 요약을 입력으로 사용해 직접 경험 여부와 방문일을 원문에서 다시 확인하지 않았습니다."
+            ]
+          },
+          {
+            "source_id": "pilot-17",
+            "category": "food",
+            "topic": "experience_condition",
+            "sentiment": "positive",
+            "experience_type": "unclear",
+            "place": null,
+            "item": "술빵",
+            "summary": "갓 만든 술빵의 맛에 만족",
+            "condition": "갓 만든 상태",
+            "reason": null,
+            "alternative": null,
+            "check_before_visit": null,
+            "published_at": "2026-07-08",
+            "visited_at": null,
+            "support": "갓 만든 술빵 맛 만족. 긴 대기줄을 부담으로 표현.",
+            "uncertainties": [
+              "저장된 검토 요약을 입력으로 사용해 직접 경험 여부와 방문일을 원문에서 다시 확인하지 않았습니다."
+            ]
+          }
+        ],
+        "limitations": []
+      }
+    },
+    {
+      "source_id": "pilot-18",
+      "sourceId": 18,
+      "published_at": "2026-06-12",
+      "input_kind": "reviewed_summary",
+      "analysis": {
+        "experiences": [
+          {
+            "source_id": "pilot-18",
+            "category": "food",
+            "topic": "value_satisfaction",
+            "sentiment": "positive",
+            "experience_type": "unclear",
+            "place": null,
+            "item": "술빵",
+            "summary": "술빵 크기에 비해 가격이 좋다는 평가",
+            "condition": null,
+            "reason": null,
+            "alternative": null,
+            "check_before_visit": null,
+            "published_at": "2026-06-12",
+            "visited_at": null,
+            "support": "술빵 크기에 비해 가격이 좋다는 반응. 평일 약 30분 미만 대기.",
+            "uncertainties": [
+              "저장된 검토 요약을 입력으로 사용해 직접 경험 여부와 방문일을 원문에서 다시 확인하지 않았습니다."
+            ]
+          },
+          {
+            "source_id": "pilot-18",
+            "category": "food",
+            "topic": "crowding",
+            "sentiment": "neutral",
+            "experience_type": "unclear",
+            "place": null,
+            "item": "술빵",
+            "summary": "평일 약 30분 미만 대기",
+            "condition": "평일 방문",
+            "reason": null,
+            "alternative": null,
+            "check_before_visit": "평일에도 대기 여부 확인",
+            "published_at": "2026-06-12",
+            "visited_at": null,
+            "support": "술빵 크기에 비해 가격이 좋다는 반응. 평일 약 30분 미만 대기.",
+            "uncertainties": [
+              "저장된 검토 요약을 입력으로 사용해 직접 경험 여부와 방문일을 원문에서 다시 확인하지 않았습니다."
+            ]
+          }
+        ],
+        "limitations": []
+      }
+    },
+    {
+      "source_id": "pilot-19",
+      "sourceId": 19,
+      "published_at": "2026-06-09",
+      "input_kind": "reviewed_summary",
+      "analysis": {
+        "experiences": [
+          {
+            "source_id": "pilot-19",
+            "category": "food",
+            "topic": "experience_condition",
+            "sentiment": "positive",
+            "experience_type": "unclear",
+            "place": null,
+            "item": "술빵",
+            "summary": "따뜻하거나 차가워도 맛있었다는 경험",
+            "condition": "따뜻한 상태와 식은 상태 모두",
+            "reason": null,
+            "alternative": null,
+            "check_before_visit": null,
+            "published_at": "2026-06-09",
+            "visited_at": null,
+            "support": "술빵이 크고 따뜻하거나 차가워도 맛있었다는 경험.",
+            "uncertainties": [
+              "저장된 검토 요약을 입력으로 사용해 직접 경험 여부와 방문일을 원문에서 다시 확인하지 않았습니다."
+            ]
+          }
+        ],
+        "limitations": []
+      }
+    },
+    {
+      "source_id": "pilot-20",
+      "sourceId": 20,
+      "published_at": "2026-02-11",
+      "input_kind": "reviewed_summary",
+      "analysis": {
+        "experiences": [
+          {
+            "source_id": "pilot-20",
+            "category": "food",
+            "topic": "value_satisfaction",
+            "sentiment": "positive",
+            "experience_type": "unclear",
+            "place": null,
+            "item": "술빵",
+            "summary": "술빵 가성비를 긍정적으로 평가",
+            "condition": null,
+            "reason": null,
+            "alternative": null,
+            "check_before_visit": null,
+            "published_at": "2026-02-11",
+            "visited_at": null,
+            "support": "술빵 가성비와 식은 후 맛 만족. 주말 긴 대기로 시도 어렵다는 반응.",
+            "uncertainties": [
+              "저장된 검토 요약을 입력으로 사용해 직접 경험 여부와 방문일을 원문에서 다시 확인하지 않았습니다."
+            ]
+          },
+          {
+            "source_id": "pilot-20",
+            "category": "food",
+            "topic": "experience_condition",
+            "sentiment": "positive",
+            "experience_type": "unclear",
+            "place": null,
+            "item": "술빵",
+            "summary": "식은 뒤에도 맛에 만족",
+            "condition": "식은 뒤 먹음",
+            "reason": null,
+            "alternative": null,
+            "check_before_visit": null,
+            "published_at": "2026-02-11",
+            "visited_at": null,
+            "support": "술빵 가성비와 식은 후 맛 만족. 주말 긴 대기로 시도 어렵다는 반응.",
+            "uncertainties": [
+              "저장된 검토 요약을 입력으로 사용해 직접 경험 여부와 방문일을 원문에서 다시 확인하지 않았습니다."
+            ]
+          },
+          {
+            "source_id": "pilot-20",
+            "category": "food",
+            "topic": "crowding",
+            "sentiment": "negative",
+            "experience_type": "unclear",
+            "place": null,
+            "item": "술빵",
+            "summary": "주말 긴 대기로 구매 시도가 어려웠다는 반응",
+            "condition": "주말",
+            "reason": null,
+            "alternative": null,
+            "check_before_visit": "구매 대기와 남은 일정 확인",
+            "published_at": "2026-02-11",
+            "visited_at": null,
+            "support": "술빵 가성비와 식은 후 맛 만족. 주말 긴 대기로 시도 어렵다는 반응.",
+            "uncertainties": [
+              "저장된 검토 요약을 입력으로 사용해 직접 경험 여부와 방문일을 원문에서 다시 확인하지 않았습니다."
+            ]
+          }
+        ],
+        "limitations": [
+          "긴 대기로 시도하기 어렵다는 반응을 실제 구매·직접 대기한 경험으로 확정하지 않았습니다."
+        ]
+      }
+    },
+    {
+      "source_id": "pilot-21",
+      "sourceId": 21,
+      "published_at": "2026-01-16",
+      "input_kind": "reviewed_summary",
+      "analysis": {
+        "experiences": [
+          {
+            "source_id": "pilot-21",
+            "category": "food",
+            "topic": "crowding",
+            "sentiment": "positive",
+            "experience_type": "unclear",
+            "place": null,
+            "item": "술빵",
+            "summary": "약 10분 대기했고 회전이 빨랐다는 경험",
+            "condition": null,
+            "reason": null,
+            "alternative": null,
+            "check_before_visit": null,
+            "published_at": "2026-01-16",
+            "visited_at": null,
+            "support": "약 10분 대기와 빠른 회전. 갓 나온 술빵 만족, 식은 후에는 평범해졌다는 반응.",
+            "uncertainties": [
+              "저장된 검토 요약을 입력으로 사용해 직접 경험 여부와 방문일을 원문에서 다시 확인하지 않았습니다."
+            ]
+          },
+          {
+            "source_id": "pilot-21",
+            "category": "food",
+            "topic": "experience_condition",
+            "sentiment": "positive",
+            "experience_type": "unclear",
+            "place": null,
+            "item": "술빵",
+            "summary": "갓 나온 술빵에 만족",
+            "condition": "갓 나온 상태",
+            "reason": null,
+            "alternative": null,
+            "check_before_visit": null,
+            "published_at": "2026-01-16",
+            "visited_at": null,
+            "support": "약 10분 대기와 빠른 회전. 갓 나온 술빵 만족, 식은 후에는 평범해졌다는 반응.",
+            "uncertainties": [
+              "저장된 검토 요약을 입력으로 사용해 직접 경험 여부와 방문일을 원문에서 다시 확인하지 않았습니다."
+            ]
+          },
+          {
+            "source_id": "pilot-21",
+            "category": "food",
+            "topic": "experience_condition",
+            "sentiment": "negative",
+            "experience_type": "unclear",
+            "place": null,
+            "item": "술빵",
+            "summary": "식은 뒤에는 평범하게 느꼈다는 평가",
+            "condition": "식은 뒤 먹음",
+            "reason": null,
+            "alternative": null,
+            "check_before_visit": "따뜻할 때 먹을지 포장 후 먹을지 고려",
+            "published_at": "2026-01-16",
+            "visited_at": null,
+            "support": "약 10분 대기와 빠른 회전. 갓 나온 술빵 만족, 식은 후에는 평범해졌다는 반응.",
+            "uncertainties": [
+              "저장된 검토 요약을 입력으로 사용해 직접 경험 여부와 방문일을 원문에서 다시 확인하지 않았습니다."
+            ]
+          }
+        ],
+        "limitations": []
+      }
+    },
+    {
+      "source_id": "pilot-22",
+      "sourceId": 22,
+      "published_at": "2026-01-07",
+      "input_kind": "reviewed_summary",
+      "analysis": {
+        "experiences": [
+          {
+            "source_id": "pilot-22",
+            "category": "food",
+            "topic": "crowding",
+            "sentiment": "neutral",
+            "experience_type": "unclear",
+            "place": null,
+            "item": "술빵",
+            "summary": "평일에도 대기한 경험",
+            "condition": "평일 방문",
+            "reason": null,
+            "alternative": null,
+            "check_before_visit": "평일 방문 시에도 대기 상황 확인",
+            "published_at": "2026-01-07",
+            "visited_at": null,
+            "support": "술빵 크기·따뜻할 때 맛 만족. 평일 대기, 식으면 질감·매력 저하.",
+            "uncertainties": [
+              "저장된 검토 요약을 입력으로 사용해 직접 경험 여부와 방문일을 원문에서 다시 확인하지 않았습니다."
+            ]
+          },
+          {
+            "source_id": "pilot-22",
+            "category": "food",
+            "topic": "experience_condition",
+            "sentiment": "positive",
+            "experience_type": "unclear",
+            "place": null,
+            "item": "술빵",
+            "summary": "따뜻할 때의 맛에 만족",
+            "condition": "따뜻할 때 먹음",
+            "reason": null,
+            "alternative": null,
+            "check_before_visit": null,
+            "published_at": "2026-01-07",
+            "visited_at": null,
+            "support": "술빵 크기·따뜻할 때 맛 만족. 평일 대기, 식으면 질감·매력 저하.",
+            "uncertainties": [
+              "저장된 검토 요약을 입력으로 사용해 직접 경험 여부와 방문일을 원문에서 다시 확인하지 않았습니다."
+            ]
+          },
+          {
+            "source_id": "pilot-22",
+            "category": "food",
+            "topic": "experience_condition",
+            "sentiment": "negative",
+            "experience_type": "unclear",
+            "place": null,
+            "item": "술빵",
+            "summary": "식으면 질감과 매력이 떨어졌다는 평가",
+            "condition": "식은 뒤 먹음",
+            "reason": null,
+            "alternative": null,
+            "check_before_visit": "포장 후 먹을 시점 고려",
+            "published_at": "2026-01-07",
+            "visited_at": null,
+            "support": "술빵 크기·따뜻할 때 맛 만족. 평일 대기, 식으면 질감·매력 저하.",
+            "uncertainties": [
+              "저장된 검토 요약을 입력으로 사용해 직접 경험 여부와 방문일을 원문에서 다시 확인하지 않았습니다."
+            ]
+          }
+        ],
+        "limitations": []
+      }
+    },
+    {
+      "source_id": "pilot-23",
+      "sourceId": 23,
+      "published_at": "2025-12-29",
+      "input_kind": "reviewed_summary",
+      "analysis": {
+        "experiences": [
+          {
+            "source_id": "pilot-23",
+            "category": "food",
+            "topic": "crowding",
+            "sentiment": "neutral",
+            "experience_type": "unclear",
+            "place": null,
+            "item": "술빵",
+            "summary": "긴 대기줄을 관찰",
+            "condition": null,
+            "reason": null,
+            "alternative": null,
+            "check_before_visit": "줄 길이와 실제 수령 시간 구분",
+            "published_at": "2025-12-29",
+            "visited_at": null,
+            "support": "긴 줄 관찰. 구매 직후 술빵의 부드러운 맛 만족.",
+            "uncertainties": [
+              "저장된 검토 요약을 입력으로 사용해 직접 경험 여부와 방문일을 원문에서 다시 확인하지 않았습니다."
+            ]
+          },
+          {
+            "source_id": "pilot-23",
+            "category": "food",
+            "topic": "experience_condition",
+            "sentiment": "positive",
+            "experience_type": "unclear",
+            "place": null,
+            "item": "술빵",
+            "summary": "구매 직후 부드러운 맛에 만족",
+            "condition": "구매 직후",
+            "reason": null,
+            "alternative": null,
+            "check_before_visit": null,
+            "published_at": "2025-12-29",
+            "visited_at": null,
+            "support": "긴 줄 관찰. 구매 직후 술빵의 부드러운 맛 만족.",
+            "uncertainties": [
+              "저장된 검토 요약을 입력으로 사용해 직접 경험 여부와 방문일을 원문에서 다시 확인하지 않았습니다."
+            ]
+          }
+        ],
+        "limitations": []
+      }
+    },
+    {
+      "source_id": "pilot-24",
+      "sourceId": 24,
+      "published_at": "2025-10-12",
+      "input_kind": "reviewed_summary",
+      "analysis": {
+        "experiences": [
+          {
+            "source_id": "pilot-24",
+            "category": "food",
+            "topic": "crowding",
+            "sentiment": "positive",
+            "experience_type": "unclear",
+            "place": null,
+            "item": "술빵",
+            "summary": "긴 줄에도 회전이 빨랐다는 경험",
+            "condition": null,
+            "reason": null,
+            "alternative": null,
+            "check_before_visit": "줄 길이보다 실제 수령 예상 시간 확인",
+            "published_at": "2025-10-12",
+            "visited_at": null,
+            "support": "긴 줄에도 회전이 빠름. 따뜻하거나 재가열한 술빵 만족.",
+            "uncertainties": [
+              "저장된 검토 요약을 입력으로 사용해 직접 경험 여부와 방문일을 원문에서 다시 확인하지 않았습니다."
+            ]
+          },
+          {
+            "source_id": "pilot-24",
+            "category": "food",
+            "topic": "experience_condition",
+            "sentiment": "positive",
+            "experience_type": "unclear",
+            "place": null,
+            "item": "술빵",
+            "summary": "따뜻하거나 재가열했을 때 만족",
+            "condition": "따뜻한 상태 또는 재가열",
+            "reason": null,
+            "alternative": null,
+            "check_before_visit": null,
+            "published_at": "2025-10-12",
+            "visited_at": null,
+            "support": "긴 줄에도 회전이 빠름. 따뜻하거나 재가열한 술빵 만족.",
+            "uncertainties": [
+              "저장된 검토 요약을 입력으로 사용해 직접 경험 여부와 방문일을 원문에서 다시 확인하지 않았습니다."
+            ]
+          }
+        ],
+        "limitations": []
+      }
+    },
+    {
+      "source_id": "pilot-25",
+      "sourceId": 25,
+      "published_at": "2025-09-24",
+      "input_kind": "reviewed_summary",
+      "analysis": {
+        "experiences": [
+          {
+            "source_id": "pilot-25",
+            "category": "food",
+            "topic": "experience_condition",
+            "sentiment": "mixed",
+            "experience_type": "unclear",
+            "place": null,
+            "item": "술빵",
+            "summary": "포장해 온 것보다 구매 직후 뜨거운 술빵을 선호",
+            "condition": "포장 후와 구매 직후 비교",
+            "reason": null,
+            "alternative": null,
+            "check_before_visit": "바로 먹을지 포장할지 결정",
+            "published_at": "2025-09-24",
+            "visited_at": null,
+            "support": "포장해 온 것보다 구매 직후 뜨거운 술빵이 더 맛있었다는 경험.",
+            "uncertainties": [
+              "저장된 검토 요약을 입력으로 사용해 직접 경험 여부와 방문일을 원문에서 다시 확인하지 않았습니다."
+            ]
+          }
+        ],
+        "limitations": []
+      }
+    },
+    {
+      "source_id": "pilot-26",
+      "sourceId": 26,
+      "published_at": "2025-03-10",
+      "input_kind": "reviewed_summary",
+      "analysis": {
+        "experiences": [
+          {
+            "source_id": "pilot-26",
+            "category": "food",
+            "topic": "crowding",
+            "sentiment": "negative",
+            "experience_type": "unclear",
+            "place": "현대아바이순대",
+            "item": "일반 오징어순대",
+            "summary": "혼잡과 기다림에 불만을 표현",
+            "condition": null,
+            "reason": null,
+            "alternative": null,
+            "check_before_visit": "주문 전 대기와 조리 완료 시간 확인",
+            "published_at": "2025-03-10",
+            "visited_at": null,
+            "support": "혼잡·기다림에 대한 불만, 새우 맛 만족. 오징어순대 속 반죽이 덜 익었다는 개인 주장 1건.",
+            "uncertainties": [
+              "저장된 검토 요약을 입력으로 사용해 직접 경험 여부와 방문일을 원문에서 다시 확인하지 않았습니다."
+            ]
+          },
+          {
+            "source_id": "pilot-26",
+            "category": "food",
+            "topic": "experience_condition",
+            "sentiment": "negative",
+            "experience_type": "unclear",
+            "place": "현대아바이순대",
+            "item": "일반 오징어순대",
+            "summary": "속 반죽이 덜 익었다고 작성자가 주장한 개별 사례",
+            "condition": "해당 후기의 구매 당시",
+            "reason": null,
+            "alternative": null,
+            "check_before_visit": "받은 음식의 조리 상태 확인",
+            "published_at": "2025-03-10",
+            "visited_at": null,
+            "support": "혼잡·기다림에 대한 불만, 새우 맛 만족. 오징어순대 속 반죽이 덜 익었다는 개인 주장 1건.",
+            "uncertainties": [
+              "저장된 검토 요약을 입력으로 사용해 직접 경험 여부와 방문일을 원문에서 다시 확인하지 않았습니다."
+            ]
+          }
+        ],
+        "limitations": [
+          "조리 상태는 작성자의 주장 1건이며 현재 상태 또는 시장 전체의 문제로 확인한 사실이 아닙니다."
+        ]
+      }
+    },
+    {
+      "source_id": "pilot-27",
+      "sourceId": 27,
+      "published_at": "2025-03-20",
+      "input_kind": "reviewed_summary",
+      "analysis": {
+        "experiences": [
+          {
+            "source_id": "pilot-27",
+            "category": "food",
+            "topic": "experience_condition",
+            "sentiment": "positive",
+            "experience_type": "unclear",
+            "place": null,
+            "item": "술빵",
+            "summary": "따뜻할 때 촉촉함과 맛에 만족",
+            "condition": "따뜻할 때 먹음",
+            "reason": null,
+            "alternative": null,
+            "check_before_visit": null,
+            "published_at": "2025-03-20",
+            "visited_at": null,
+            "support": "술빵 촉촉함과 따뜻할 때 맛 만족, 식으면 촉촉함 감소. 닭강정 주소가 시장 밖 지점과 혼재해 그 부분은 제외.",
+            "uncertainties": [
+              "저장된 검토 요약을 입력으로 사용해 직접 경험 여부와 방문일을 원문에서 다시 확인하지 않았습니다."
+            ]
+          },
+          {
+            "source_id": "pilot-27",
+            "category": "food",
+            "topic": "experience_condition",
+            "sentiment": "negative",
+            "experience_type": "unclear",
+            "place": null,
+            "item": "술빵",
+            "summary": "식으면 촉촉함이 줄었다는 경험",
+            "condition": "식은 뒤 먹음",
+            "reason": null,
+            "alternative": null,
+            "check_before_visit": "포장 후 먹을 시점 고려",
+            "published_at": "2025-03-20",
+            "visited_at": null,
+            "support": "술빵 촉촉함과 따뜻할 때 맛 만족, 식으면 촉촉함 감소. 닭강정 주소가 시장 밖 지점과 혼재해 그 부분은 제외.",
+            "uncertainties": [
+              "저장된 검토 요약을 입력으로 사용해 직접 경험 여부와 방문일을 원문에서 다시 확인하지 않았습니다."
+            ]
+          }
+        ],
+        "limitations": [
+          "시장 밖 닭강정 지점과 혼재한 부분은 제외했습니다."
+        ]
+      }
+    },
+    {
+      "source_id": "pilot-28",
+      "sourceId": 28,
+      "published_at": "2025-11-25",
+      "input_kind": "reviewed_summary",
+      "analysis": {
+        "experiences": [
+          {
+            "source_id": "pilot-28",
+            "category": "food",
+            "topic": "experience_condition",
+            "sentiment": "positive",
+            "experience_type": "unclear",
+            "place": "시장 지하 회센터",
+            "item": "회",
+            "summary": "지하 회센터의 회 신선도와 식감에 만족",
+            "condition": null,
+            "reason": null,
+            "alternative": null,
+            "check_before_visit": null,
+            "published_at": "2025-11-25",
+            "visited_at": null,
+            "support": "지하 회센터의 생선회 식감·신선함과 매운탕 만족.",
+            "uncertainties": [
+              "저장된 검토 요약을 입력으로 사용해 직접 경험 여부와 방문일을 원문에서 다시 확인하지 않았습니다."
+            ]
+          }
+        ],
+        "limitations": []
+      }
+    },
+    {
+      "source_id": "pilot-29",
+      "sourceId": 29,
+      "published_at": "2025-08-23",
+      "input_kind": "reviewed_summary",
+      "analysis": {
+        "experiences": [
+          {
+            "source_id": "pilot-29",
+            "category": "food",
+            "topic": "experience_condition",
+            "sentiment": "positive",
+            "experience_type": "unclear",
+            "place": "중앙닭강정",
+            "item": "닭강정",
+            "summary": "포장 후 식감에 만족",
+            "condition": "포장 후 이용",
+            "reason": null,
+            "alternative": null,
+            "check_before_visit": null,
+            "published_at": "2025-08-23",
+            "visited_at": null,
+            "support": "중앙닭강정 포장 후 식감 만족, 대기 중 시장 구경 후 수령. 리뷰 이벤트 소개가 있어 유인 가능성 표시.",
+            "uncertainties": [
+              "저장된 검토 요약을 입력으로 사용해 직접 경험 여부와 방문일을 원문에서 다시 확인하지 않았습니다."
+            ]
+          },
+          {
+            "source_id": "pilot-29",
+            "category": "food",
+            "topic": "crowding",
+            "sentiment": "neutral",
+            "experience_type": "unclear",
+            "place": "중앙닭강정",
+            "item": "닭강정",
+            "summary": "대기 중 시장 구경 후 수령한 경험",
+            "condition": "주문 후 시장 구경",
+            "reason": null,
+            "alternative": null,
+            "check_before_visit": "주문 후 수령 방식과 안내 시간 확인",
+            "published_at": "2025-08-23",
+            "visited_at": null,
+            "support": "중앙닭강정 포장 후 식감 만족, 대기 중 시장 구경 후 수령. 리뷰 이벤트 소개가 있어 유인 가능성 표시.",
+            "uncertainties": [
+              "저장된 검토 요약을 입력으로 사용해 직접 경험 여부와 방문일을 원문에서 다시 확인하지 않았습니다."
+            ]
+          }
+        ],
+        "limitations": [
+          "리뷰 이벤트가 소개된 글이므로 유인 가능성이 있습니다."
+        ]
+      }
+    },
+    {
+      "source_id": "pilot-30",
+      "sourceId": 30,
+      "published_at": "2025-07-18",
+      "input_kind": "reviewed_summary",
+      "analysis": {
+        "experiences": [
+          {
+            "source_id": "pilot-30",
+            "category": "food",
+            "topic": "experience_condition",
+            "sentiment": "positive",
+            "experience_type": "unclear",
+            "place": "중앙닭강정",
+            "item": "닭강정",
+            "summary": "시장에서 포장한 닭강정 맛에 만족",
+            "condition": "포장 후 이용",
+            "reason": null,
+            "alternative": null,
+            "check_before_visit": null,
+            "published_at": "2025-07-18",
+            "visited_at": null,
+            "support": "시장에서 포장한 중앙닭강정 맛 만족. 시장 밖 구구집 물회 경험은 제외.",
+            "uncertainties": [
+              "저장된 검토 요약을 입력으로 사용해 직접 경험 여부와 방문일을 원문에서 다시 확인하지 않았습니다."
+            ]
+          }
+        ],
+        "limitations": [
+          "시장 밖 물회집 경험은 제외했습니다."
+        ]
+      }
+    }
+  ],
+  "limitations": [
+    "직접 경험 여부와 방문일은 저장된 요약만으로 다시 확인할 수 없어 experience_type은 unclear, visited_at은 null로 두었습니다.",
+    "입력에 없는 가격·시설·대안은 만들지 않았습니다.",
+    "표시 수는 관련 게시물 수이며 독립된 여행자 수나 발생 확률이 아닙니다.",
+    "서로 다른 품목·가게의 경험을 시장 전체의 가격·품질 평가로 합치지 않습니다.",
+    "숙박·교통·입장·대여·편의시설을 판단할 입력은 없습니다."
+  ],
+  "generatedBy": "assistant",
+  "promptSha256": "7bf80a2946f500edf46633a75f8b8039b1e119cd6c74511efe20a1aaf243ec6c",
+  "inputSha256": "1c7765be99c5d535d73443c9716dbc34adbb8e4c23b593ab479ef41354a2c2b2"
+}

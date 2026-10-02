@@ -55,18 +55,17 @@ function selectReviewYear(data, year) {
 }
 function renderReviewPilot(data) {
   const result=$('result'); result.replaceChildren();
-  $('result-kind').textContent='후기 '+data.sources.length+'건 · 수동 검토';
+  $('result-kind').textContent='후기 '+data.sources.length+'건 · 프롬프트 적용 예시';
   const summary=node('article','summary-panel');
-  summary.append(node('span','confidence','반복된 경험 탐색 · 전체 시장 평가는 보류'),node('h3','',data.title),node('p','summary-text',data.summary));
+  summary.append(node('span','confidence','방문 전에 살펴보는 선택 단서'),node('h3','',data.title),node('p','summary-text',data.summary));
   const stats=node('div','review-stats');
   [[String(data.sources.length),'검토 게시물'],[String(data.sources.filter(s=>s.type==='개인 블로그').length),'개인 블로그'],[String(data.sources.filter(s=>s.type==='뽈레').length),'뽈레 후기']].forEach(([value,label])=>{const item=node('div','review-stat');item.append(node('strong','',value),node('span','',label));stats.append(item);});
   summary.append(stats,node('p','report-meta','작성일 '+data.dateFrom+' ~ '+data.dateTo+' · 확인일 '+data.reviewedAt));
   summary.append(node('p','period-note',data.year===null?'여러 연도를 합친 검토예요. 작성일과 실제 방문일은 다를 수 있어요.':'후기 작성 연도를 기준으로 분류했어요. 작성일과 실제 방문일은 다를 수 있어요.'));
   result.append(summary);
-  const guide=node('aside','review-guide');
-  guide.append(node('h3','','방문 전, 이렇게 활용해 보세요'),node('p','','가격 부담은 특정 품목의 경험으로 확인하고, 인기 점포는 대기 시간을 고려해 보세요. 술빵을 포장한다면 식은 뒤 맛에 대한 서로 다른 의견도 함께 읽어보세요.'));
-  result.append(guide);
-  result.append(node('h3','subheading','반복된 경험 · 펼쳐서 근거 확인'));
+  if(data.promptPilot)window.ReviewInsights.render(data,data.promptPilot,result);
+  const previous=node('details','all-reviews');previous.append(node('summary','','기존 주제별 검토 보기'));
+  previous.append(node('h3','subheading','주제별 검토 · 펼쳐서 근거 확인'));
   const groups=[
     {label:'만족한 경험',tone:'positive',tags:['BV','SC','TO','SF']},
     {label:'아쉬웠던 경험',tone:'negative',tags:['PB','WB']},
@@ -87,10 +86,10 @@ function renderReviewPilot(data) {
     });
     grid.append(column);
   });
-  result.append(grid);
+  previous.append(grid);
   const comparison=node('aside','comparison-note');
   comparison.append(node('h3','','줄이 길다고 모두 불만은 아니에요'),node('p','',`대기 언급은 ${data.themes.find(t=>t.tag==='WS').ids.length}건, 기다림 부담은 ${data.themes.find(t=>t.tag==='WB').ids.length}건, 빠른 회전·짧은 기다림은 ${data.themes.find(t=>t.tag==='FS').ids.length}건이었어요. 서로 겹칠 수 있는 주제이며, 의견을 단순 찬반 점수로 합산하지 않았어요.`));
-  result.append(comparison);
+  previous.append(comparison);result.append(previous);
   result.append(node('p','limitations',data.limitation));
   const all=node('details','all-reviews');const allHeading=node('summary','','선택한 후기 '+data.sources.length+'건 모두 보기');
   const list=node('div','sources');data.sources.forEach(source=>list.append(reviewCard(source)));
@@ -113,10 +112,10 @@ async function analyze(scroll=true) {
         renderResult({kind:'empty',title:'이 관광지의 후기 검토는 준비 중이에요',summary:'현재 수동 후기 검토는 속초관광수산시장에 제공됩니다.'});
         return;
       }
-      const response=await fetch('/data/sokcho-review-pilot.json?v=annual-anonymous',{signal:pending.signal});
-      if(!response.ok)throw new Error('후기 검토 자료를 불러오지 못했습니다. 잠시 후 다시 시도해주세요.');
-      const raw=await response.json();if(current!==requestId)return;
-      const data=selectReviewYear(raw,year);
+      const responses=await Promise.all([fetch('/data/sokcho-review-pilot.json?v=annual-anonymous',{signal:pending.signal}),fetch('/data/sokcho-prompt-pilot.json?v=prompt-1',{signal:pending.signal})]);
+      if(responses.some(response=>!response.ok))throw new Error('후기 분석 자료를 불러오지 못했습니다. 잠시 후 다시 시도해주세요.');
+      const [raw,pilot]=await Promise.all(responses.map(response=>response.json()));if(current!==requestId)return;
+      const data={...selectReviewYear(raw,year),promptPilot:pilot};
       if(!data.sources.length){renderResult({kind:'empty',title:'이 연도의 검토 후기가 아직 없어요',summary:year+'년에 작성된 검토 자료가 없습니다. 속초 전체 후기를 확인해 보세요.'});return;}
       renderReviewPilot(data);return;
     }
