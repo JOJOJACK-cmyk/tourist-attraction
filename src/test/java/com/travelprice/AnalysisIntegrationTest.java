@@ -42,9 +42,22 @@ class AnalysisIntegrationTest {
     }
     @Test void startupIsIdempotent() {
         initializer.run(new DefaultApplicationArguments());
-        assertThat(destinations.count()).isEqualTo(6);
+        assertThat(destinations.count()).isEqualTo(9);
         assertThat(evidence.count()).isEqualTo(2);
         assertThat(prices.count()).isEqualTo(2);
+    }
+    @Test void newDestinationsArePubliclySelectableAndHaveNoInventedReviews() throws Exception {
+        mvc.perform(get("/api/destinations"))
+                .andExpect(status().isOk()).andExpect(jsonPath("$.length()").value(9))
+                .andExpect(jsonPath("$[?(@.slug == 'seomun')].name").value(org.hamcrest.Matchers.contains("대구 서문시장")))
+                .andExpect(jsonPath("$[?(@.slug == 'yeosu')].name").value(org.hamcrest.Matchers.contains("여수 낭만포차거리")))
+                .andExpect(jsonPath("$[?(@.slug == 'damyang')].name").value(org.hamcrest.Matchers.contains("담양 죽녹원")));
+        for (String slug : new String[]{"seomun", "yeosu", "damyang"}) {
+            mvc.perform(post("/api/analysis").contentType(MediaType.APPLICATION_JSON)
+                    .content("{\"destinationId\":\""+slug+"\",\"year\":2026,\"mode\":\"sample\"}"))
+                    .andExpect(status().isOk()).andExpect(jsonPath("$.kind").value("empty"))
+                    .andExpect(jsonPath("$.sources.length()").value(0));
+        }
     }
     @Test void invalidLocalReviewsAreRejectedBeforeCallingOllama() throws Exception {
         for(String body: new String[]{

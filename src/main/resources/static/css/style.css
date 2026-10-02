@@ -117,3 +117,11 @@ h1,h2,h3,h4,h5,h6,.community-post-title,.theme-heading{font-weight:700}
 
 /* Visitor experience overview */
 .visitor-overview{margin:24px 0}.visitor-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}.visitor-card{background:#fffdf7;color:#263b43;border:1px solid #d5dfd9;border-radius:20px;padding:24px;box-shadow:0 5px 0 #cfddd53d}.visitor-card h4{font-size:20px;font-weight:700;line-height:1.5;margin:14px 0}.visitor-card p,.visitor-experiences{font-size:16px;line-height:1.7}.visitor-card .small{color:#52645e}.visitor-card.insufficient{background:#f3f5ef}.visitor-counts{color:#365b49;font-weight:700}.visitor-experiences{padding-left:20px;margin:16px 0 0}.visitor-experiences li+li{margin-top:12px}.visitor-condition{display:block;font-size:14px;color:#596b65;margin-top:3px}.visitor-sources{background:#fffdf7;padding:16px 24px;border-radius:16px;margin:20px 0}.visitor-sources summary{cursor:pointer;color:#365b49}.search-suggestions{width:100%;min-height:180px;border:0;background:#fff;border-radius:16px;margin-top:16px}@media(max-width:640px){.visitor-grid{grid-template-columns:1fr}.visitor-card{padding:20px}}
+
+/* Individual detailed pixel landscapes, shared by cards and the Sokcho introduction. */
+.destination-scene.market,.destination-scene.coast,.destination-scene.night-market,.destination-scene.harbor,.destination-scene.bamboo{background-position:center;background-size:cover;background-repeat:no-repeat}
+.destination-scene.market{background-image:url('/images/sokcho-market.svg?v=1')}
+.destination-scene.coast{background-image:url('/images/anmok-beach.svg?v=1')}
+.destination-scene.night-market{background-image:url('/images/seomun-market.svg?v=1')}
+.destination-scene.harbor{background-image:url('/images/yeosu-night.svg?v=1')}
+.destination-scene.bamboo{background-image:url('/images/juknokwon-bamboo.svg?v=1')}

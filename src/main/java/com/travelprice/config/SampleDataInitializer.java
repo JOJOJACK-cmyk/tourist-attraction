@@ -24,6 +24,9 @@ public class SampleDataInitializer implements ApplicationRunner {
         addDestination("busan","부산 해운대","부산","음식 · 해변 · 주차","해운대해수욕장 주변 상권","광안리, 자갈치시장");
         addDestination("jeju","제주 동문시장","제주","시장 음식 · 특산품","제주 동문시장","서귀포매일올레시장, 제주 전체");
         addDestination("gangneung","강릉 안목해변","강원","카페 · 식당 · 주차","안목해변, 안목 커피거리","경포해변, 주문진");
+        addDestination("seomun","대구 서문시장","대구","시장 먹거리 · 직물 · 야시장","대구 서문시장, 서문시장 야시장","칠성시장, 대구 전체");
+        addDestination("yeosu","여수 낭만포차거리","전남","해산물 · 밤바다 · 산책","여수 낭만포차거리, 하멜로 낭만포차, 거북선대교 아래 낭만포차","여수 수산시장, 광양, 순천");
+        addDestination("damyang","담양 죽녹원","전남","대숲 산책 · 입장 · 주변 먹거리","담양 죽녹원, 죽녹원 대나무숲","메타세쿼이아길, 소쇄원, 담양 전체");
         var sokcho=destinations.findBySlug("sokcho").orElseThrow();
         addEvidence(sokcho,"정이네 속초중앙시장점 방문 리뷰","방문자 리뷰","https://polle.com/lkhun71/posts/1215",LocalDate.of(2026,7,16),
                 "오징어순대 가격 대비 만족을 표현한 리뷰입니다. 시장 전체 가격에 대한 작성자의 주장은 검증되지 않았습니다.","누룽지 오징어순대","구성·중량 미확인",15000);
