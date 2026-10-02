@@ -68,7 +68,7 @@ function renderDestinations() {
   const cards=$('cards');cards.replaceChildren();
   destinations.filter(d=>activeRegion==='전체'||d.region===activeRegion).forEach(d=>{
     const card=node('article','card');const top=node('div','card-top');top.append(node('span','card-tag',d.region)); const scene=node('div','destination-scene');scene.setAttribute('aria-hidden','true');const scenery={sokcho:'market',gyeongju:'temple',jeonju:'village',busan:'beach',jeju:'island',gangneung:'coast'};scene.classList.add(scenery[d.slug] || 'coast'); card.append(scene,top,node('h3','',d.name),node('p','',d.categories));
-    const button=node('button','destination-button','관광지 선택 →');button.type='button';button.setAttribute('aria-label',d.name+' 후기 살펴보기');button.addEventListener('click',()=>{$('destination').value=d.slug;renderDestinations();analyze();});card.classList.toggle('selected',d.slug===$('destination').value);const actions=node('div','destination-actions');
+    const button=node('button','destination-button','후기 살펴보기');button.type='button';button.setAttribute('aria-label',d.name+' 후기 살펴보기');button.addEventListener('click',()=>{$('destination').value=d.slug;renderDestinations();analyze();});card.classList.toggle('selected',d.slug===$('destination').value);const actions=node('div','destination-actions');
     if(d.slug==='sokcho'){const intro=node('a','destination-intro-link','시장 소개 보기 →');intro.href='/destinations/sokcho';intro.setAttribute('aria-label',d.name+' 소개 보기');actions.append(intro);}
     actions.append(button);card.append(actions);cards.append(card);
   });

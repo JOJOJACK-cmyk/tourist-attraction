@@ -84,3 +84,19 @@ h1,h2,h3,h4,h5,h6,.community-post-title,.theme-heading{font-weight:700}
 @media(max-width:540px){.attraction-hero{padding:32px 0}.attraction-postcard .destination-scene{height:150px}.attraction-grid,.attraction-alleys,.attraction-route ol{grid-template-columns:1fr}.attraction-tabs{gap:8px}.attraction-tabs a{font-size:14px;padding:7px 12px}.attraction-section{padding-top:32px}.attraction-card,.attraction-visit,.attraction-route,.attraction-review-callout{padding:20px}.attraction-visit dl>div{grid-template-columns:1fr;gap:6px}.attraction-callout-actions{align-items:start;width:100%}.attraction-callout-actions .primary{width:100%}}
 
 @media(max-width:540px){.attraction-page .topbar{flex-wrap:wrap;padding-block:14px}.attraction-page .topbar nav{flex-wrap:wrap}.attraction-page .topbar nav a{max-width:100%;overflow-wrap:anywhere}}
+
+/* Keep all hero text on an opaque surface, away from the scenery. */
+.attraction-hero>div:first-child{background:#fffdf5;border:1px solid #e5ddc9;border-radius:22px;padding:30px;box-shadow:0 8px 24px #172b4814;color:#172b48}
+.attraction-alias{color:#3e5266}.attraction-lead{color:#172b48}
+.hero-content{background:#fffdf5;border:1px solid #e5ddc9;border-radius:22px;padding:32px;margin-block:40px;box-shadow:0 8px 24px #172b4814}
+.hero-copy{color:#263b50}.hero-content .eyebrow{color:#285e59}
+.community-intro{background:#fffdf5;border:1px solid #e5ddc9;border-radius:22px;padding:28px;margin-block:30px;color:#172b48}
+/* Calm, readable destination actions with a compact direction indicator. */
+.destination-actions{gap:10px;padding-top:4px}
+.destination-actions .destination-button{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:48px;padding:10px 16px;background:#e5f2ec;color:#174e42;border:1px solid #b3d2c4;border-radius:14px;box-shadow:none;font-size:16px;font-weight:700;line-height:1.7;text-align:left}
+.destination-actions .destination-button:after{content:'›';display:grid;place-items:center;flex-shrink:0;width:28px;height:28px;background:#fffdf5;color:#174e42;border-radius:50%;font-size:23px;line-height:1;font-weight:400}
+.destination-actions .destination-button:hover{background:#d4eade;border-color:#7aab94}
+.destination-actions .destination-button:active{background:#c9e2d4}
+.destination-intro-link{border:1px solid #b3d2c4;border-radius:14px;background:#fffdf5;color:#174e42;padding:10px 16px;font-size:16px}
+.destination-intro-link:hover{background:#f1f8f3}
+@media(max-width:540px){.attraction-hero>div:first-child{padding:22px}.hero-content{padding:24px 20px;margin-block:26px}.community-intro{padding:22px;margin-block:24px}.attraction-hero h1{font-size:30px}.attraction-lead{font-size:17px}}
