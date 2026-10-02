@@ -125,3 +125,12 @@ h1,h2,h3,h4,h5,h6,.community-post-title,.theme-heading{font-weight:700}
 .destination-scene.night-market{background-image:url('/images/seomun-market.svg?v=1')}
 .destination-scene.harbor{background-image:url('/images/yeosu-night.svg?v=1')}
 .destination-scene.bamboo{background-image:url('/images/juknokwon-bamboo.svg?v=1')}
+
+/* Selected pixel logo: display its artwork without changing the source PNG. */
+.brand{flex:0 0 auto;padding:6px 0;line-height:1}
+.brand-logo-window{display:block;position:relative;overflow:hidden;width:272px;aspect-ratio:1705/438}
+.brand-logo{display:block;position:absolute;width:127.39003%;max-width:none;height:auto;left:-13.78299%;top:-33.10502%}
+.topbar{min-height:100px;padding-block:12px;flex-wrap:wrap;gap:16px 24px}
+.topbar nav{flex-wrap:wrap;justify-content:flex-end;gap:12px 18px}
+@media(max-width:850px){.topbar{justify-content:center}.topbar nav{width:100%;justify-content:center;padding-bottom:4px}}
+@media(max-width:540px){.brand-logo-window{width:232px}.topbar{gap:8px;min-height:0;padding-block:12px}.topbar nav{gap:8px}.topbar .nav-pill{padding:8px 10px}}

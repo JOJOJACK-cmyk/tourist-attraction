@@ -33,7 +33,7 @@ public class KakaoPaymentClient {
     public Ready ready(String orderId,String userId,int amount){
         requireAvailable();
         var body=new HashMap<String,Object>();body.put("cid",cid);body.put("partner_order_id",orderId);body.put("partner_user_id",userId);
-        body.put("item_name","여행물가 운영 응원");body.put("quantity",1);body.put("total_amount",amount);body.put("tax_free_amount",0);
+        body.put("item_name","여행온도 운영 응원");body.put("quantity",1);body.put("total_amount",amount);body.put("tax_free_amount",0);
         body.put("approval_url",siteUrl+"/support/success?orderId="+orderId);
         body.put("cancel_url",siteUrl+"/support/cancel?orderId="+orderId);
         body.put("fail_url",siteUrl+"/support/fail?orderId="+orderId);
