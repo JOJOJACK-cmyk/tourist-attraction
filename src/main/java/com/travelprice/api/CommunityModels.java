@@ -6,7 +6,7 @@ import java.util.List;
 
 public final class CommunityModels {
     private CommunityModels(){}
-    public record PostInput(@NotBlank String destinationId,@NotNull Kind kind,@NotNull Category category,
+    public record PostInput(@Size(max=60) String destinationId,@NotNull Kind kind,@NotNull Category category,
         @NotBlank @Size(min=2,max=120) String title,@NotBlank @Size(min=5,max=10000) String body,
         LocalDate visitedAt,@Pattern(regexp="[a-f0-9-]{36}") String imageKey){}
     public record CommentInput(@NotBlank @Size(max=2000) String body){}

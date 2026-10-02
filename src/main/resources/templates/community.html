@@ -2,16 +2,16 @@
 <html lang="ko">
 <head>
   <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>여행 경험 공유 | 여행물가</title>
+  <title>질문·자유 게시판 | 여행물가</title>
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="/css/style.css?v=readability-2">
-  <script src="/js/community.js?v=community-1" defer></script>
+  <link rel="stylesheet" href="/css/style.css?v=boards-2">
+  <script src="/js/community.js?v=boards-2" defer></script>
 </head>
 <body>
   <a class="skip-link" href="#board">게시글로 바로 가기</a>
   <header class="hero community-hero"><div class="wrap">
-    <div class="topbar"><a class="brand" href="/"><span class="brand-mark" aria-hidden="true">₩</span>여행물가</a><nav aria-label="주요 메뉴"><a href="/">관광지 보기</a><a class="nav-pill" href="#board">경험 공유</a><a th:if="${admin}" href="/admin/reviews">후기 분석 관리</a></nav></div>
-    <div class="community-intro"><span class="eyebrow">함께 나누는 여행 이야기</span><h1>다녀온 경험이<br>다음 여행의 힌트가 돼요.</h1><p>만족했던 선택, 아쉬웠던 경험, 궁금한 이야기를 나눠보세요.</p></div>
+    <div class="topbar"><a class="brand" href="/"><span class="brand-mark" aria-hidden="true">₩</span>여행물가</a><nav aria-label="주요 메뉴"><a href="/">관광지 보기</a><a class="nav-pill" href="#board">커뮤니티</a><a th:if="${admin}" href="/admin/reviews">후기 분석 관리</a></nav></div>
+    <div class="community-intro"><span class="eyebrow">함께 나누는 여행 이야기</span><h1>궁금한 건 묻고,<br>여행 이야기는 자유롭게.</h1><p>질문 게시판에서 여행 고민을 나누고, 자유 게시판에서 후기와 일상을 이야기해요.</p></div>
   </div></header>
   <main><div class="wrap community-wrap">
     <div class="community-account"><span id="account-state">로그인 상태를 확인하고 있어요.</span><button id="account-toggle" class="filter" type="button">로그인 · 회원가입</button></div>
@@ -25,10 +25,11 @@
     </section>
     <p id="board-error" class="error" role="alert" hidden></p><p id="board-message" class="small" role="status"></p>
     <section id="board" aria-labelledby="board-title">
-      <div class="section-head"><div><span class="eyebrow">여행 후기 · 정보 제보 · 질문</span><h2 id="board-title">여행 경험 공유</h2></div><button id="write-post" class="primary" type="button">글쓰기</button></div>
+      <div class="section-head"><div><span class="eyebrow">우리들의 여행 이야기</span><h2 id="board-title">자유 게시판</h2><p id="board-description" class="section-note">후기, 여행 팁, 소소한 일상까지 편하게 나눠보세요.</p></div><button id="write-post" class="primary" type="button">글쓰기</button></div>
+      <div class="community-board-tabs" role="group" aria-label="게시판 선택"><button id="board-general" type="button" aria-pressed="true"><strong>자유 게시판</strong><span>후기 · 여행 팁 · 일상</span></button><button id="board-question" type="button" aria-pressed="false"><strong>질문 게시판</strong><span>궁금한 여행 정보 묻기</span></button></div>
       <form id="board-filter" class="community-filters">
-        <label>관광지<select id="board-destination"><option value="">전체 관광지</option></select></label>
-        <label>글 유형<select id="board-kind"><option value="">전체 유형</option><option value="REVIEW">여행 후기</option><option value="REPORT">정보 제보</option><option value="QUESTION">질문</option></select></label>
+        <label>관광지 태그<select id="board-destination"><option value="">전체 관광지</option></select></label>
+        <input id="board-kind" type="hidden" value="GENERAL">
         <label>분류<select id="board-category"><option value="">전체 분류</option></select></label>
         <label>검색<input id="board-query" maxlength="80" type="search" placeholder="제목·내용 검색"></label><button class="filter" type="submit">찾기</button>
         <label id="hidden-filter-label" class="check-label" hidden><input id="board-hidden" type="checkbox"> 숨긴 글 함께 보기</label>
@@ -37,11 +38,11 @@
       <div class="community-pagination"><button id="page-prev" class="filter" type="button" disabled>이전</button><span id="page-status"></span><button id="page-next" class="filter" type="button" disabled>다음</button></div>
     </section>
     <section id="post-editor" class="community-panel" aria-labelledby="editor-title" hidden>
-      <h2 id="editor-title">경험 나누기</h2>
+      <h2 id="editor-title">자유 게시판 글쓰기</h2>
       <form id="post-form" class="community-form">
-        <div class="community-fields"><label>관광지<select id="post-destination" required></select></label><label>글 유형<select id="post-kind" required><option value="REVIEW">여행 후기</option><option value="REPORT">정보 제보</option><option value="QUESTION">질문</option></select></label><label>분류<select id="post-category" required></select></label><label>방문일 · 선택<input id="post-visited" type="date"></label></div>
-        <label>제목<input id="post-title" required minlength="2" maxlength="120" placeholder="어떤 경험을 나누고 싶나요?"></label>
-        <label>내용<textarea id="post-body" rows="8" required minlength="5" maxlength="10000" placeholder="어디에서 어떤 경험을 했는지 알려주세요."></textarea></label>
+        <div class="community-fields"><label>관광지 태그 · 선택<select id="post-destination"><option value="">태그 없이 작성</option></select></label><label>게시판<select id="post-kind" required><option value="GENERAL">자유 게시판</option><option value="QUESTION">질문 게시판</option></select></label><label>분류<select id="post-category" required></select></label><label>방문일 · 선택<input id="post-visited" type="date"></label></div>
+        <label>제목<input id="post-title" required minlength="2" maxlength="120" placeholder="제목을 입력해 주세요."></label>
+        <label>내용<textarea id="post-body" rows="8" required minlength="5" maxlength="10000" placeholder="나누고 싶은 이야기를 자유롭게 적어 주세요."></textarea></label>
         <label>사진 한 장 · 선택<input id="post-photo" type="file" accept="image/jpeg,image/png"><span class="small">JPG·PNG, 5MB 이하</span></label>
         <img id="photo-preview" class="community-photo" alt="첨부할 사진 미리보기" hidden>
         <label class="check-label"><input id="remove-photo" type="checkbox"> 첨부 사진 빼기</label>

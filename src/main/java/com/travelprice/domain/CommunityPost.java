@@ -5,11 +5,13 @@ import java.time.*;
 @Entity
 @Table(name="community_post",indexes=@Index(name="idx_community_destination_created",columnList="destination_id,created_at"))
 public class CommunityPost {
-    public enum Kind { REVIEW, REPORT, QUESTION }
+    public enum Kind { GENERAL, QUESTION, REVIEW, REPORT;
+        public Kind boardKind(){ return this==QUESTION ? QUESTION : GENERAL; }
+    }
     public enum Category { FOOD, LODGING, PARKING, TRANSPORT, ADMISSION, SHOPPING, RENTAL, AMENITIES, OTHER }
     @Id @GeneratedValue(strategy=GenerationType.IDENTITY) private Long id;
     @ManyToOne(fetch=FetchType.LAZY,optional=false) @JoinColumn(name="author_id") private Member author;
-    @ManyToOne(fetch=FetchType.LAZY,optional=false) @JoinColumn(name="destination_id") private Destination destination;
+    @ManyToOne(fetch=FetchType.LAZY) @JoinColumn(name="destination_id") private Destination destination;
     @Enumerated(EnumType.STRING) @Column(nullable=false,length=12) private Kind kind;
     @Enumerated(EnumType.STRING) @Column(nullable=false,length=15) private Category category;
     @Column(nullable=false,length=120) private String title;

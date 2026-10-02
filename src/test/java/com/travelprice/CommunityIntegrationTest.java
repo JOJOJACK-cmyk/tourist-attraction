@@ -125,8 +125,37 @@ class CommunityIntegrationTest {
         assertThat(java.nio.file.Files.exists(java.nio.file.Path.of("/tmp/tourist-community-test-photos",key+".png"))).isFalse();
         mvc.perform(get("/api/community/images/"+key).with(user("alice"))).andExpect(status().isNotFound());
     }
+    @Test void twoBoardsSupportUntaggedPostsAndBoardMoves()throws Exception{
+        String free="{\"kind\":\"GENERAL\",\"category\":\"OTHER\",\"title\":\"여행 이야기\",\"body\":\"여행 이야기를 자유롭게 나눠요\"}";
+        var created=mvc.perform(post("/api/community/posts").with(user("alice")).with(csrf()).contentType(MediaType.APPLICATION_JSON).content(free))
+                .andExpect(status().isCreated()).andExpect(jsonPath("$.kind").value("GENERAL"))
+                .andExpect(jsonPath("$.destinationId").isEmpty()).andReturn();
+        long id=mapper.readTree(created.getResponse().getContentAsString()).get("id").asLong();
+        create("주차 질문","QUESTION","PARKING",null);
+        mvc.perform(get("/api/community/posts").param("kind","GENERAL")).andExpect(jsonPath("$.totalElements").value(1));
+        mvc.perform(get("/api/community/posts").param("kind","QUESTION")).andExpect(jsonPath("$.totalElements").value(1));
+        mvc.perform(get("/api/community/posts").param("kind","GENERAL").param("destination","sokcho")).andExpect(jsonPath("$.totalElements").value(0));
+        mvc.perform(put("/api/community/posts/"+id).with(user("alice")).with(csrf()).contentType(MediaType.APPLICATION_JSON).content(free.replace("GENERAL","QUESTION")))
+                .andExpect(status().isOk()).andExpect(jsonPath("$.kind").value("QUESTION"));
+        mvc.perform(get("/api/community/posts").param("kind","GENERAL")).andExpect(jsonPath("$.totalElements").value(0));
+        mvc.perform(get("/api/community/posts").param("kind","QUESTION")).andExpect(jsonPath("$.totalElements").value(2));
+        mvc.perform(post("/api/community/posts").with(user("alice")).with(csrf()).contentType(MediaType.APPLICATION_JSON).content(free.replace("{","{\"destinationId\":\"unknown\",")))
+                .andExpect(status().isBadRequest());
+    }
+    @Test void legacyReviewsAndReportsRemainInFreeBoardWithComments()throws Exception{
+        var member=members.findByLoginId("alice").orElseThrow();
+        var destination=new com.travelprice.domain.CommunityPost(member,null,com.travelprice.domain.CommunityPost.Kind.REVIEW,com.travelprice.domain.CommunityPost.Category.OTHER,"예전 후기","이전 버전에서 작성한 여행 후기",null,null);
+        var legacy=posts.saveAndFlush(destination);
+        posts.saveAndFlush(new com.travelprice.domain.CommunityPost(member,null,com.travelprice.domain.CommunityPost.Kind.REPORT,com.travelprice.domain.CommunityPost.Category.OTHER,"예전 제보","이전 버전에서 작성한 여행 제보",null,null));
+        mvc.perform(post("/api/community/posts/"+legacy.getId()+"/comments").with(user("bob")).with(csrf()).contentType(MediaType.APPLICATION_JSON).content("{\"body\":\"이전 글도 잘 보이네요\"}")).andExpect(status().isCreated());
+        mvc.perform(get("/api/community/posts").param("kind","GENERAL")).andExpect(jsonPath("$.totalElements").value(2)).andExpect(jsonPath("$.content[0].kind").value("GENERAL"));
+        mvc.perform(get("/api/community/posts").param("kind","QUESTION")).andExpect(jsonPath("$.totalElements").value(0));
+        mvc.perform(get("/api/community/posts/"+legacy.getId())).andExpect(jsonPath("$.kind").value("GENERAL"));
+        mvc.perform(get("/api/community/posts/"+legacy.getId()+"/comments")).andExpect(jsonPath("$.length()").value(1));
+        assertThat(posts.findById(legacy.getId()).orElseThrow().getKind()).isEqualTo(com.travelprice.domain.CommunityPost.Kind.REVIEW);
+    }
     @Test void communityPageIsServed()throws Exception{
-        mvc.perform(get("/community")).andExpect(status().isOk()).andExpect(content().string(org.hamcrest.Matchers.containsString("경험 공유")));
+        mvc.perform(get("/community")).andExpect(status().isOk()).andExpect(content().string(org.hamcrest.Matchers.containsString("질문 게시판")));
         mvc.perform(get("/js/community.js")).andExpect(status().isOk());
     }
 }

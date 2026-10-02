@@ -25,7 +25,8 @@ public class CommunityService {
             var predicates=new ArrayList<jakarta.persistence.criteria.Predicate>();
             if(!includeHidden)predicates.add(cb.isFalse(root.get("hidden")));
             if(destination!=null && !destination.isBlank())predicates.add(cb.equal(root.get("destination").get("slug"),destination));
-            if(kind!=null)predicates.add(cb.equal(root.get("kind"),kind));
+            if(kind==Kind.GENERAL)predicates.add(root.get("kind").in(Kind.GENERAL,Kind.REVIEW,Kind.REPORT));
+            else if(kind!=null)predicates.add(cb.equal(root.get("kind"),kind));
             if(category!=null)predicates.add(cb.equal(root.get("category"),category));
             if(q!=null && !q.isBlank()){
                 var word="%"+q.trim().toLowerCase(Locale.ROOT).replace("\\","\\\\").replace("%","\\%").replace("_","\\_")+"%";
@@ -39,11 +40,11 @@ public class CommunityService {
     @Transactional(readOnly=true) public PostView detail(Long id,Authentication auth){var viewer=members.current(auth);return view(visible(id,viewer),viewer,false);}
     public PostView create(PostInput input,Authentication auth){
         var author=members.require(auth);var destination=validate(input,author);
-        return view(posts.saveAndFlush(new CommunityPost(author,destination,input.kind(),input.category(),input.title().trim(),input.body().trim(),input.visitedAt(),input.imageKey())),author,false);
+        return view(posts.saveAndFlush(new CommunityPost(author,destination,input.kind().boardKind(),input.category(),input.title().trim(),input.body().trim(),input.visitedAt(),input.imageKey())),author,false);
     }
     public PostView update(Long id,PostInput input,Authentication auth){
         var author=members.require(auth);var post=visible(id,author);requireOwner(post,author);var oldImage=post.getImageKey();
-        post.update(validate(input,author),input.kind(),input.category(),input.title().trim(),input.body().trim(),input.visitedAt(),input.imageKey());
+        post.update(validate(input,author),input.kind().boardKind(),input.category(),input.title().trim(),input.body().trim(),input.visitedAt(),input.imageKey());
         posts.flush();if(!Objects.equals(oldImage,input.imageKey()))photos.deleteUnused(oldImage);
         return view(post,author,false);
     }
@@ -66,7 +67,8 @@ public class CommunityService {
         if(input.title().trim().length()<2 || input.body().trim().length()<5)throw new ApiException(400,"제목과 내용을 조금 더 작성해주세요.");
         if(input.visitedAt()!=null && input.visitedAt().isAfter(LocalDate.now(ZoneId.of("Asia/Seoul"))))throw new ApiException(400,"방문일을 확인해주세요.");
         photos.checkOwner(input.imageKey(),author);
-        return destinations.findBySlug(input.destinationId()).orElseThrow(()->new ApiException(400,"관광지를 선택해주세요."));
+        if(input.destinationId()==null || input.destinationId().isBlank())return null;
+        return destinations.findBySlug(input.destinationId().trim()).orElseThrow(()->new ApiException(400,"등록된 관광지 태그를 선택해주세요."));
     }
     private CommunityPost visible(Long id,Member viewer){
         var post=posts.findById(id).orElseThrow(()->new ApiException(404,"글이 없습니다."));
@@ -75,7 +77,7 @@ public class CommunityService {
     private void requireOwner(CommunityPost post,Member member){if(!post.getAuthor().getId().equals(member.getId()))throw new ApiException(403,"본인 글만 수정·삭제할 수 있어요.");}
     private PostView view(CommunityPost p,Member viewer,boolean preview){
         boolean mine=viewer!=null && p.getAuthor().getId().equals(viewer.getId());var body=p.getBody();if(preview && body.length()>140)body=body.substring(0,140)+"…";
-        return new PostView(p.getId(),p.getDestination().getSlug(),p.getDestination().getName(),p.getKind(),p.getCategory(),p.getTitle(),body,p.getVisitedAt(),p.getImageKey()==null?null:"/api/community/images/"+p.getImageKey(),"익명",mine,p.isHidden(),viewer!=null&&viewer.isAdmin(),p.getCreatedAt(),p.getUpdatedAt());
+        return new PostView(p.getId(),p.getDestination()==null?null:p.getDestination().getSlug(),p.getDestination()==null?null:p.getDestination().getName(),p.getKind().boardKind(),p.getCategory(),p.getTitle(),body,p.getVisitedAt(),p.getImageKey()==null?null:"/api/community/images/"+p.getImageKey(),"익명",mine,p.isHidden(),viewer!=null&&viewer.isAdmin(),p.getCreatedAt(),p.getUpdatedAt());
     }
     private CommentView comment(CommunityComment c,Member viewer){return new CommentView(c.getId(),c.getBody(),"익명",viewer!=null && (viewer.isAdmin() || c.getAuthor().getId().equals(viewer.getId())),c.getCreatedAt());}
 }

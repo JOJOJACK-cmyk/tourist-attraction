@@ -1,13 +1,13 @@
 # 커뮤니티 구현
 
-`/community`에서 여행 후기(REVIEW), 정보 제보(REPORT), 질문(QUESTION)을 작성합니다. 초기 가짜 게시글을 넣지 않으며 실제 작성한 글을 MySQL에 저장합니다. 관광지, 글 유형, 9개 분류와 제목·내용 검색을 조합하고 12건씩 최신순으로 조회합니다. 방문일과 사진 한 장은 선택 사항입니다.
+`/community`에서 자유 게시판(GENERAL)과 질문 게시판(QUESTION)을 이용합니다. `/community?board=free` 및 `/community?board=question`으로 바로 열 수 있습니다. 초기 가짜 게시글을 넣지 않으며 실제 작성한 글을 MySQL에 저장합니다. 선택 관광지 태그, 게시판, 9개 분류와 제목·내용 검색을 조합하고 12건씩 최신순으로 조회합니다. 방문일과 사진 한 장은 선택 사항입니다.
 
 ## 데이터와 권한
 
 | 테이블 | 내용 |
 |---|---|
 | community_member | 아이디, BCrypt 비밀번호 해시, MEMBER/ADMIN 역할 |
-| community_post | 작성자·관광지 관계, 유형·분류, 제목·본문·방문일·사진 키, 숨김 여부, 작성·수정 시각 |
+| community_post | 작성자·선택 관광지 관계, 게시판·분류, 제목·본문·방문일·사진 키, 숨김 여부, 작성·수정 시각 |
 | community_comment | 글·작성자 관계, 내용, 작성 시각 |
 | community_photo | 사진 UUID, 업로드한 회원, jpg/png 확장자 |
 
@@ -41,7 +41,7 @@ Spring Security 세션 인증을 사용합니다. 로그인 성공 시 세션 ID
 ```json
 {
   "destinationId": "sokcho",
-  "kind": "REPORT",
+  "kind": "GENERAL",
   "category": "PARKING",
   "title": "시장 주변 주차 경험",
   "body": "방문 시간과 실제 이용한 주차장의 경험을 적습니다.",
@@ -61,3 +61,10 @@ Spring Security 세션 인증을 사용합니다. 로그인 성공 시 세션 ID
 ## 범위
 
 회원가입·로그인·글 CRUD·검색·페이지 구분·댓글·관리자 권한·사진 첨부를 제공합니다. 댓글 수정, 비밀번호 재설정, 이메일 인증, 글 신고 접수함, 알림, 자동 AI 분석·집계는 이번 구현 범위에 포함하지 않습니다. 여기서 **정보 제보**는 여행 정보를 공유하는 게시글 유형입니다.
+
+
+## 기존 데이터 호환
+
+기존 REVIEW·REPORT 행은 자유 게시판 목록에 함께 포함하고 응답 kind는 GENERAL로 표시합니다. QUESTION은 질문 게시판에 표시합니다. 글·댓글·사진의 ID와 소유권은 유지됩니다. 신규/수정 입력의 REVIEW·REPORT도 GENERAL로 정규화하므로 이전 클라이언트 요청을 거부하지 않습니다. 원래 저장 행을 일괄 변경하는 작업은 없습니다.
+
+관광지 태그는 `destinationId: null`, 빈 문자열 또는 생략으로 작성할 수 있습니다. 지정한 태그는 등록된 관광지인지 검사합니다. MySQL 기존 destination_id는 시작 시 필요한 경우에만 NULL 허용으로 변경합니다. MySQL native enum에 GENERAL이 없으면 시작 시 기존 enum 값을 유지하면서 추가합니다. 이 변경에는 DB 계정의 ALTER 권한이 필요합니다.
