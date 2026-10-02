@@ -70,6 +70,13 @@
     get('photo-preview').hidden=!post?.imageUrl;if(post?.imageUrl)get('photo-preview').src=post.imageUrl;
     get('post-editor').scrollIntoView({behavior:'smooth',block:'start'});
   }
+  async function socialProviders(){
+    try{
+      const providers=await api('/api/auth/social/providers');
+      ['kakao','google'].forEach(provider=>{get('social-'+provider).hidden=!providers[provider];});
+      get('social-login-note').textContent=providers.kakao||providers.google?'소셜 로그인 후에도 글과 댓글은 익명으로 표시돼요.':'소셜 로그인은 준비 중이에요. 아이디로 로그인할 수 있어요.';
+    }catch{get('social-login-note').textContent='소셜 로그인 상태를 확인하지 못했어요. 아이디로 로그인할 수 있어요.';}
+  }
   function selectBoard(kind){
     get('board-kind').value=kind;
     const question=kind==='QUESTION';
@@ -77,7 +84,9 @@
     get('board-title').textContent=question?'질문 게시판':'자유 게시판';
     get('board-description').textContent=question?'여행지, 먹거리, 가격과 주차까지 궁금한 것을 물어보세요.':'후기, 여행 팁, 소소한 일상까지 편하게 나눠보세요.';
     get('write-post').textContent=question?'질문하기':'글쓰기';
-    const url=new URL(location.href);url.searchParams.set('board',question?'question':'free');history.replaceState(null,'',url.pathname+url.search+url.hash);
+    const selectedBoard=question?'question':'free';
+    ['kakao','google'].forEach(provider=>{get('social-'+provider).href='/auth/social/'+provider+'?board='+selectedBoard;});
+    const url=new URL(location.href);url.searchParams.set('board',selectedBoard);history.replaceState(null,'',url.pathname+url.search+url.hash);
   }
   [['board-general','GENERAL'],['board-question','QUESTION']].forEach(([id,kind])=>get(id).addEventListener('click',async()=>{
     clear();page=0;selectBoard(kind);++detailVersion;detail=null;get('post-detail').hidden=true;
@@ -118,7 +127,10 @@
   get('page-prev').addEventListener('click',async()=>{clear();page=Math.max(0,page-1);try{await list();}catch(e){error(e);}});
   get('page-next').addEventListener('click',async()=>{clear();if(page+1<pages)page++;try{await list();}catch(e){error(e);}});
   (async()=>{try{
-    selectBoard(initialBoard);await token();await auth();const destinations=await api('/api/destinations');
+    selectBoard(initialBoard);await token();await auth();await socialProviders();
+    const loginError=new URLSearchParams(location.search).get('loginError');
+    if(loginError){get('account-panel').hidden=false;error(new Error(loginError==='unavailable'?'아직 연결되지 않은 소셜 로그인이에요.':'소셜 로그인을 완료하지 못했어요. 다시 시도해 주세요.'));const url=new URL(location.href);url.searchParams.delete('loginError');history.replaceState(null,'',url.pathname+url.search+url.hash);}
+    const destinations=await api('/api/destinations');
     destinations.forEach(d=>{const option=node('option','',d.name);option.value=d.slug;get('post-destination').append(option);get('board-destination').append(option.cloneNode(true));});
     Object.entries(categories).forEach(([value,label])=>{const option=node('option','',label);option.value=value;get('post-category').append(option);get('board-category').append(option.cloneNode(true));});
     await list();

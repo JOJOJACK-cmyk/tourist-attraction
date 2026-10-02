@@ -155,6 +155,7 @@ class CommunityIntegrationTest {
         assertThat(posts.findById(legacy.getId()).orElseThrow().getKind()).isEqualTo(com.travelprice.domain.CommunityPost.Kind.REVIEW);
     }
     @Test void communityPageIsServed()throws Exception{
+        mvc.perform(get("/api/auth/social/providers")).andExpect(jsonPath("$.kakao").value(false)).andExpect(jsonPath("$.google").value(false));
         mvc.perform(get("/community")).andExpect(status().isOk()).andExpect(content().string(org.hamcrest.Matchers.containsString("질문 게시판")));
         mvc.perform(get("/js/community.js")).andExpect(status().isOk());
     }

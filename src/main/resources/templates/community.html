@@ -4,8 +4,8 @@
   <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
   <title>질문·자유 게시판 | 여행물가</title>
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="/css/style.css?v=boards-2">
-  <script src="/js/community.js?v=boards-2" defer></script>
+  <link rel="stylesheet" href="/css/style.css?v=social-1">
+  <script src="/js/community.js?v=social-1" defer></script>
 </head>
 <body>
   <a class="skip-link" href="#board">게시글로 바로 가기</a>
@@ -16,6 +16,13 @@
   <main><div class="wrap community-wrap">
     <div class="community-account"><span id="account-state">로그인 상태를 확인하고 있어요.</span><button id="account-toggle" class="filter" type="button">로그인 · 회원가입</button></div>
     <section id="account-panel" class="community-panel" aria-label="회원 로그인" hidden>
+      <h2 class="account-heading">로그인하고 이야기를 나눠보세요</h2>
+      <div id="social-login-buttons" class="social-login-buttons" aria-label="소셜 로그인">
+        <a id="social-kakao" class="social-login kakao" href="/auth/social/kakao" hidden><span aria-hidden="true">●</span>카카오로 시작하기</a>
+        <a id="social-google" class="social-login google" href="/auth/social/google" hidden><span aria-hidden="true">G</span>구글로 시작하기</a>
+      </div>
+      <p id="social-login-note" class="small" role="status"></p>
+      <div class="account-divider"><span>아이디로 로그인 · 회원가입</span></div>
       <form id="account-form" class="community-form">
         <label>아이디<input id="account-id" autocomplete="username" required minlength="3" maxlength="30" pattern="[a-z0-9_]{3,30}" placeholder="영문 소문자·숫자·밑줄 3~30자"></label>
         <label>비밀번호<input id="account-password" type="password" autocomplete="current-password" required minlength="8" maxlength="64" placeholder="8자 이상"></label>

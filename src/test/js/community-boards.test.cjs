@@ -10,7 +10,8 @@ const requests=[];let saved;
 const base={id:99,kind:'GENERAL',category:'OTHER',destination:null,destinationId:null,title:'여행 이야기',body:'여행 준비 이야기',createdAt:'2026-10-02',mine:true};
 const ctx=vm.createContext({URL,URLSearchParams,FormData,location:{href:'http://localhost/community?board=question',search:'?board=question'},history:{replaceState(){}},document:{getElementById:id=>{assert.ok(elements[id],id);return elements[id];},createElement:()=>new Element()},fetch:async(url,options)=>{
  requests.push(url);let data;
- if(url==='/api/auth/csrf')data={headerName:'X-CSRF-TOKEN',token:'token'};
+ if(url==='/api/auth/social/providers')data={kakao:true,google:false};
+ else if(url==='/api/auth/csrf')data={headerName:'X-CSRF-TOKEN',token:'token'};
  else if(url==='/api/auth/me')data={authenticated:true,loginId:'alice'};
  else if(url==='/api/destinations')data=[{slug:'sokcho',name:'속초시장'}];
  else if(options.method==='POST'){saved=JSON.parse(options.body);assert.equal(options.headers['X-CSRF-TOKEN'],'token');data={...base,...saved};}
@@ -22,7 +23,7 @@ const ctx=vm.createContext({URL,URLSearchParams,FormData,location:{href:'http://
 vm.runInContext(fs.readFileSync(path.join(root,'static/js/community.js'),'utf8'),ctx);
 const settle=async()=>{for(let i=0;i<8;i++)await new Promise(r=>setImmediate(r));};
 (async()=>{
- await settle();assert.equal(elements['board-kind'].value,'QUESTION');assert.equal(elements['board-question'].attrs['aria-pressed'],'true');assert.equal(elements['write-post'].textContent,'질문하기');
+ await settle();assert.equal(elements['social-kakao'].hidden,false);assert.equal(elements['social-google'].hidden,true);assert.equal(elements['social-kakao'].href,'/auth/social/kakao?board=question');assert.equal(elements['board-kind'].value,'QUESTION');assert.equal(elements['board-question'].attrs['aria-pressed'],'true');assert.equal(elements['write-post'].textContent,'질문하기');
  elements['write-post'].listeners.click();assert.equal(elements['post-kind'].value,'QUESTION');assert.equal(elements['post-destination'].value,'');assert.equal(elements['post-category'].value,'OTHER');
  await elements['page-next'].listeners.click();assert.ok(requests.at(-1).includes('page=1'));
  await elements['board-general'].listeners.click();assert.equal(elements['board-kind'].value,'GENERAL');assert.equal(elements['board-general'].attrs['aria-pressed'],'true');assert.ok(requests.at(-1).includes('page=0'));assert.ok(requests.at(-1).includes('kind=GENERAL'));

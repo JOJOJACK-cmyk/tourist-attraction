@@ -220,3 +220,15 @@ Ollama 공식 문서: https://docs.ollama.com/api/chat · https://docs.ollama.co
 기존 MySQL에서는 시작 시 `CommunitySchemaUpdater`가 필요한 경우에만 MySQL enum에 GENERAL을 추가하고 기존 destination_id의 NOT NULL을 해제합니다. 기존 enum 값은 유지합니다. DB 계정은 기존 JPA 스키마 변경과 동일하게 ALTER 권한이 필요합니다. H2로 게시판 동작·권한을 검증했으며 실제 MySQL 스키마 갱신은 사용자 환경에서 확인해야 합니다.
 
 화면 동작 검증: `node src/test/js/community-boards.test.cjs` (게시판 바로가기·탭·페이지 초기화·선택 태그·CSRF 저장·이동한 게시판 갱신).
+
+
+## 카카오·구글 로그인
+
+커뮤니티 로그인 패널에 카카오·구글 버튼을 제공합니다. 일반 로그인은 유지하고 소셜 로그인으로도 익명 글·댓글·사진을 작성할 수 있습니다. 제공자별 Client ID와 Secret이 모두 있어야 버튼이 활성화되며, 설정 없이도 앱을 실행할 수 있습니다.
+
+- 카카오 콜백: `http://localhost:8080/login/oauth2/code/kakao`
+- 구글 콜백: `http://localhost:8080/login/oauth2/code/google`
+- 환경변수: `KAKAO_CLIENT_ID`, `KAKAO_CLIENT_SECRET`, `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`
+- 개발자 콘솔 등록·PowerShell/IntelliJ 설정·검증: [소셜 로그인 안내](docs/social-login.md)
+
+소셜 계정은 별도 일반회원으로 생성됩니다. 기존 일반 계정과 이메일 기반 자동 통합은 하지 않으며, 소셜 계정이 관리자로 자동 승격되지 않습니다. 같은 제공자와 계정은 다시 로그인해도 기존 회원을 사용합니다. 일반 로그인을 통한 관리자 접속은 유지됩니다. 키 없는 환경 및 모의 인증 테스트와 실제 외부 로그인 성공은 구분합니다.

@@ -20,7 +20,7 @@ public class AuthController {
     public AuthController(MemberService members,AuthenticationManager manager,SecurityContextRepository contexts,SessionAuthenticationStrategy sessions){this.members=members;this.manager=manager;this.contexts=contexts;this.sessions=sessions;}
     @GetMapping("/csrf") public Map<String,String> csrf(CsrfToken token){return Map.of("headerName",token.getHeaderName(),"token",token.getToken());}
     @GetMapping("/me") public Map<String,Object> me(Authentication auth){
-        var member=members.current(auth);return member==null?Map.of("authenticated",false):Map.of("authenticated",true,"admin",member.isAdmin(),"loginId",member.getLoginId());
+        var member=members.current(auth);return member==null?Map.of("authenticated",false):Map.of("authenticated",true,"admin",member.isAdmin(),"loginId",member.isSocial()?("kakao".equals(member.getSocialProvider())?"카카오 계정":"구글 계정"):member.getLoginId(),"authProvider",member.isSocial()?member.getSocialProvider():"local");
     }
     @PostMapping("/signup") @org.springframework.web.bind.annotation.ResponseStatus(org.springframework.http.HttpStatus.CREATED)
     public Map<String,Boolean> signup(@Valid @RequestBody Credentials input){members.signup(input.loginId(),input.password());return Map.of("success",true);}
