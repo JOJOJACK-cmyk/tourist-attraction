@@ -13,9 +13,17 @@ public class SupportOrder {
     @Column(nullable=false) private Instant createdAt;
     @Column(nullable=false) private Instant expiresAt;
     private Instant completedAt;
+    @Column(length=8) private String paymentMode;
+    @Column(length=200) private String paymentKey;
+    private Instant confirmationStartedAt;
+    public String getPaymentMode(){return paymentMode;}
+    public String getPaymentKey(){return paymentKey;}
+    public boolean isConfirming(){return confirmationStartedAt!=null&&status==Status.READY;}
+    public void configure(String mode){paymentMode=mode;}
+    public void beginConfirmation(String key){paymentKey=key;confirmationStartedAt=Instant.now();}
     protected SupportOrder(){}
     public SupportOrder(String owner,String request,int amount,Instant now){id=UUID.randomUUID().toString();ownerKey=owner;requestKey=request;this.amount=amount;status=Status.READY;createdAt=now;expiresAt=now.plus(Duration.ofMinutes(20));}
     public String getId(){return id;}public String getOwnerKey(){return ownerKey;}public int getAmount(){return amount;}public Status getStatus(){return status;}public Instant getCreatedAt(){return createdAt;}public Instant getCompletedAt(){return completedAt;}
-    public void expire(Instant now){if(status==Status.READY&&!now.isBefore(expiresAt)){status=Status.EXPIRED;completedAt=now;}}
+    public void expire(Instant now){if(status==Status.READY&&confirmationStartedAt==null&&!now.isBefore(expiresAt)){status=Status.EXPIRED;completedAt=now;}}
     public void finish(Status status,Instant now){this.status=status;completedAt=now;}
 }

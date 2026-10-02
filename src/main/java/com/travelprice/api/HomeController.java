@@ -16,7 +16,7 @@ public class HomeController {
     public String sokchoIntroduction() { return "destination-sokcho"; }
     @GetMapping("/community")
     public String community() { return "community"; }
-    @GetMapping("/support")
+    @GetMapping({"/support","/support/success","/support/fail"})
     public String support() { return "support"; }
     @GetMapping("/chat")
     public String chat() { return "chat"; }

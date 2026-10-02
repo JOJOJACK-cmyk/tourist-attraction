@@ -1,22 +1,82 @@
 (() => {
-  const $=id=>document.getElementById(id),dialog=$('support-dialog');if(!dialog)return;
-  let order=null,requestId=null,requestAmount=null,csrf=null,busy=false,opener=null;
-  const money=amount=>Number(amount).toLocaleString('ko-KR')+'원';
-  async function api(url,method='GET',body){if(method!=='GET')csrf=await api('/api/auth/csrf');const headers={};if(body)headers['Content-Type']='application/json';if(method!=='GET')headers[csrf.headerName]=csrf.token;const response=await fetch(url,{method,headers,credentials:'same-origin',body:body?JSON.stringify(body):undefined});const data=await response.json();if(!response.ok){const failure=new Error(data.error||'모의 후원을 처리하지 못했어요.');failure.status=response.status;throw failure;}return data;}
-  function error(e){$('support-error').textContent=e.message||'다시 시도해 주세요.';$('support-error').hidden=false;}
-  function setBusy(value){busy=value;['support-close','support-start','support-success','support-cancel','support-fail','support-again'].forEach(id=>$(id).disabled=value);dialog.setAttribute('aria-busy',String(value));if(!value){const focusTarget=!$('support-selection').hidden?$('support-start'):!$('support-checkout').hidden?$('support-success'):$('support-again');focusTarget.focus();}}
-  function reset(){order=null;requestId=null;requestAmount=null;$('support-error').hidden=true;$('support-selection').hidden=false;$('support-checkout').hidden=true;$('support-result').hidden=true;}
-  function uuid(){if(crypto.randomUUID)return crypto.randomUUID();const bytes=crypto.getRandomValues(new Uint8Array(16));bytes[6]=(bytes[6]&15)|64;bytes[8]=(bytes[8]&63)|128;const h=[...bytes].map(b=>b.toString(16).padStart(2,'0')).join('');return h.slice(0,8)+'-'+h.slice(8,12)+'-'+h.slice(12,16)+'-'+h.slice(16,20)+'-'+h.slice(20);}
-  function show(data){
-    order=data;$('support-selection').hidden=true;$('support-error').hidden=true;
-    if(data.status==='READY'){$('support-checkout').hidden=false;$('support-result').hidden=true;$('support-checkout-amount').textContent=money(data.amount);$('support-success').focus();return;}
-    $('support-checkout').hidden=true;$('support-result').hidden=false;
-    const outcomes={SUCCEEDED:['☕','응원 체험이 완료됐어요!','따뜻한 마음 고마워요. 실제 금액은 청구되지 않았어요.'],CANCELLED:['↩','모의 후원을 취소했어요.','부담 없이 여행 이야기를 계속 즐겨 주세요.'],FAILED:['☁','모의 후원이 완료되지 않았어요.','실패 상황을 체험했어요. 다시 시작할 수 있어요.'],EXPIRED:['⌛','체험 시간이 지났어요.','새 모의 후원으로 다시 시작해 주세요.']};
-    const [icon,title,copy]=outcomes[data.status]||outcomes.FAILED;$('support-result-icon').textContent=icon;$('support-result-title').textContent=title;$('support-result-copy').textContent=copy;$('support-result-amount').textContent='선택한 테스트 금액 · '+money(data.amount);$('support-again').focus();
+  'use strict';
+  const dialog = document.getElementById('support-dialog');
+  if (!dialog) return;
+  const $ = id => document.getElementById(id);
+  let config, sdkPromise, busy = false, requestId, selectedAmount;
+  const api = async (path, body) => {
+    const options = {credentials: 'same-origin'};
+    if (body !== undefined) {
+      const token = await api('/api/auth/csrf');
+      Object.assign(options, {method: 'POST', headers: {'Content-Type': 'application/json', [token.headerName]: token.token}, body: JSON.stringify(body)});
+    }
+    const response = await fetch(path, options);
+    const data = await response.json();
+    if (!response.ok) throw new Error(data.error || '요청을 확인할 수 없어요. 다시 시도해주세요.');
+    return data;
+  };
+  const error = message => { $('support-error').textContent = message; $('support-error').hidden = !message; };
+  const configure = async () => {
+    config = await api('/api/support/orders/config');
+    $('support-mode').textContent = !config.available ? '결제 서비스 준비 중' : config.mode === 'TEST' ? '토스 테스트 결제 · 실제 청구 없음' : '선택한 금액이 실제 결제됩니다';
+    $('support-start').disabled = !config.available;
+  };
+  const loadSdk = () => {
+    if (window.TossPayments) return Promise.resolve();
+    if (!sdkPromise) sdkPromise = new Promise((resolve, reject) => {
+      const script = document.createElement('script');
+      script.src = 'https://js.tosspayments.com/v2/standard';
+      script.onload = resolve;
+      script.onerror = () => {sdkPromise = null; script.remove(); reject(new Error('토스 결제창을 불러오지 못했어요.'));};
+      document.head.append(script);
+    });
+    return sdkPromise;
+  };
+  document.querySelectorAll('[data-open-support]').forEach(link => link.addEventListener('click', async event => {
+    event.preventDefault(); dialog.showModal(); error('');
+    try {await configure();} catch (_) {error('결제 서비스에 연결하지 못했어요.');}
+  }));
+  $('support-close').addEventListener('click', () => dialog.close());
+  $('support-form').addEventListener('submit', async event => {
+    event.preventDefault(); if (busy) return; busy = true; $('support-start').disabled = true; error('');
+    try {
+      await configure(); if (!config.available) throw new Error('결제 서비스 준비 중이에요.');
+      const amount = Number(document.querySelector('input[name="supportAmount"]:checked').value);
+      if (!requestId || amount !== selectedAmount) {requestId = crypto.randomUUID(); selectedAmount = amount;}
+      const order = await api('/api/support/orders', {amount, requestId});
+      if (order.status !== 'READY' || order.confirming) throw new Error('이미 진행된 주문이에요. 결제 결과를 확인해주세요.');
+      await loadSdk();
+      await window.TossPayments(config.clientKey).payment({customerKey: window.TossPayments.ANONYMOUS}).requestPayment({
+        method: 'CARD', amount: {value: order.amount, currency: order.currency}, orderId: order.id,
+        orderName: '여행물가 운영 응원', successUrl: location.origin + '/support/success', failUrl: location.origin + '/support/fail'
+      });
+      // Resolving the SDK promise never means that the server has approved a payment.
+    } catch (failure) {if (failure.code === 'USER_CANCEL') requestId = undefined; error(failure.code === 'USER_CANCEL' ? '결제를 닫았어요. 원할 때 다시 응원해주세요.' : failure.message);}
+    finally {busy = false; $('support-start').disabled = !config?.available;}
+  });
+  if (location.pathname === '/support/success' || location.pathname === '/support/fail') {
+    const panel = $('support-callback'); panel.hidden = false;
+    const title = $('support-callback-title'), copy = $('support-callback-copy'), retry = $('support-retry');
+    const params = new URLSearchParams(location.search), orderId = params.get('orderId'), paymentKey = params.get('paymentKey'), amount = Number(params.get('amount'));
+    const validId = /^[a-f0-9-]{36}$/.test(orderId || '');
+    if (location.pathname === '/support/fail') {
+      title.textContent = '결제가 완료되지 않았어요'; copy.textContent = '결제창을 닫았거나 결제를 진행할 수 없었어요. 다시 응원하려면 금액을 선택해주세요.';
+      history.replaceState(null, '', '/support/fail');
+    } else {
+      const confirm = async () => {
+        retry.hidden = true; title.textContent = '결제 승인 확인 중';
+        try {
+          if (!validId) throw new Error('주문 정보를 확인할 수 없어요.');
+          const order = paymentKey && Number.isSafeInteger(amount) && amount > 0
+            ? await api('/api/support/orders/' + orderId + '/confirm', {paymentKey, amount})
+            : await api('/api/support/orders/' + orderId);
+          if (order.status !== 'SUCCEEDED' || order.mode === 'DEMO') throw new Error('아직 승인 완료를 확인하지 못했어요. 새 결제를 시작하지 말고 다시 확인해주세요.');
+          title.textContent = order.mode === 'TEST' ? '토스 테스트 결제 완료' : '응원해 주셔서 고마워요 ☕';
+          copy.textContent = order.amount.toLocaleString('ko-KR') + '원 · ' + (order.mode === 'TEST' ? '실제 청구 없이 결제사 승인까지 확인했어요.' : '결제사 승인이 완료되었어요.');
+          history.replaceState(null, '', '/support/success?orderId=' + encodeURIComponent(orderId));
+        } catch (failure) {title.textContent = '승인 결과를 다시 확인해주세요'; copy.textContent = failure.message; retry.hidden = false;}
+      };
+      retry.addEventListener('click', confirm); confirm();
+    }
   }
-  document.querySelectorAll('[data-open-support]').forEach(link=>link.addEventListener('click',async e=>{e.preventDefault();opener=link;dialog.showModal();if(order){try{show(await api('/api/support/orders/'+order.id));}catch(errorValue){if(errorValue.status===404)reset();error(errorValue);}}}));
-  $('support-close').addEventListener('click',()=>{if(!busy)dialog.close();});dialog.addEventListener('cancel',e=>{if(busy)e.preventDefault();});dialog.addEventListener('close',()=>opener?.focus());
-  $('support-form').addEventListener('submit',async e=>{e.preventDefault();if(busy)return;$('support-error').hidden=true;const amount=Number(document.querySelector('input[name="supportAmount"]:checked').value);setBusy(true);try{if(!requestId||requestAmount!==amount){requestId=uuid();requestAmount=amount;}show(await api('/api/support/orders','POST',{amount,requestId}));}catch(errorValue){error(errorValue);}finally{setBusy(false);}});
-  async function result(outcome){if(busy||!order)return;setBusy(true);$('support-error').hidden=true;try{show(await api('/api/support/orders/'+order.id+'/result','POST',{outcome}));}catch(e){error(e);try{const latest=await api('/api/support/orders/'+order.id);show(latest);if(latest.status==='READY')error(e);}catch{}}finally{setBusy(false);}}
-  $('support-success').addEventListener('click',()=>result('SUCCESS'));$('support-cancel').addEventListener('click',()=>result('CANCEL'));$('support-fail').addEventListener('click',()=>result('FAIL'));$('support-again').addEventListener('click',()=>{if(!busy){reset();$('support-start').focus();}});
 })();
