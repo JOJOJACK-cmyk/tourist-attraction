@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>후기 분석 관리 | 여행물가</title>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/css/style.css?v=community-1">
+  <script src="/js/local-review.js?v=admin-2" defer></script>
+</head>
+<body>
+  <header class="hero community-hero"><div class="wrap">
+    <div class="topbar"><a class="brand" href="/"><span class="brand-mark" aria-hidden="true">₩</span>여행물가</a><nav aria-label="주요 메뉴"><a href="/">관광지 보기</a><a href="/community">경험 공유 · 계정</a></nav></div>
+    <div class="community-intro"><span class="eyebrow">관리자</span><h1>후기 분석 관리</h1><p>Ollama로 후기에서 여행에 도움이 될 경험을 추출해요.</p></div>
+  </div></header>
+  <main>
+    <section class="wrap local-review-section" id="local-review" aria-labelledby="local-review-title">
+      <div class="section-head"><div><span class="eyebrow">후기 한 편 살펴보기</span><h2 id="local-review-title">이 후기에서 알아둘 점은?</h2></div></div>
+      <p class="section-note">관광지를 선택하고 후기 한 편을 붙여 넣어보세요. 만족했던 선택과 불편했던 경험을 나눠 살펴볼 수 있어요.</p>
+      <form id="local-review-form" class="local-review-form">
+        <label for="destination">관광지<select id="destination" required><option value="">관광지를 불러오는 중</option></select></label>
+        <label for="local-body">후기 본문<textarea id="local-body" required maxlength="4000" rows="7" placeholder="음식, 숙박, 주차, 교통, 시설 등 여행 경험이 담긴 후기를 넣어주세요."></textarea></label>
+        <div class="local-actions"><label for="local-published">글 작성일 · 알고 있다면<input id="local-published" type="date"></label><button id="local-analyze" class="primary" type="submit">후기 분석하기</button></div>
+        <p id="local-status" class="small" role="status">분석 연결을 확인하고 있어요.</p>
+        <button id="local-reconnect" class="filter" type="button">연결 다시 확인</button>
+      </form>
+      <p id="local-error" class="error" role="alert" hidden></p>
+      <div id="local-result" aria-live="polite" aria-busy="false"></div>
+    </section>
+  </main>
+</body>
+</html>

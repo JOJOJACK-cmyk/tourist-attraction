@@ -13,6 +13,7 @@ import org.springframework.http.MediaType;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.*;
 
 @SpringBootTest @AutoConfigureMockMvc @ActiveProfiles("test")
 class AnalysisIntegrationTest {
@@ -51,14 +52,14 @@ class AnalysisIntegrationTest {
             "{\"destinationId\":\"unknown\",\"body\":\"후기\"}",
             "{\"destinationId\":\"sokcho\",\"publishedAt\":\"2100-01-01\",\"body\":\"후기\"}"
         })
-            mvc.perform(post("/api/reviews/extract").contentType(MediaType.APPLICATION_JSON).content(body))
+            mvc.perform(post("/api/reviews/extract").with(user("admin").roles("ADMIN")).with(csrf()).contentType(MediaType.APPLICATION_JSON).content(body))
                     .andExpect(status().isBadRequest());
     }
     @Test void homeAndStaticFilesAreServed() throws Exception {
         mvc.perform(get("/")).andExpect(status().isOk()).andExpect(content().string(org.hamcrest.Matchers.containsString("여행지 경험과 가격 단서")));
         mvc.perform(get("/css/style.css")).andExpect(status().isOk());
         mvc.perform(get("/js/app.js")).andExpect(status().isOk());
-        mvc.perform(get("/js/local-review.js")).andExpect(status().isOk());
+        mvc.perform(get("/js/local-review.js").with(user("admin").roles("ADMIN"))).andExpect(status().isOk());
         mvc.perform(get("/data/sokcho-review-pilot.json")).andExpect(status().isOk())
                 .andExpect(jsonPath("$.sources.length()").value(30))
                 .andExpect(jsonPath("$.themes.length()").value(10))

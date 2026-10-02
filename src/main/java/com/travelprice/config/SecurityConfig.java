@@ -31,8 +31,9 @@ public class SecurityConfig {
     }
     @Bean SecurityFilterChain security(HttpSecurity http,SecurityContextRepository contexts,CsrfTokenRepository tokens) throws Exception {
         http.securityContext(c->c.securityContextRepository(contexts))
-            .csrf(c->c.csrfTokenRepository(tokens).ignoringRequestMatchers("/api/analysis","/api/reviews/extract"))
-            .authorizeHttpRequests(a->a.requestMatchers(HttpMethod.GET,"/api/community/**").permitAll()
+            .csrf(c->c.csrfTokenRepository(tokens).ignoringRequestMatchers("/api/analysis"))
+            .authorizeHttpRequests(a->a.requestMatchers("/admin/**","/api/reviews/**","/js/local-review.js").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.GET,"/api/community/**").permitAll()
                 .requestMatchers("/api/community/**").authenticated().anyRequest().permitAll())
             .requestCache(c->c.disable())
             .exceptionHandling(e->e.authenticationEntryPoint((req,res,x)->{res.setStatus(401);res.setContentType("application/json;charset=UTF-8");res.getWriter().write("{\"error\":\"로그인이 필요해요.\"}");})
