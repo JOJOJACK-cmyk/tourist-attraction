@@ -3,8 +3,8 @@
   "destinationId": "sokcho",
   "title": "속초시장, 다녀온 사람들의 이야기",
   "summary": "술빵의 가격 대비 만족, 누룽지 오징어순대의 바삭함, 포장 이용의 만족이 반복됐어요. 일부 품목의 가격과 인기 점포 대기는 아쉬움으로 언급됐고, 식은 술빵의 맛은 의견이 갈렸어요.",
-  "reviewedAt": "2026-09-30",
-  "dateFrom": "2025-01-20",
+  "reviewedAt": "2026-10-02",
+  "dateFrom": "2023-03-06",
   "dateTo": "2026-09-13",
   "sources": [
     {
@@ -360,6 +360,72 @@
         "TO"
       ],
       "type": "개인 블로그"
+    },
+    {
+      "id": 31,
+      "date": "2023-03-06",
+      "url": "https://theqoo.net/travel/2737499923",
+      "title": "익명 후기 31",
+      "summary": "샌드류 가격 대비 아쉬움과 메밀전·대게 식사의 만족이 함께 언급됐고, 시장 방문과 연결된 숙소 위치를 긍정적으로 평가했어요.",
+      "tags": [],
+      "type": "더쿠",
+      "reviewedAt": "2026-10-02",
+      "evidenceLevel": "public_body_reviewed"
+    },
+    {
+      "id": 32,
+      "date": "2023-10-29",
+      "url": "https://theqoo.net/muk/2980977527",
+      "title": "익명 후기 32",
+      "summary": "시장 도넛과 부꾸미의 양 대비 가격에 만족한 경험이에요.",
+      "tags": [],
+      "type": "더쿠",
+      "reviewedAt": "2026-10-02",
+      "evidenceLevel": "public_body_reviewed"
+    },
+    {
+      "id": 33,
+      "date": "2025-08-26",
+      "url": "https://gall.dcinside.com/board/view/?id=food&no=3620652",
+      "title": "익명 후기 33",
+      "summary": "코끼리분식 꽈배기의 맛에 만족한 짧은 방문 후기이며, 가격·서비스 평가는 없어요.",
+      "tags": [],
+      "type": "디시인사이드",
+      "reviewedAt": "2026-10-02",
+      "evidenceLevel": "public_body_reviewed"
+    },
+    {
+      "id": 34,
+      "date": "2025-05-19",
+      "url": "https://theqoo.net/travel/3743954299",
+      "title": "익명 후기 34",
+      "summary": "시장 정선감자전에서 전날의 줄과 다음 날 아침의 한산함을 다르게 경험했어요. 다른 식당의 비용·응대 평가는 시장 집계에서 제외했어요.",
+      "tags": [],
+      "type": "더쿠",
+      "reviewedAt": "2026-10-02",
+      "evidenceLevel": "public_body_reviewed"
+    },
+    {
+      "id": 35,
+      "date": "2025-02-13",
+      "url": "https://gall.dcinside.com/mgallery/board/view/?id=coffee&no=362343",
+      "title": "익명 후기 35",
+      "summary": "시장 안 카페에서 필터커피·빵 가격과 응대에 만족한 방문 후기예요.",
+      "tags": [],
+      "type": "디시인사이드",
+      "reviewedAt": "2026-10-02",
+      "evidenceLevel": "public_body_reviewed"
+    },
+    {
+      "id": 36,
+      "date": "2026-03-07",
+      "url": "https://gall.dcinside.com/mgallery/board/view/?id=carsharing&no=56900",
+      "title": "익명 후기 36",
+      "summary": "시장 방문 중 큰 닭강정 박스 대신 혼자 먹을 작은 포장을 선택했어요. 렌터카 관련 친절 평가와 다른 해변의 한산함은 시장 집계에서 제외했어요.",
+      "tags": [],
+      "type": "디시인사이드",
+      "reviewedAt": "2026-10-02",
+      "evidenceLevel": "public_body_reviewed"
     }
   ],
   "themes": [
@@ -492,5 +558,5 @@
       "description": "회센터와 포장회에서 신선도·식감에 만족한 경험이 있었어요."
     }
   ],
-  "limitation": "검색으로 선정한 먹거리 중심 후기를 수동 검토했습니다. 한 글이 여러 주제에 포함될 수 있으며, 언급 수는 관광객 비율이 아닙니다. 공개 작성 계정은 서로 다르지만 독립된 여행자 30명인지 확인한 것은 아닙니다. 광고·협찬·AI 작성 여부는 모든 글에서 확인하지 못했습니다. 이 자료로 시장 전체의 바가지 여부나 선택한 연도 전체의 분위기를 확정할 수 없습니다."
+  "limitation": "기존 검토 요약 30건과 공개 본문에서 관련 경험을 수동 확인한 커뮤니티 글 6건입니다. 작성 연도를 유지하며 같은 원문의 재게시와 검색 미리보기는 후기 수에 넣지 않습니다. 글 수는 방문자 수가 아닙니다."
 }

@@ -71,13 +71,13 @@ class AnalysisIntegrationTest {
         mvc.perform(get("/js/review-insights.js")).andExpect(status().isOk());
         mvc.perform(get("/data/sokcho-prompt-pilot.json")).andExpect(status().isOk())
                 .andExpect(jsonPath("$.kind").value("assistant_prompt_pilot"))
-                .andExpect(jsonPath("$.reviews.length()").value(30))
+                .andExpect(jsonPath("$.reviews.length()").value(36))
                 .andExpect(jsonPath("$.reviews[5].analysis.experiences[1].category").value("parking"));
         mvc.perform(get("/js/local-review.js").with(user("admin").roles("ADMIN"))).andExpect(status().isOk());
         mvc.perform(get("/data/sokcho-review-pilot.json")).andExpect(status().isOk())
-                .andExpect(jsonPath("$.sources.length()").value(30))
+                .andExpect(jsonPath("$.sources.length()").value(36))
                 .andExpect(jsonPath("$.themes.length()").value(10))
-                .andExpect(jsonPath("$.dateFrom").value("2025-01-20"))
+                .andExpect(jsonPath("$.dateFrom").value("2023-03-06"))
                 .andExpect(jsonPath("$.dateTo").value("2026-09-13"))
                 .andExpect(jsonPath("$.sources[0].author").doesNotExist())
                 .andExpect(jsonPath("$.sources[0].title").value("익명 후기 1"));

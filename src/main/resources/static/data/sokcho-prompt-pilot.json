@@ -2,10 +2,10 @@
   "kind": "assistant_prompt_pilot",
   "destinationId": "sokcho",
   "generatedAt": "2026-10-02",
-  "inputKind": "stored_review_summaries",
+  "inputKind": "mixed_stored_summaries_and_reviewed_public_bodies",
   "promptPath": "prompts/review-extraction-system.txt",
-  "promptVersion": "repository-2026-10-02",
-  "provenance": "저장된 후기 요약 30건을 시스템 프롬프트에 맞춰 분석한 예시입니다. 실제 Ollama 호출 결과나 원문 재수집 결과가 아닙니다.",
+  "promptVersion": "visitor-experiences-2026-10-02",
+  "provenance": "기존 검토 요약 30건과 공개 본문을 수동 확인한 커뮤니티 글 6건의 추출 예시입니다. 실제 Ollama 호출 결과가 아닙니다.",
   "reviews": [
     {
       "source_id": "pilot-1",
@@ -1492,6 +1492,324 @@
         ],
         "limitations": [
           "시장 밖 물회집 경험은 제외했습니다."
+        ]
+      }
+    },
+    {
+      "source_id": "pilot-31",
+      "sourceId": 31,
+      "published_at": "2023-03-06",
+      "input_kind": "public_body_reviewed",
+      "analysis": {
+        "experiences": [
+          {
+            "source_id": "pilot-31",
+            "category": "food",
+            "topic": "spending_regret",
+            "sentiment": "negative",
+            "experience_type": "direct",
+            "place": null,
+            "item": "속초샌드·벌꿀샌드",
+            "summary": "샌드류는 맛에 비해 가격이 부담스러웠다는 후기",
+            "condition": null,
+            "reason": null,
+            "alternative": null,
+            "check_before_visit": null,
+            "published_at": "2023-03-06",
+            "visited_at": null,
+            "support": "샌드류는 맛에 비해 가격이 부담스러웠다는 후기",
+            "uncertainties": [
+              "공개 본문에서 관련 경험을 수동 확인했습니다. 방문일은 특정하지 않았습니다."
+            ]
+          },
+          {
+            "source_id": "pilot-31",
+            "category": "food",
+            "topic": "experience_condition",
+            "sentiment": "positive",
+            "experience_type": "direct",
+            "place": null,
+            "item": "메밀전·대게",
+            "summary": "메밀전과 대게 식사에 만족했다는 후기",
+            "condition": null,
+            "reason": null,
+            "alternative": null,
+            "check_before_visit": null,
+            "published_at": "2023-03-06",
+            "visited_at": null,
+            "support": "메밀전과 대게 식사에 만족했다는 후기",
+            "uncertainties": [
+              "공개 본문에서 관련 경험을 수동 확인했습니다. 방문일은 특정하지 않았습니다."
+            ]
+          },
+          {
+            "source_id": "pilot-31",
+            "category": "lodging",
+            "topic": "access_convenience",
+            "sentiment": "positive",
+            "experience_type": "direct",
+            "place": "씨크루즈",
+            "item": "씨크루즈",
+            "summary": "시장 방문 동선과 연결된 숙소 위치에 만족",
+            "condition": "시장 주변 숙박 · 가격 평가는 없음",
+            "reason": null,
+            "alternative": null,
+            "check_before_visit": null,
+            "published_at": "2023-03-06",
+            "visited_at": null,
+            "support": "시장 방문 동선과 연결된 숙소 위치에 만족",
+            "uncertainties": [
+              "공개 본문에서 관련 경험을 수동 확인했습니다. 방문일은 특정하지 않았습니다."
+            ]
+          }
+        ],
+        "limitations": [
+          "다른 지역·시장 밖 식당의 경험과 가격 평가 없는 숙소 만족은 해당 분야의 가격 판단에 사용하지 않습니다."
+        ]
+      }
+    },
+    {
+      "source_id": "pilot-32",
+      "sourceId": 32,
+      "published_at": "2023-10-29",
+      "input_kind": "public_body_reviewed",
+      "analysis": {
+        "experiences": [
+          {
+            "source_id": "pilot-32",
+            "category": "food",
+            "topic": "value_satisfaction",
+            "sentiment": "positive",
+            "experience_type": "direct",
+            "place": null,
+            "item": "도넛",
+            "summary": "도넛의 가격 대비 만족을 언급",
+            "condition": "코끼리분식 방문",
+            "reason": null,
+            "alternative": null,
+            "check_before_visit": null,
+            "published_at": "2023-10-29",
+            "visited_at": null,
+            "support": "도넛의 가격 대비 만족을 언급",
+            "uncertainties": [
+              "공개 본문에서 관련 경험을 수동 확인했습니다. 방문일은 특정하지 않았습니다."
+            ]
+          },
+          {
+            "source_id": "pilot-32",
+            "category": "food",
+            "topic": "value_satisfaction",
+            "sentiment": "positive",
+            "experience_type": "direct",
+            "place": null,
+            "item": "수수부꾸미",
+            "summary": "부꾸미는 가격에 비해 양이 많았다는 후기",
+            "condition": null,
+            "reason": null,
+            "alternative": null,
+            "check_before_visit": null,
+            "published_at": "2023-10-29",
+            "visited_at": null,
+            "support": "부꾸미는 가격에 비해 양이 많았다는 후기",
+            "uncertainties": [
+              "공개 본문에서 관련 경험을 수동 확인했습니다. 방문일은 특정하지 않았습니다."
+            ]
+          }
+        ],
+        "limitations": [
+          "다른 지역·시장 밖 식당의 경험과 가격 평가 없는 숙소 만족은 해당 분야의 가격 판단에 사용하지 않습니다."
+        ]
+      }
+    },
+    {
+      "source_id": "pilot-33",
+      "sourceId": 33,
+      "published_at": "2025-08-26",
+      "input_kind": "public_body_reviewed",
+      "analysis": {
+        "experiences": [
+          {
+            "source_id": "pilot-33",
+            "category": "food",
+            "topic": "experience_condition",
+            "sentiment": "positive",
+            "experience_type": "direct",
+            "place": null,
+            "item": "꽈배기",
+            "summary": "꽈배기의 맛에 만족한 후기",
+            "condition": "가격·서비스 평가는 없음",
+            "reason": null,
+            "alternative": null,
+            "check_before_visit": null,
+            "published_at": "2025-08-26",
+            "visited_at": null,
+            "support": "꽈배기의 맛에 만족한 후기",
+            "uncertainties": [
+              "공개 본문에서 관련 경험을 수동 확인했습니다. 방문일은 특정하지 않았습니다."
+            ]
+          }
+        ],
+        "limitations": [
+          "다른 지역·시장 밖 식당의 경험과 가격 평가 없는 숙소 만족은 해당 분야의 가격 판단에 사용하지 않습니다."
+        ]
+      }
+    },
+    {
+      "source_id": "pilot-34",
+      "sourceId": 34,
+      "published_at": "2025-05-19",
+      "input_kind": "public_body_reviewed",
+      "analysis": {
+        "experiences": [
+          {
+            "source_id": "pilot-34",
+            "category": "food",
+            "topic": "crowding",
+            "sentiment": "negative",
+            "experience_type": "direct",
+            "place": null,
+            "item": "감자전",
+            "summary": "전날 시장 점포에 긴 줄이 있었다는 경험",
+            "condition": "정선감자전 · 전날 시장 구경 시 · 시간 미상",
+            "reason": null,
+            "alternative": null,
+            "check_before_visit": null,
+            "published_at": "2025-05-19",
+            "visited_at": null,
+            "support": "전날 시장 점포에 긴 줄이 있었다는 경험",
+            "uncertainties": [
+              "공개 본문에서 관련 경험을 수동 확인했습니다. 방문일은 특정하지 않았습니다."
+            ]
+          },
+          {
+            "source_id": "pilot-34",
+            "category": "food",
+            "topic": "crowding",
+            "sentiment": "positive",
+            "experience_type": "direct",
+            "place": null,
+            "item": "감자전",
+            "summary": "아침에는 사람이 없어 구매했다는 경험",
+            "condition": "정선감자전 · 다음 날 아침",
+            "reason": null,
+            "alternative": null,
+            "check_before_visit": null,
+            "published_at": "2025-05-19",
+            "visited_at": null,
+            "support": "아침에는 사람이 없어 구매했다는 경험",
+            "uncertainties": [
+              "공개 본문에서 관련 경험을 수동 확인했습니다. 방문일은 특정하지 않았습니다."
+            ]
+          }
+        ],
+        "limitations": [
+          "다른 지역·시장 밖 식당의 경험과 가격 평가 없는 숙소 만족은 해당 분야의 가격 판단에 사용하지 않습니다."
+        ]
+      }
+    },
+    {
+      "source_id": "pilot-35",
+      "sourceId": 35,
+      "published_at": "2025-02-13",
+      "input_kind": "public_body_reviewed",
+      "analysis": {
+        "experiences": [
+          {
+            "source_id": "pilot-35",
+            "category": "food",
+            "topic": "value_satisfaction",
+            "sentiment": "positive",
+            "experience_type": "direct",
+            "place": null,
+            "item": "필터커피·빵",
+            "summary": "시장 카페의 필터커피와 빵이 저렴하다고 느낀 후기",
+            "condition": "무이커피 방문",
+            "reason": null,
+            "alternative": null,
+            "check_before_visit": null,
+            "published_at": "2025-02-13",
+            "visited_at": null,
+            "support": "시장 카페의 필터커피와 빵이 저렴하다고 느낀 후기",
+            "uncertainties": [
+              "공개 본문에서 관련 경험을 수동 확인했습니다. 방문일은 특정하지 않았습니다."
+            ]
+          },
+          {
+            "source_id": "pilot-35",
+            "category": "food",
+            "topic": "service_quality",
+            "sentiment": "positive",
+            "experience_type": "direct",
+            "place": null,
+            "item": "카페 응대",
+            "summary": "시장 카페에서 친절한 응대를 경험했다는 후기",
+            "condition": "무이커피 방문 · 개별 점포 경험",
+            "reason": null,
+            "alternative": null,
+            "check_before_visit": null,
+            "published_at": "2025-02-13",
+            "visited_at": null,
+            "support": "시장 카페에서 친절한 응대를 경험했다는 후기",
+            "uncertainties": [
+              "공개 본문에서 관련 경험을 수동 확인했습니다. 방문일은 특정하지 않았습니다."
+            ]
+          }
+        ],
+        "limitations": [
+          "다른 지역·시장 밖 식당의 경험과 가격 평가 없는 숙소 만족은 해당 분야의 가격 판단에 사용하지 않습니다."
+        ]
+      }
+    },
+    {
+      "source_id": "pilot-36",
+      "sourceId": 36,
+      "published_at": "2026-03-07",
+      "input_kind": "public_body_reviewed",
+      "analysis": {
+        "experiences": [
+          {
+            "source_id": "pilot-36",
+            "category": "food",
+            "topic": "price_information",
+            "sentiment": "neutral",
+            "experience_type": "direct",
+            "place": null,
+            "item": "닭강정",
+            "summary": "큰 박스의 가격·양을 고려해 작은 포장을 선택한 후기",
+            "condition": "혼자 방문 · 큰 박스는 2만원대라고 언급 · 현재 가격 아님",
+            "reason": null,
+            "alternative": null,
+            "check_before_visit": null,
+            "published_at": "2026-03-07",
+            "visited_at": null,
+            "support": "큰 박스의 가격·양을 고려해 작은 포장을 선택한 후기",
+            "uncertainties": [
+              "공개 본문에서 관련 경험을 수동 확인했습니다. 방문일은 특정하지 않았습니다."
+            ]
+          },
+          {
+            "source_id": "pilot-36",
+            "category": "food",
+            "topic": "experience_condition",
+            "sentiment": "positive",
+            "experience_type": "direct",
+            "place": null,
+            "item": "먹물소스 닭강정",
+            "summary": "작은 포장 닭강정의 맛에 만족",
+            "condition": "혼자 먹을 소량 포장 선택",
+            "reason": null,
+            "alternative": null,
+            "check_before_visit": null,
+            "published_at": "2026-03-07",
+            "visited_at": null,
+            "support": "작은 포장 닭강정의 맛에 만족",
+            "uncertainties": [
+              "공개 본문에서 관련 경험을 수동 확인했습니다. 방문일은 특정하지 않았습니다."
+            ]
+          }
+        ],
+        "limitations": [
+          "다른 지역·시장 밖 식당의 경험과 가격 평가 없는 숙소 만족은 해당 분야의 가격 판단에 사용하지 않습니다."
         ]
       }
     }

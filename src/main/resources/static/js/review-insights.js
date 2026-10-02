@@ -1,10 +1,53 @@
 (() => {
   const count=items=>new Set(items.map(e=>e.source_id)).size;
   const node=(tag,cls,text)=>{const el=document.createElement(tag);el.className=cls;if(text!==undefined)el.textContent=text;return el;};
+  function canonicalSource(source){
+    try{const url=new URL(source.url);const host=url.hostname.replace(/^(www\.|m\.)/,'');
+      if(host==='fmkorea.com'){const id=url.searchParams.get('document_srl')||url.pathname.match(/(?:^|\/)(\d+)(?:\/|$)/)?.[1];if(id)return 'fmkorea:'+id;}
+      if(host.endsWith('dcinside.com')&&url.searchParams.has('id')&&url.searchParams.has('no'))return 'dcinside:'+url.searchParams.get('id')+':'+url.searchParams.get('no');
+      if(host==='theqoo.net')return host+url.pathname.replace(/\/$/,'');
+      for(const key of [...url.searchParams.keys()])if(/^(utm_|fbclid|gclid)/.test(key))url.searchParams.delete(key);
+      url.searchParams.sort();return host+url.pathname+url.search;
+    }catch(_){return 'source:'+source.id;}
+  }
   function select(data,pilot){
-    const ids=new Set(data.sources.map(s=>'pilot-'+s.id));
-    const reviews=pilot.reviews.filter(r=>ids.has(r.source_id));
-    return {reviews,experiences:reviews.flatMap(r=>r.analysis.experiences)};
+    const ids=new Set(),seen=new Set();
+    data.sources.forEach(source=>{const key=canonicalSource(source);if(!seen.has(key)){ids.add('pilot-'+source.id);seen.add(key);}});
+    const selected=new Set();const reviews=pilot.reviews.filter(r=>ids.has(r.source_id)&&!selected.has(r.source_id)&&(selected.add(r.source_id),true));
+    return {reviews,experiences:reviews.flatMap(r=>r.analysis.experiences.filter(e=>e.source_id===r.source_id&&!['hearsay','repost'].includes(e.experience_type)))};
+  }
+  function dimensions(data,pilot){
+    const {experiences}=select(data,pilot);
+    const cost=new Set(['value_satisfaction','spending_regret','unexpected_cost','price_information']);
+    const definitions=[['food_cost','식비','식비'],['lodging_cost','숙박비','시장 주변 숙박비'],['service','서비스·응대','서비스·응대'],['crowding','혼잡·대기','혼잡·대기']];
+    return definitions.map(([key,label])=>{
+      if(key==='food_cost')label='식비';
+      const items=experiences.filter(e=>key==='food_cost'?e.category==='food'&&cost.has(e.topic):key==='lodging_cost'?e.category==='lodging'&&cost.has(e.topic):key==='service'?e.topic==='service_quality':e.topic==='crowding').sort((a,b)=>Number(b.experience_type==='direct')-Number(a.experience_type==='direct')||(b.published_at||'').localeCompare(a.published_at||''));
+      const positive=items.filter(e=>e.sentiment==='positive'),negative=items.filter(e=>e.sentiment==='negative'),neutral=items.filter(e=>['neutral','mixed'].includes(e.sentiment));
+      const total=count(items),good=count(positive),bad=count(negative),other=count(neutral);
+      let verdict=total?'개별 경험이 있어요':'판단할 후기가 부족해요';
+      if(total>=3){if(good&&bad)verdict=key==='crowding'?'방문 상황에 따라 대기가 달라요':key==='service'?'응대 경험이 갈려요':'품목·이용 조건에 따라 체감이 갈려요';
+        else if(good>=3)verdict=key==='crowding'?'여유로운 이용 언급이 있어요':key==='service'?'좋은 응대 언급이 모였어요':'가격 대비 만족 언급이 모였어요';
+        else if(bad>=3)verdict=key==='crowding'?'대기 부담 언급이 모였어요':key==='service'?'응대 불편 언급이 모였어요':'가격 부담 언급이 모였어요';}
+      const unique=entries=>[...new Map(entries.map(e=>[e.summary+'|'+(e.condition||''),e])).values()];
+      const examples=unique([...negative.slice(0,2),...positive.slice(0,2),...neutral.slice(0,1)]).slice(0,4).map(e=>({text:e.summary,condition:data.year==null?[e.published_at?.slice(0,4)+'년 작성',e.condition].filter(Boolean).join(' · '):e.condition||null,sentiment:e.sentiment}));
+      const conditions=[...new Set(items.map(e=>e.condition).filter(Boolean))].slice(0,3);
+      return {key,label:key==='lodging_cost'?'시장 주변 숙박비':label,total,good,bad,other,verdict,examples,conditions,
+        emptyText:key==='lodging_cost'?'이 기간의 시장 주변 숙박비 후기가 아직 충분하지 않아요.':key==='service'?'이 기간의 실제 응대 경험을 담은 후기가 아직 충분하지 않아요.':key==='food_cost'?'이 기간의 가격 대비 만족을 평가한 후기가 아직 충분하지 않아요.':'이 기간의 시장 인파·대기 후기가 아직 충분하지 않아요.'};
+    });
+  }
+  function renderDimensions(aspects,target){
+    const section=node('section','visitor-overview');section.append(node('h3','subheading','비용과 방문 분위기'));
+    const grid=node('div','visitor-grid');
+    aspects.forEach(aspect=>{const card=node('article','visitor-card '+(aspect.total?'':'insufficient'));
+      card.append(node('span','card-tag',aspect.label),node('h4','',aspect.verdict));
+      if(aspect.total){const labels=aspect.key==='crowding'?['여유·빠른 이용','혼잡·대기 부담']:aspect.key==='service'?['좋은 응대','응대 불편']:['가격 대비 만족','가격 부담'];
+        const stats=[];if(aspect.good)stats.push(labels[0]+' '+aspect.good+'건');if(aspect.bad)stats.push(labels[1]+' '+aspect.bad+'건');if(aspect.other)stats.push('그 외 체감 '+aspect.other+'건');
+        card.append(node('p','visitor-counts',stats.join(' · ')),node('p','small','관련 후기 '+aspect.total+'건'));
+        const list=node('ul','visitor-experiences');aspect.examples.forEach(example=>{const row=node('li','');row.append(node('span','',example.text));if(example.condition)row.append(node('span','visitor-condition',example.condition));list.append(row);});card.append(list);
+      }else card.append(node('p','small',aspect.emptyText));
+      grid.append(card);
+    });section.append(grid);target.append(section);
   }
   function aggregate(data,pilot){
     const {reviews,experiences}=select(data,pilot);
@@ -28,7 +71,7 @@
       ['오징어순대 조리 상태 지적',e=>e.item==='일반 오징어순대'&&e.topic==='experience_condition']
     ]);
     const issues=[];
-    const waiting=experiences.filter(e=>e.category==='food'&&e.topic==='crowding');
+    const waiting=experiences.filter(e=>e.category==='food'&&e.topic==='crowding').sort((a,b)=>Number(b.experience_type==='direct')-Number(a.experience_type==='direct')||(b.published_at||'').localeCompare(a.published_at||''));
     if(waiting.length){
       const bad=count(waiting.filter(e=>e.sentiment==='negative')),good=count(waiting.filter(e=>e.sentiment==='positive'));
       const parts=[];if(bad)parts.push('대기 부담 '+bad+'건');if(good)parts.push('빠른 구매·회전 '+good+'건');
@@ -60,6 +103,7 @@
     });
     summary.append(stats,node('p','report-meta','후기 작성일 '+data.dateFrom+' ~ '+data.dateTo),node('p','small','한 후기에 칭찬과 불만이 함께 포함될 수 있어요.'));
     target.append(summary);
+    renderDimensions(dimensions(data,pilot),target);
     const columns=node('div','overview-columns');
     [[overview.praise,'어떤 칭찬이 많았나','positive'],[overview.complaints,'어떤 불만이 있었나','negative']].forEach(([themes,title,tone])=>{
       const column=node('section','overview-keywords '+tone);column.append(node('h3','',title));
@@ -75,5 +119,5 @@
       });section.append(grid);target.append(section);
     }
   }
-  window.ReviewInsights={select,aggregate,render};
+  window.ReviewInsights={select,aggregate,dimensions,renderDimensions,render,canonicalSource};
 })();

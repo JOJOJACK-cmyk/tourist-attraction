@@ -11,5 +11,13 @@ public final class ApiModels {
     public record Price(String item,String unit,long amount,long sourceId,String date) {}
     public record Finding(String text,List<Long> sourceIds) {}
     public record AnalysisResult(String kind,String destinationId,int year,String title,String summary,String confidence,
-                                 List<Price> prices,List<Finding> findings,List<Source> sources,String limitation,String reviewedAt,String searchSuggestions) {}
+                                 List<Price> prices,List<Finding> findings,List<Source> sources,String limitation,String reviewedAt,String searchSuggestions,
+                                 List<VisitorAspect> aspects,List<SearchCoverage> coverage) {
+        public AnalysisResult(String kind,String destinationId,int year,String title,String summary,String confidence,
+                              List<Price> prices,List<Finding> findings,List<Source> sources,String limitation,String reviewedAt,String searchSuggestions){
+            this(kind,destinationId,year,title,summary,confidence,prices,findings,sources,limitation,reviewedAt,searchSuggestions,List.of(),List.of());
+        }
+    }
+    public record VisitorAspect(String key,String label,String summary,List<Finding> findings,String status) {}
+    public record SearchCoverage(String aspect,String status,List<String> requestedQueries,List<String> executedQueries,int sourceCount) {}
 }
