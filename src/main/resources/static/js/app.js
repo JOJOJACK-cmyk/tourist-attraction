@@ -1,6 +1,7 @@
 const $ = id => document.getElementById(id);
 let destinations = [], activeRegion = '전체', requestId = 0;
 let pending = null;
+const reviewCatalog={sokcho:{name:'속초시장',version:'community-2'},seomun:{name:'서문시장',version:'seomun-1'}};
 function node(tag,className,text) { const n=document.createElement(tag); if(className)n.className=className; if(text!==undefined)n.textContent=text; return n; }
 function setBusy(busy) {
   $('report').setAttribute('aria-busy',String(busy)); $('loading').hidden=!busy; $('analyze-button').disabled=busy || !destinations.length;
@@ -39,7 +40,7 @@ function selectReviewYear(data, year) {
   const ids=new Set(sources.map(s=>s.id));
   const themes=data.themes.map(t=>({...t,ids:t.ids.filter(id=>ids.has(id))}));
   return {...data,sources,themes,year,
-    title:year===null?'속초시장, 다녀온 사람들의 이야기':year+'년 속초시장 후기',
+    title:year===null?data.title:year+'년 '+(data.destinationName||'속초시장')+' 후기',
     summary:year===null?data.summary:'선택한 연도에 작성된 후기 '+sources.length+'건에서 반복된 만족과 불편을 살펴보세요. 아래 언급 수와 근거는 이 연도의 글만 반영해요.',
     dateFrom:sources.length?sources.map(s=>s.date).sort()[0]:'',
     dateTo:sources.length?sources.map(s=>s.date).sort().at(-1):''};
@@ -60,16 +61,17 @@ async function analyze(scroll=true) {
   renderDestinations();
   if(scroll)$('report').scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'});
   try {
-    if(mode==='sample' && (destinationId==='sokcho'||isAll)) {
-      if(destinationId!=='sokcho') {
-        renderResult({kind:'empty',title:'이 관광지의 후기 검토는 준비 중이에요',summary:'현재 수동 후기 검토는 속초관광수산시장에 제공됩니다.'});
+    if(mode==='sample' && (reviewCatalog[destinationId]||isAll)) {
+      const reviewed=reviewCatalog[destinationId];
+      if(!reviewed) {
+        renderResult({kind:'empty',title:'이 관광지의 후기 검토는 준비 중이에요',summary:'현재 수동 후기 검토는 속초관광수산시장과 대구 서문시장에 제공됩니다.'});
         return;
       }
-      const responses=await Promise.all([fetch('/data/sokcho-review-pilot.json?v=community-2',{signal:pending.signal}),fetch('/data/sokcho-prompt-pilot.json?v=community-2',{signal:pending.signal})]);
+      const responses=await Promise.all([fetch('/data/'+destinationId+'-review-pilot.json?v='+reviewed.version,{signal:pending.signal}),fetch('/data/'+destinationId+'-prompt-pilot.json?v='+reviewed.version,{signal:pending.signal})]);
       if(responses.some(response=>!response.ok))throw new Error('후기 분석 자료를 불러오지 못했습니다. 잠시 후 다시 시도해주세요.');
       const [raw,pilot]=await Promise.all(responses.map(response=>response.json()));if(current!==requestId)return;
       const data={...selectReviewYear(raw,year),promptPilot:pilot};
-      if(!data.sources.length){renderResult({kind:'empty',title:'이 연도의 검토 후기가 아직 없어요',summary:year+'년에 작성된 검토 자료가 없습니다. 속초 전체 후기를 확인해 보세요.'});return;}
+      if(!data.sources.length){renderResult({kind:'empty',title:'이 연도의 검토 후기가 아직 없어요',summary:year+'년에 작성된 검토 자료가 없습니다. 전체 연도를 선택해 '+reviewed.name+' 검토 후기를 확인해 보세요.'});return;}
       renderReviewPilot(data);return;
     }
     if(isAll)throw new Error('AI 웹 검색은 연도를 선택한 뒤 이용해주세요.');

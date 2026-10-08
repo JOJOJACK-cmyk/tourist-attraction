@@ -6,6 +6,11 @@
       if(host==='fmkorea.com'){const id=url.searchParams.get('document_srl')||url.pathname.match(/(?:^|\/)(\d+)(?:\/|$)/)?.[1];if(id)return 'fmkorea:'+id;}
       if(host.endsWith('dcinside.com')&&url.searchParams.has('id')&&url.searchParams.has('no'))return 'dcinside:'+url.searchParams.get('id')+':'+url.searchParams.get('no');
       if(host==='theqoo.net')return host+url.pathname.replace(/\/$/,'');
+      if(host==='blog.naver.com'){
+        const blog=url.searchParams.get('blogId'),post=url.searchParams.get('logNo');
+        if(blog&&post)return 'naver:'+blog+':'+post;
+        const match=url.pathname.match(/^\/([^/]+)\/(\d+)\/?$/);if(match)return 'naver:'+match[1]+':'+match[2];
+      }
       for(const key of [...url.searchParams.keys()])if(/^(utm_|fbclid|gclid)/.test(key))url.searchParams.delete(key);
       url.searchParams.sort();return host+url.pathname+url.search;
     }catch(_){return 'source:'+source.id;}
@@ -50,6 +55,7 @@
     });section.append(grid);target.append(section);
   }
   function aggregate(data,pilot){
+    if(Array.isArray(data.overviewThemes))return aggregateConfigured(data,pilot);
     const {reviews,experiences}=select(data,pilot);
     const positive=experiences.filter(e=>e.sentiment==='positive');
     const negative=experiences.filter(e=>e.sentiment==='negative');
@@ -93,6 +99,16 @@
     if(complaints.length)summary.push(complaints.slice(0,2).map(t=>t.label).join(', ')+'이 주요 불만이에요.');
     return {total:reviews.length,praiseCount:count(positive),complaintCount:count(negative),praise,complaints,issues,summary:summary.join(' ')||'아직 종합할 만한 칭찬·불만이 충분하지 않아요.'};
   }
+  function aggregateConfigured(data,pilot){
+    const {reviews,experiences}=select(data,pilot);
+    const matches=(e,rule)=>(!rule.sentiment||e.sentiment===rule.sentiment)&&(!rule.items||rule.items.includes(e.item))&&(!rule.topics||rule.topics.includes(e.topic))&&(!rule.categories||rule.categories.includes(e.category));
+    const themes=sentiment=>data.overviewThemes.filter(t=>t.sentiment===sentiment).map(t=>({label:t.label,count:count(experiences.filter(e=>matches(e,t)))})).filter(t=>t.count).sort((a,b)=>b.count-a.count);
+    const praise=themes('positive'),complaints=themes('negative');
+    const issues=(data.overviewIssues||[]).map(t=>({title:t.title,text:t.text,count:count(experiences.filter(e=>matches(e,t)))})).filter(t=>t.count);
+    const summary=[];if(praise.length)summary.push(praise.slice(0,2).map(t=>t.label).join(', ')+' 언급이 있어요.');
+    if(complaints.length)summary.push(complaints.slice(0,2).map(t=>t.label).join(', ')+'도 언급됐어요.');
+    return {total:reviews.length,praiseCount:count(experiences.filter(e=>e.sentiment==='positive')),complaintCount:count(experiences.filter(e=>e.sentiment==='negative')),praise,complaints,issues,summary:summary.join(' ')||'아직 종합할 만한 칭찬·불만이 충분하지 않아요.'};
+  }
   function render(data,pilot,target){
     const overview=aggregate(data,pilot);
     const summary=node('article','summary-panel');
@@ -102,6 +118,7 @@
       const card=node('div','review-stat '+tone);card.append(node('strong','',value+'건'),node('span','',label));stats.append(card);
     });
     summary.append(stats,node('p','report-meta','후기 작성일 '+data.dateFrom+' ~ '+data.dateTo),node('p','small','한 후기에 칭찬과 불만이 함께 포함될 수 있어요.'));
+    if(data.destinationId==='seomun')summary.append(node('p','small',data.limitation));
     target.append(summary);
     renderDimensions(dimensions(data,pilot),target);
     const columns=node('div','overview-columns');

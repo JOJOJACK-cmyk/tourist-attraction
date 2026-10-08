@@ -1,0 +1,546 @@
+{
+  "kind": "manual_public_body_extraction",
+  "destinationId": "seomun",
+  "generatedAt": "2026-10-08",
+  "inputKind": "reviewed_public_bodies",
+  "provenance": "작성일과 시장 관련 경험을 공개 본문에서 수동 확인해 요약한 자료입니다. 실제 Ollama 호출 결과가 아닙니다.",
+  "reviews": [
+    {
+      "source_id": "pilot-1",
+      "sourceId": 1,
+      "published_at": "2026-05-01",
+      "input_kind": "public_body_reviewed",
+      "analysis": {
+        "experiences": [
+          {
+            "source_id": "pilot-1",
+            "category": "food",
+            "topic": "crowding",
+            "sentiment": "neutral",
+            "experience_type": "direct",
+            "place": "대구 서문시장",
+            "item": "김밥·돈까스",
+            "summary": "김밥은 약 20분, 돈까스는 20분 넘게 기다렸다는 경험",
+            "condition": "인기 점포 식사 대기; 작성일과 정확한 방문일은 다름",
+            "reason": null,
+            "alternative": null,
+            "check_before_visit": null,
+            "published_at": "2026-05-01",
+            "visited_at": null,
+            "support": null,
+            "uncertainties": [
+              "작성자의 개별 경험이며 현재 가격·운영 상태를 보장하지 않습니다."
+            ]
+          },
+          {
+            "source_id": "pilot-1",
+            "category": "food",
+            "topic": "experience_condition",
+            "sentiment": "positive",
+            "experience_type": "direct",
+            "place": "대구 서문시장",
+            "item": "땅콩빵",
+            "summary": "땅콩빵을 반복 구매하고 다음 날에도 식감이 괜찮았다고 평가",
+            "condition": "구매 다음 날 섭취",
+            "reason": null,
+            "alternative": null,
+            "check_before_visit": null,
+            "published_at": "2026-05-01",
+            "visited_at": null,
+            "support": null,
+            "uncertainties": [
+              "작성자의 개별 경험이며 현재 가격·운영 상태를 보장하지 않습니다."
+            ]
+          },
+          {
+            "source_id": "pilot-1",
+            "category": "food",
+            "topic": "experience_condition",
+            "sentiment": "positive",
+            "experience_type": "direct",
+            "place": "대구 서문시장",
+            "item": "씨앗호떡",
+            "summary": "바삭한 씨앗호떡에 만족해 재방문 중 여러 번 구매",
+            "condition": "조리된 개체에 따라 식감 차이를 언급",
+            "reason": null,
+            "alternative": null,
+            "check_before_visit": null,
+            "published_at": "2026-05-01",
+            "visited_at": null,
+            "support": null,
+            "uncertainties": [
+              "작성자의 개별 경험이며 현재 가격·운영 상태를 보장하지 않습니다."
+            ]
+          },
+          {
+            "source_id": "pilot-1",
+            "category": "food",
+            "topic": "experience_condition",
+            "sentiment": "negative",
+            "experience_type": "direct",
+            "place": "대구 서문시장",
+            "item": "호떡",
+            "summary": "기름을 적게 쓴 다른 호떡은 본인 취향에 맞지 않았다고 평가",
+            "condition": "씨앗호떡과 다른 점포; 맛의 개인 취향",
+            "reason": null,
+            "alternative": null,
+            "check_before_visit": null,
+            "published_at": "2026-05-01",
+            "visited_at": null,
+            "support": null,
+            "uncertainties": [
+              "작성자의 개별 경험이며 현재 가격·운영 상태를 보장하지 않습니다."
+            ]
+          },
+          {
+            "source_id": "pilot-1",
+            "category": "food",
+            "topic": "experience_condition",
+            "sentiment": "positive",
+            "experience_type": "direct",
+            "place": "대구 서문시장",
+            "item": "약밥",
+            "summary": "약밥 맛에 만족하고 다시 구매하고 싶다고 평가",
+            "condition": "평일 점심 무렵 구매",
+            "reason": null,
+            "alternative": null,
+            "check_before_visit": null,
+            "published_at": "2026-05-01",
+            "visited_at": null,
+            "support": null,
+            "uncertainties": [
+              "작성자의 개별 경험이며 현재 가격·운영 상태를 보장하지 않습니다."
+            ]
+          },
+          {
+            "source_id": "pilot-1",
+            "category": "food",
+            "topic": "experience_condition",
+            "sentiment": "neutral",
+            "experience_type": "direct",
+            "place": "대구 서문시장",
+            "item": "땅콩빵",
+            "summary": "오후 늦게 방문했을 때 말차 맛이 없는 경우가 있었다고 언급",
+            "condition": "오후 늦은 시간; 전체 메뉴 품절이 아님",
+            "reason": null,
+            "alternative": null,
+            "check_before_visit": null,
+            "published_at": "2026-05-01",
+            "visited_at": null,
+            "support": null,
+            "uncertainties": [
+              "작성자의 개별 경험이며 현재 가격·운영 상태를 보장하지 않습니다."
+            ]
+          }
+        ],
+        "limitations": [
+          "서문시장과 명시적으로 연결된 본문만 추출했습니다."
+        ]
+      }
+    },
+    {
+      "source_id": "pilot-2",
+      "sourceId": 2,
+      "published_at": "2026-08-17",
+      "input_kind": "public_body_reviewed",
+      "analysis": {
+        "experiences": [
+          {
+            "source_id": "pilot-2",
+            "category": "food",
+            "topic": "experience_condition",
+            "sentiment": "positive",
+            "experience_type": "direct",
+            "place": "대구 서문시장",
+            "item": "납작만두",
+            "summary": "야시장에서 납작만두와 함께 먹은 무침의 조합에 만족",
+            "condition": "야시장 식사",
+            "reason": null,
+            "alternative": null,
+            "check_before_visit": null,
+            "published_at": "2026-08-17",
+            "visited_at": null,
+            "support": null,
+            "uncertainties": [
+              "작성자의 개별 경험이며 현재 가격·운영 상태를 보장하지 않습니다."
+            ]
+          },
+          {
+            "source_id": "pilot-2",
+            "category": "food",
+            "topic": "experience_condition",
+            "sentiment": "positive",
+            "experience_type": "direct",
+            "place": "대구 서문시장",
+            "item": "칼국수",
+            "summary": "다시 방문한 시장 지하 식당의 칼국수와 알밥에 만족",
+            "condition": "시장 지하 식당; 상호 미확인",
+            "reason": null,
+            "alternative": null,
+            "check_before_visit": null,
+            "published_at": "2026-08-17",
+            "visited_at": null,
+            "support": null,
+            "uncertainties": [
+              "작성자의 개별 경험이며 현재 가격·운영 상태를 보장하지 않습니다."
+            ]
+          },
+          {
+            "source_id": "pilot-2",
+            "category": "food",
+            "topic": "experience_condition",
+            "sentiment": "positive",
+            "experience_type": "direct",
+            "place": "대구 서문시장",
+            "item": "카스테라",
+            "summary": "포장한 카스테라를 가족과 먹고 맛에 만족",
+            "condition": "포장 후 가족과 섭취",
+            "reason": null,
+            "alternative": null,
+            "check_before_visit": null,
+            "published_at": "2026-08-17",
+            "visited_at": null,
+            "support": null,
+            "uncertainties": [
+              "작성자의 개별 경험이며 현재 가격·운영 상태를 보장하지 않습니다."
+            ]
+          },
+          {
+            "source_id": "pilot-2",
+            "category": "other",
+            "topic": "experience_condition",
+            "sentiment": "neutral",
+            "experience_type": "direct",
+            "place": "대구 서문시장",
+            "item": "방문 시간",
+            "summary": "일반 시장은 닫았고 야시장은 시작 전인 시간에 도착해 다시 방문",
+            "condition": "8월 방문; 정확한 시각 미기재",
+            "reason": null,
+            "alternative": null,
+            "check_before_visit": null,
+            "published_at": "2026-08-17",
+            "visited_at": null,
+            "support": null,
+            "uncertainties": [
+              "작성자의 개별 경험이며 현재 가격·운영 상태를 보장하지 않습니다."
+            ]
+          }
+        ],
+        "limitations": [
+          "서문시장과 명시적으로 연결된 본문만 추출했습니다."
+        ]
+      }
+    },
+    {
+      "source_id": "pilot-3",
+      "sourceId": 3,
+      "published_at": "2026-02-22",
+      "input_kind": "public_body_reviewed",
+      "analysis": {
+        "experiences": [
+          {
+            "source_id": "pilot-3",
+            "category": "food",
+            "topic": "value_satisfaction",
+            "sentiment": "positive",
+            "experience_type": "direct",
+            "place": "대구 서문시장",
+            "item": "칼국수",
+            "summary": "당시 6천 원인 칼국수 가격을 긍정적으로 언급",
+            "condition": "2026년 2월 방문 당시 가격; 현행 가격표가 아님",
+            "reason": null,
+            "alternative": null,
+            "check_before_visit": null,
+            "published_at": "2026-02-22",
+            "visited_at": "2026-02-21",
+            "support": null,
+            "uncertainties": [
+              "작성자의 개별 경험이며 현재 가격·운영 상태를 보장하지 않습니다."
+            ]
+          },
+          {
+            "source_id": "pilot-3",
+            "category": "food",
+            "topic": "experience_condition",
+            "sentiment": "positive",
+            "experience_type": "direct",
+            "place": "대구 서문시장",
+            "item": "칼국수",
+            "summary": "칼국수를 포함한 시장 먹거리 경험에 만족",
+            "condition": "대구마라톤 전날 점심 방문",
+            "reason": null,
+            "alternative": null,
+            "check_before_visit": null,
+            "published_at": "2026-02-22",
+            "visited_at": "2026-02-21",
+            "support": null,
+            "uncertainties": [
+              "작성자의 개별 경험이며 현재 가격·운영 상태를 보장하지 않습니다."
+            ]
+          }
+        ],
+        "limitations": [
+          "서문시장과 명시적으로 연결된 본문만 추출했습니다."
+        ]
+      }
+    },
+    {
+      "source_id": "pilot-4",
+      "sourceId": 4,
+      "published_at": "2026-06-26",
+      "input_kind": "public_body_reviewed",
+      "analysis": {
+        "experiences": [
+          {
+            "source_id": "pilot-4",
+            "category": "other",
+            "topic": "crowding",
+            "sentiment": "neutral",
+            "experience_type": "direct",
+            "place": "대구 서문시장",
+            "item": "시장 골목",
+            "summary": "주말 시장 골목에 사람이 많고 평일보다 붐빈다고 관찰",
+            "condition": "주말·평일 비교 관찰; 통계 수치나 불만으로 처리하지 않음",
+            "reason": null,
+            "alternative": null,
+            "check_before_visit": null,
+            "published_at": "2026-06-26",
+            "visited_at": null,
+            "support": null,
+            "uncertainties": [
+              "작성자의 개별 경험이며 현재 가격·운영 상태를 보장하지 않습니다."
+            ]
+          }
+        ],
+        "limitations": [
+          "서문시장과 명시적으로 연결된 본문만 추출했습니다."
+        ]
+      }
+    },
+    {
+      "source_id": "pilot-5",
+      "sourceId": 5,
+      "published_at": "2025-03-27",
+      "input_kind": "public_body_reviewed",
+      "analysis": {
+        "experiences": [
+          {
+            "source_id": "pilot-5",
+            "category": "food",
+            "topic": "crowding",
+            "sentiment": "positive",
+            "experience_type": "direct",
+            "place": "대구 서문시장",
+            "item": "계란김밥",
+            "summary": "평일 오후에는 입장 대기 없이 먹고 주문 후 약 5분에 받았다는 경험",
+            "condition": "평일 오후 3시 무렵; 에덴김밥",
+            "reason": null,
+            "alternative": null,
+            "check_before_visit": null,
+            "published_at": "2025-03-27",
+            "visited_at": null,
+            "support": null,
+            "uncertainties": [
+              "작성자의 개별 경험이며 현재 가격·운영 상태를 보장하지 않습니다."
+            ]
+          },
+          {
+            "source_id": "pilot-5",
+            "category": "food",
+            "topic": "experience_condition",
+            "sentiment": "mixed",
+            "experience_type": "direct",
+            "place": "대구 서문시장",
+            "item": "계란김밥",
+            "summary": "계란지단 맛은 좋지만 예상 가능한 맛이라 같은 메뉴 재구매 의사는 낮음",
+            "condition": "김밥만 한 줄 주문; 육수·김치와 함께 섭취",
+            "reason": null,
+            "alternative": null,
+            "check_before_visit": null,
+            "published_at": "2025-03-27",
+            "visited_at": null,
+            "support": null,
+            "uncertainties": [
+              "작성자의 개별 경험이며 현재 가격·운영 상태를 보장하지 않습니다."
+            ]
+          }
+        ],
+        "limitations": [
+          "서문시장과 명시적으로 연결된 본문만 추출했습니다."
+        ]
+      }
+    },
+    {
+      "source_id": "pilot-6",
+      "sourceId": 6,
+      "published_at": "2026-04-22",
+      "input_kind": "public_body_reviewed",
+      "analysis": {
+        "experiences": [
+          {
+            "source_id": "pilot-6",
+            "category": "food",
+            "topic": "experience_condition",
+            "sentiment": "positive",
+            "experience_type": "direct",
+            "place": "대구 서문시장",
+            "item": "땅콩빵",
+            "summary": "땅콩빵 맛에 만족하고 다시 먹고 싶다고 표현",
+            "condition": "정확한 점포·개수·방문일 미기재",
+            "reason": null,
+            "alternative": null,
+            "check_before_visit": null,
+            "published_at": "2026-04-22",
+            "visited_at": null,
+            "support": null,
+            "uncertainties": [
+              "작성자의 개별 경험이며 현재 가격·운영 상태를 보장하지 않습니다."
+            ]
+          },
+          {
+            "source_id": "pilot-6",
+            "category": "food",
+            "topic": "spending_regret",
+            "sentiment": "negative",
+            "experience_type": "direct",
+            "place": "대구 서문시장",
+            "item": "땅콩빵",
+            "summary": "구매 금액에 비해 양이 적게 느껴졌다는 평가",
+            "condition": "당시 구매 금액 6천 원·1만 원 언급; 가격표·수량 미확인",
+            "reason": null,
+            "alternative": null,
+            "check_before_visit": null,
+            "published_at": "2026-04-22",
+            "visited_at": null,
+            "support": null,
+            "uncertainties": [
+              "작성자의 개별 경험이며 현재 가격·운영 상태를 보장하지 않습니다."
+            ]
+          }
+        ],
+        "limitations": [
+          "서문시장과 명시적으로 연결된 본문만 추출했습니다."
+        ]
+      }
+    },
+    {
+      "source_id": "pilot-7",
+      "sourceId": 7,
+      "published_at": "2026-08-15",
+      "input_kind": "public_body_reviewed",
+      "analysis": {
+        "experiences": [
+          {
+            "source_id": "pilot-7",
+            "category": "other",
+            "topic": "crowding",
+            "sentiment": "neutral",
+            "experience_type": "direct",
+            "place": "대구 서문시장",
+            "item": "시장 골목",
+            "summary": "시장에 인파가 많았다고 사진과 함께 관찰",
+            "condition": "2026년 8월 15일 오후 작성; 불만 여부는 미기재",
+            "reason": null,
+            "alternative": null,
+            "check_before_visit": null,
+            "published_at": "2026-08-15",
+            "visited_at": "2026-08-15",
+            "support": null,
+            "uncertainties": [
+              "작성자의 개별 경험이며 현재 가격·운영 상태를 보장하지 않습니다."
+            ]
+          }
+        ],
+        "limitations": [
+          "서문시장과 명시적으로 연결된 본문만 추출했습니다."
+        ]
+      }
+    },
+    {
+      "source_id": "pilot-8",
+      "sourceId": 8,
+      "published_at": "2018-10-15",
+      "input_kind": "public_body_reviewed",
+      "analysis": {
+        "experiences": [
+          {
+            "source_id": "pilot-8",
+            "category": "food",
+            "topic": "experience_condition",
+            "sentiment": "positive",
+            "experience_type": "direct",
+            "place": "대구 서문시장",
+            "item": "계란김밥",
+            "summary": "계란김밥과 함께 먹은 김치 맛에 만족",
+            "condition": "2018년 작성; 동행인은 기본 김밥을 더 선호",
+            "reason": null,
+            "alternative": null,
+            "check_before_visit": null,
+            "published_at": "2018-10-15",
+            "visited_at": null,
+            "support": null,
+            "uncertainties": [
+              "작성자의 개별 경험이며 현재 가격·운영 상태를 보장하지 않습니다."
+            ]
+          },
+          {
+            "source_id": "pilot-8",
+            "category": "food",
+            "topic": "experience_condition",
+            "sentiment": "positive",
+            "experience_type": "direct",
+            "place": "대구 서문시장",
+            "item": "석쇠불고기",
+            "summary": "서문시장 석쇠불고기를 맛있게 먹었다고 평가",
+            "condition": "2018년 작성; 상호와 가격은 미확인",
+            "reason": null,
+            "alternative": null,
+            "check_before_visit": null,
+            "published_at": "2018-10-15",
+            "visited_at": null,
+            "support": null,
+            "uncertainties": [
+              "작성자의 개별 경험이며 현재 가격·운영 상태를 보장하지 않습니다."
+            ]
+          }
+        ],
+        "limitations": [
+          "서문시장과 명시적으로 연결된 본문만 추출했습니다."
+        ]
+      }
+    },
+    {
+      "source_id": "pilot-9",
+      "sourceId": 9,
+      "published_at": "2018-09-21",
+      "input_kind": "public_body_reviewed",
+      "analysis": {
+        "experiences": [
+          {
+            "source_id": "pilot-9",
+            "category": "food",
+            "topic": "experience_condition",
+            "sentiment": "positive",
+            "experience_type": "direct",
+            "place": "대구 서문시장",
+            "item": "칼국수",
+            "summary": "서문시장 여러 칼국수집 중 얼큰이칼제비를 선호했다고 평가",
+            "condition": "2018년 작성; 현행 점포 정보와 가격은 별도 확인",
+            "reason": null,
+            "alternative": null,
+            "check_before_visit": null,
+            "published_at": "2018-09-21",
+            "visited_at": null,
+            "support": null,
+            "uncertainties": [
+              "작성자의 개별 경험이며 현재 가격·운영 상태를 보장하지 않습니다."
+            ]
+          }
+        ],
+        "limitations": [
+          "서문시장과 명시적으로 연결된 본문만 추출했습니다."
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,217 @@
+{
+  "kind": "manual",
+  "destinationId": "seomun",
+  "destinationName": "대구 서문시장",
+  "title": "서문시장, 다녀온 사람들의 이야기",
+  "summary": "시장 먹거리 만족과 인기 점포 대기, 방문 시간 차이를 살펴보는 공개 본문 검토 자료입니다.",
+  "reviewedAt": "2026-10-08",
+  "dateFrom": "2018-09-21",
+  "dateTo": "2026-08-17",
+  "sources": [
+    {
+      "id": 1,
+      "date": "2026-05-01",
+      "url": "https://theqoo.net/review/4185507493",
+      "title": "익명 후기 1",
+      "summary": "김밥·돈까스에서 각각 약 20분 대기. 땅콩빵과 씨앗호떡·약밥 만족, 일부 호떡은 취향에 맞지 않았음. 늦은 시간 품절 경험도 언급.",
+      "tags": [],
+      "type": "더쿠",
+      "reviewedAt": "2026-10-08",
+      "evidenceLevel": "public_body_reviewed"
+    },
+    {
+      "id": 2,
+      "date": "2026-08-17",
+      "url": "https://theqoo.net/kbaseball/4316751749",
+      "title": "익명 후기 2",
+      "summary": "일반 시장 마감과 야시장 시작 사이에 방문한 경험. 야시장 납작만두와 무침, 재방문한 지하 식당 칼국수·알밥 및 포장 카스테라에 만족.",
+      "tags": [],
+      "type": "더쿠",
+      "reviewedAt": "2026-10-08",
+      "evidenceLevel": "public_body_reviewed"
+    },
+    {
+      "id": 3,
+      "date": "2026-02-22",
+      "url": "https://gall.dcinside.com/mgallery/board/view/?id=running&no=961528",
+      "title": "익명 후기 3",
+      "summary": "대구마라톤 전날 시장에서 칼국수·땅콩빵·당고를 먹고 시장 방문에 만족. 칼국수 6천 원이라는 당시 가격을 긍정적으로 언급.",
+      "tags": [],
+      "type": "디시인사이드",
+      "reviewedAt": "2026-10-08",
+      "evidenceLevel": "public_body_reviewed"
+    },
+    {
+      "id": 4,
+      "date": "2026-06-26",
+      "url": "https://gall.dcinside.com/board/view/?id=city&no=2533257",
+      "title": "익명 후기 4",
+      "summary": "사진과 함께 주말 골목 인파가 많고 평일은 상대적으로 적다고 관찰. 수치 추정과 상인 재산 추측은 제외.",
+      "tags": [],
+      "type": "디시인사이드",
+      "reviewedAt": "2026-10-08",
+      "evidenceLevel": "public_body_reviewed"
+    },
+    {
+      "id": 5,
+      "date": "2025-03-27",
+      "url": "https://blog.naver.com/PostView.nhn?blogId=wkddbeka&logNo=223812341095&redirect=Dlog&widgetTypeCall=true",
+      "title": "익명 후기 5",
+      "summary": "평일 오후 3시 방문 시 입장 대기 없고 주문 후 약 5분 소요. 계란김밥 맛은 괜찮지만 재구매 의사는 낮다는 평가.",
+      "tags": [],
+      "type": "네이버 블로그",
+      "reviewedAt": "2026-10-08",
+      "evidenceLevel": "public_body_reviewed"
+    },
+    {
+      "id": 6,
+      "date": "2026-04-22",
+      "url": "https://gall.dcinside.com/board/view/?id=samsunglions_new&no=16815293",
+      "title": "익명 후기 6",
+      "summary": "땅콩빵 맛에 만족하면서도 6천 원·1만 원을 구매해도 양이 적게 느껴졌다는 체감.",
+      "tags": [],
+      "type": "디시인사이드",
+      "reviewedAt": "2026-10-08",
+      "evidenceLevel": "public_body_reviewed"
+    },
+    {
+      "id": 7,
+      "date": "2026-08-15",
+      "url": "https://gall.dcinside.com/board/view/?id=city&no=2552954",
+      "title": "익명 후기 7",
+      "summary": "당일 사진과 함께 시장 인파가 많다고 관찰. 시장 규모 순위와 외국인 비율 주장은 제외.",
+      "tags": [],
+      "type": "디시인사이드",
+      "reviewedAt": "2026-10-08",
+      "evidenceLevel": "public_body_reviewed"
+    },
+    {
+      "id": 8,
+      "date": "2018-10-15",
+      "url": "https://theqoo.net/muk/891326574",
+      "title": "익명 후기 8",
+      "summary": "에덴김밥의 계란김밥·김치와 시장 석쇠불고기를 긍정적으로 평가. 동행인은 기본 김밥을 더 선호. 다른 지역 식당 평가는 제외.",
+      "tags": [],
+      "type": "더쿠",
+      "reviewedAt": "2026-10-08",
+      "evidenceLevel": "public_body_reviewed"
+    },
+    {
+      "id": 9,
+      "date": "2018-09-21",
+      "url": "https://theqoo.net/review/868048094",
+      "title": "익명 후기 9",
+      "summary": "시장 2지구 지하 얼큰이칼국수의 칼제비를 본인 선호 메뉴로 추천. 다른 지역 식당의 가격·대기 평가는 제외.",
+      "tags": [],
+      "type": "더쿠",
+      "reviewedAt": "2026-10-08",
+      "evidenceLevel": "public_body_reviewed"
+    }
+  ],
+  "themes": [],
+  "overviewThemes": [
+    {
+      "label": "땅콩빵 맛·식감 만족",
+      "sentiment": "positive",
+      "items": [
+        "땅콩빵"
+      ],
+      "topics": [
+        "experience_condition"
+      ]
+    },
+    {
+      "label": "칼국수·칼제비 만족",
+      "sentiment": "positive",
+      "items": [
+        "칼국수"
+      ],
+      "topics": [
+        "experience_condition"
+      ]
+    },
+    {
+      "label": "계란김밥 맛 만족",
+      "sentiment": "positive",
+      "items": [
+        "계란김밥"
+      ],
+      "topics": [
+        "experience_condition"
+      ]
+    },
+    {
+      "label": "야시장 납작만두 조합 만족",
+      "sentiment": "positive",
+      "items": [
+        "납작만두"
+      ]
+    },
+    {
+      "label": "칼국수 가격 대비 만족",
+      "sentiment": "positive",
+      "items": [
+        "칼국수"
+      ],
+      "topics": [
+        "value_satisfaction"
+      ]
+    },
+    {
+      "label": "씨앗호떡·약밥 만족",
+      "sentiment": "positive",
+      "items": [
+        "씨앗호떡",
+        "약밥"
+      ]
+    },
+    {
+      "label": "땅콩빵 구매 금액 대비 양 아쉬움",
+      "sentiment": "negative",
+      "items": [
+        "땅콩빵"
+      ],
+      "topics": [
+        "spending_regret"
+      ]
+    },
+    {
+      "label": "일부 호떡 취향 아쉬움",
+      "sentiment": "negative",
+      "items": [
+        "호떡"
+      ],
+      "topics": [
+        "experience_condition"
+      ]
+    }
+  ],
+  "overviewIssues": [
+    {
+      "title": "인기 점포 대기와 방문 시간",
+      "text": "대기 언급을 불만으로 단정하지 않았어요. 점포와 방문 시간별 경험을 함께 확인해요.",
+      "topics": [
+        "crowding"
+      ]
+    },
+    {
+      "title": "낮 시장과 야시장 사이 방문",
+      "text": "일반 시장이 닫고 야시장이 시작하기 전 도착해 다시 방문한 개별 경험이 있어요.",
+      "items": [
+        "방문 시간"
+      ]
+    },
+    {
+      "title": "늦은 시간 일부 맛 품절",
+      "text": "늦은 오후 말차 땅콩빵을 구매하지 못한 경우가 언급됐어요.",
+      "items": [
+        "땅콩빵"
+      ],
+      "topics": [
+        "experience_condition"
+      ],
+      "sentiment": "neutral"
+    }
+  ],
+  "limitation": "공개 본문을 확인한 디시인사이드 4건·더쿠 4건·네이버 블로그 1건의 수동 검토입니다. 2018년 글 2건은 전체 연도에서만 포함하며 현재 상태로 취급하지 않습니다. 에펨코리아 검토 자료는 확보하지 못했습니다. 숙박비·실제 응대 경험은 부족합니다. 글 수는 방문자 수가 아니며 시장 전체의 대표 통계가 아닙니다."
+}
