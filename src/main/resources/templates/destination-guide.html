@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#172b48">
+  <meta name="description" th:content="${guide.lead}">
+  <title th:text="${guide.name + ' 소개 | 여행온도'}">관광지 소개 | 여행온도</title>
+  <link rel="icon" href="/favicon.svg?v=travel-temperature-1" type="image/svg+xml">
+  <link rel="stylesheet" href="/css/style.css?v=destination-guides-1">
+</head>
+<body class="attraction-page">
+  <a class="skip-link" href="#guide-about">관광지 소개로 바로 가기</a>
+  <header class="hero" id="top"><div class="wrap">
+    <div class="topbar"><a class="brand" href="/"><span class="brand-logo-window"><img class="brand-logo" src="/images/travel-temperature-logo.png" alt="여행온도" width="2172" height="724" decoding="async"></span></a><nav aria-label="주요 메뉴"><a href="/#destinations">관광지 선택</a><a class="nav-pill" th:href="@{/(destination=${guide.slug})} + '#report'">종합 후기</a><a class="nav-pill" href="/community">커뮤니티</a><a class="nav-pill" href="/chat">채팅방</a><a th:if="${admin}" href="/admin/reviews">후기 분석 관리</a></nav></div>
+    <div class="attraction-hero">
+      <div><span class="eyebrow" th:text="${'관광지 소개 · ' + guide.region}"></span><h1 th:text="${guide.name}"></h1><p class="attraction-lead" th:text="${guide.lead}"></p><div class="attraction-tags"><span>장소 소개</span><span>여행 준비</span><span>방문 체크</span></div><a class="primary attraction-button" href="#guide-budget">가기 전에 확인하기 ↓</a></div>
+      <div class="attraction-postcard" aria-hidden="true"><div class="destination-scene" th:classappend="${guide.scene}"></div><span>장소를 알고, 경험을 살펴보고</span><strong th:text="${guide.name}"></strong></div>
+    </div>
+  </div></header>
+  <main class="wrap attraction-main">
+    <nav class="attraction-tabs" aria-label="관광지 소개 목차"><a href="#guide-about">어떤 곳?</a><a href="#guide-food">먹거리와 체험</a><a href="#guide-budget">비용과 방문 체크</a><a href="#guide-route">추천 동선</a><a href="#guide-visit">방문 정보</a></nav>
+    <section class="attraction-section" id="guide-about" aria-labelledby="about-title">
+      <span class="eyebrow">어떤 곳인가요?</span><h2 id="about-title" th:text="${guide.name + ' 둘러보기'}"></h2><p class="attraction-description" th:text="${guide.about}"></p>
+      <div class="attraction-grid"><article class="attraction-card" th:each="card : ${guide.highlights}"><h3 th:text="${card.title}"></h3><p th:text="${card.body}"></p></article></div>
+    </section>
+    <section class="attraction-section" id="guide-food" aria-labelledby="food-title">
+      <span class="eyebrow">무엇을 즐길까요?</span><h2 id="food-title">먹거리와 체험 고르기</h2>
+      <div class="attraction-grid attraction-food-grid"><article class="attraction-card" th:each="card : ${guide.food}"><h3 th:text="${card.title}"></h3><p th:text="${card.body}"></p><p class="attraction-tip" th:text="${'고르기 전에 · ' + card.tip}"></p></article></div>
+    </section>
+    <section class="attraction-section" id="guide-budget" aria-labelledby="budget-title">
+      <span class="eyebrow">여행 준비 가이드</span><h2 id="budget-title">비용과 방문 경험 체크</h2>
+      <p class="attraction-inline-note">아래 내용은 여행 준비를 위한 확인 항목이에요. 실제 방문자들의 가격·친절·혼잡도 평가는 종합 후기에서 살펴보세요.</p>
+      <div class="attraction-grid guide-budget-grid"><article class="attraction-card" th:each="card : ${guide.budget}"><h3 th:text="${card.title}"></h3><p th:text="${card.body}"></p></article></div>
+    </section>
+    <section class="attraction-section" id="guide-route" aria-labelledby="route-title">
+      <span class="eyebrow">여행온도 추천</span><h2 id="route-title">이렇게 둘러보세요</h2>
+      <div class="attraction-route"><p>관심 있는 장소와 현장 상황에 맞춰 순서를 바꿔보세요.</p><ol><li th:each="step : ${guide.route}"><strong th:text="${step}"></strong></li></ol></div>
+    </section>
+    <section class="attraction-section" id="guide-visit" aria-labelledby="visit-title">
+      <span class="eyebrow">가기 전 확인</span><h2 id="visit-title">위치와 방문 정보</h2>
+      <div class="attraction-visit"><dl><div><dt>위치</dt><dd th:text="${guide.location}"></dd></div><div><dt>방문 준비</dt><dd th:text="${guide.visit}"></dd></div><div><dt>안내 기준</dt><dd>소개 정보와 추천 동선을 정리한 가이드예요. 요금·휴무·운영은 방문 전에 공식 안내와 해당 업체에서 확인하세요.</dd></div></dl>
+        <aside class="attraction-map-card"><h3>방문 안내 확인하기</h3><p>운영시간과 이동 계획을 확인할 수 있는 공식 안내예요.</p><a class="attraction-text-link" th:each="source : ${guide.sources}" th:href="${source.url}" th:text="${source.label + ' ↗'}" target="_blank" rel="noopener noreferrer"></a></aside>
+      </div>
+    </section>
+    <section class="attraction-review-callout" aria-labelledby="review-link-title"><div><span class="eyebrow">소개를 봤다면, 이제 후기도</span><h2 id="review-link-title">다녀온 사람들은 어땠을까요?</h2><p>관광지와 연도를 선택해 실제 경험과 출처를 확인해 보세요.</p></div><div class="attraction-callout-actions"><a class="primary attraction-button" th:href="@{/(destination=${guide.slug})} + '#report'">이 관광지 종합 후기 보기 →</a><a class="attraction-text-link" href="/community">내 경험도 나누기 →</a></div></section>
+    <div class="attraction-sources"><span th:text="${'소개 정보 확인 · ' + guide.checkedAt}"></span><a th:each="source : ${guide.sources}" th:href="${source.url}" th:text="${source.label + ' ↗'}" target="_blank" rel="noopener noreferrer"></a><a href="#top">맨 위로 ↑</a></div>
+  </main>
+  <th:block th:replace="~{fragments/support :: footer}"></th:block>
+</body>
+</html>

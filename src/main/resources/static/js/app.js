@@ -11,8 +11,13 @@ function renderResult(data) {
   $('result-kind').textContent=data.kind==='live'?'AI 검색 종합':data.kind==='empty'?'자료 없음':'종합 후기';
   const summary=node('article','summary-panel');summary.append(node('h3','',data.title),node('p','summary-text',data.summary));result.append(summary);
   if(data.kind==='empty') {
-    const button=node('button','primary','속초 전체 후기 보기');button.type='button';
-    button.addEventListener('click',()=>{$('destination').value='sokcho';$('period').querySelector('option[value="all"]').disabled=false;$('period').value='all';document.querySelector('input[name="mode"][value="sample"]').checked=true;analyze();});result.append(button);return;
+    const chosen=destinations.find(d=>d.slug===$('destination').value);
+    if(chosen){const intro=node('a','primary',chosen.name+' 소개와 방문 팁 보기 →');intro.href='/destinations/'+encodeURIComponent(chosen.slug);result.append(intro);}
+    if(chosen?.slug==='sokcho'){
+      const button=node('button','destination-button','속초 전체 후기 보기');button.type='button';
+      button.addEventListener('click',()=>{$('period').querySelector('option[value="all"]').disabled=false;$('period').value='all';document.querySelector('input[name="mode"][value="sample"]').checked=true;analyze();});result.append(button);
+    }
+    return;
   }
   if(data.aspects?.length){
     const section=node('section','visitor-overview');section.append(node('h3','subheading','비용과 방문 분위기'));const grid=node('div','visitor-grid');
@@ -78,7 +83,7 @@ function renderDestinations() {
   destinations.filter(d=>activeRegion==='전체'||d.region===activeRegion).forEach(d=>{
     const card=node('article','card');const top=node('div','card-top');top.append(node('span','card-tag',d.region)); const scene=node('div','destination-scene');scene.setAttribute('aria-hidden','true');const scenery={sokcho:'market',gyeongju:'temple',jeonju:'village',busan:'beach',jeju:'island',gangneung:'coast',seomun:'night-market',yeosu:'harbor',damyang:'bamboo'};scene.classList.add(scenery[d.slug] || 'coast'); card.append(scene,top,node('h3','',d.name),node('p','',d.categories));
     const button=node('button','destination-button','후기 살펴보기');button.type='button';button.setAttribute('aria-label',d.name+' 후기 살펴보기');button.addEventListener('click',()=>{$('destination').value=d.slug;renderDestinations();analyze();});card.classList.toggle('selected',d.slug===$('destination').value);const actions=node('div','destination-actions');
-    if(d.slug==='sokcho'){const intro=node('a','destination-intro-link','시장 소개 보기 →');intro.href='/destinations/sokcho';intro.setAttribute('aria-label',d.name+' 소개 보기');actions.append(intro);}
+    const intro=node('a','destination-intro-link','소개와 방문 팁 →');intro.href='/destinations/'+encodeURIComponent(d.slug);intro.setAttribute('aria-label',d.name+' 소개 보기');actions.append(intro);
     actions.append(button);card.append(actions);cards.append(card);
   });
 }
@@ -90,10 +95,11 @@ async function initialize() {
   try {
     const [d,s]=await Promise.all([fetch('/api/destinations'),fetch('/api/status')]);if(!d.ok||!s.ok)throw new Error('관광지 정보를 불러오지 못했습니다. 새로고침해주세요.');
     destinations=await d.json(); const status=await s.json();if(!destinations.length)throw new Error('등록된 관광지가 없습니다.');
-    $('destination').replaceChildren();destinations.forEach(d=>{const o=node('option','',d.name);o.value=d.slug;$('destination').append(o);});$('destination').value='sokcho';
+    $('destination').replaceChildren();destinations.forEach(d=>{const o=node('option','',d.name);o.value=d.slug;$('destination').append(o);});const requested=new URLSearchParams(location.search).get('destination');$('destination').value=destinations.some(d=>d.slug===requested)?requested:'sokcho';
     $('live-mode').disabled=!status.liveAvailable;$('connection-note').textContent='식비·숙박비·응대·혼잡도와 방문 조건을 함께 살펴보세요.';
     ['전체',...new Set(destinations.map(d=>d.region))].forEach(region=>{const b=node('button','filter',region);b.type='button';b.setAttribute('aria-pressed',String(region===activeRegion));b.addEventListener('click',()=>{activeRegion=region;[...$('filters').children].forEach(c=>c.setAttribute('aria-pressed',String(c===b)));renderDestinations();});$('filters').append(b);});
     renderDestinations();await analyze(false);
+    if(location.hash==='#report')$('report').scrollIntoView({block:'start'});
   } catch(error) {$('connection-note').textContent=error.message;$('error').textContent=error.message;$('error').hidden=false;}
 }
 $('destination').addEventListener('change',renderDestinations);
