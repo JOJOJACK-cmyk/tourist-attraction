@@ -32,7 +32,7 @@ const elements=Object.fromEntries(ids.map(id=>[id,new Element()]));
 const requests=[],sample={value:'sample',checked:true};
 const destinations=[{slug:'sokcho',name:'속초시장',region:'강원',categories:'시장'},{slug:'seomun',name:'대구 서문시장',region:'대구',categories:'시장'}];
 Object.assign(ctx,{URLSearchParams,AbortController,Date,location:{search:'?destination=seomun',hash:'#report'},matchMedia:()=>({matches:true}),fetch:async url=>{
- requests.push(url);return {ok:true,json:async()=>url==='/api/destinations'?destinations:url==='/api/status'?{liveAvailable:false}:url.includes('seomun-review-pilot')?raw:url.includes('seomun-prompt-pilot')?pilot:(()=>{throw Error('Unexpected fetch '+url)})()};
+ requests.push(url);return {ok:true,json:async()=>url==='/api/destinations'?destinations:url==='/api/status'?{liveAvailable:false}:url.startsWith('/api/visit-reviews/summary?')?{total:0,aspects:[]}:url.includes('seomun-review-pilot')?raw:url.includes('seomun-prompt-pilot')?pilot:(()=>{throw Error('Unexpected fetch '+url)})()};
 }});
 Object.assign(ctx.document,{getElementById:id=>elements[id],querySelector:()=>sample,querySelectorAll:()=>[]});
 vm.runInContext(fs.readFileSync(path.join(root,'static/js/app.js'),'utf8'),ctx);

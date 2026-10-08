@@ -41,7 +41,10 @@ public class SecurityConfig {
             OAuth2UserService<OidcUserRequest,OidcUser> socialOidcUserService) throws Exception {
         http.securityContext(c->c.securityContextRepository(contexts))
             .csrf(c->c.csrfTokenRepository(tokens).ignoringRequestMatchers("/api/analysis"))
-            .authorizeHttpRequests(a->a.requestMatchers("/admin/**","/api/reviews/**","/js/local-review.js").hasRole("ADMIN")
+            .authorizeHttpRequests(a->a.requestMatchers("/admin/**","/api/admin/visit-reviews/**","/api/reviews/**","/js/local-review.js").hasRole("ADMIN")
+                .requestMatchers("/api/visit-reviews/mine").authenticated()
+                .requestMatchers(HttpMethod.GET,"/api/visit-reviews/**").permitAll()
+                .requestMatchers("/api/visit-reviews/**").authenticated()
                 .requestMatchers("/api/chat/**","/ws/chat").authenticated()
                 .requestMatchers(HttpMethod.GET,"/api/community/**").permitAll()
                 .requestMatchers("/api/community/**").authenticated().anyRequest().permitAll())

@@ -7,6 +7,8 @@ import java.util.Map;
 
 @RestControllerAdvice
 public class ApiExceptionHandler {
+    @ExceptionHandler(org.springframework.dao.OptimisticLockingFailureException.class)
+    ResponseEntity<?> changed(Exception e) { return ResponseEntity.status(409).body(Map.of("error","후기가 변경됐어요. 목록을 새로고침하고 다시 확인해주세요.")); }
     @ExceptionHandler(ApiException.class)
     ResponseEntity<?> api(ApiException e) { return ResponseEntity.status(e.getStatus()).body(Map.of("error",e.getMessage())); }
     @ExceptionHandler({MethodArgumentNotValidException.class,HttpMessageNotReadableException.class,org.springframework.web.method.annotation.MethodArgumentTypeMismatchException.class})

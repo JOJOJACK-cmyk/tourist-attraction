@@ -14,3 +14,11 @@ jobs:
           cache: maven
       - run: chmod +x mvnw
       - run: ./mvnw --batch-mode test
+      - name: Check JavaScript and UI behavior
+        run: |
+          for script_file in src/main/resources/static/js/*.js; do
+            node --check "$script_file"
+          done
+          for test_file in src/test/js/*.test.cjs; do
+            node "$test_file"
+          done

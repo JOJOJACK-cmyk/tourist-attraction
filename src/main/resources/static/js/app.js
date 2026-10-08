@@ -59,6 +59,7 @@ async function analyze(scroll=true) {
   const chosen=destinations.find(d=>d.slug===destinationId);
   $('report-period').textContent=chosen.name+' · '+(isAll?'전체 연도':year+'년'); $('result').replaceChildren();$('error').hidden=true;setBusy(true);
   renderDestinations();
+  const visitSummary=loadVisitOverview(destinationId,year,current,pending.signal);
   if(scroll)$('report').scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'});
   try {
     if(mode==='sample' && (reviewCatalog[destinationId]||isAll)) {
@@ -78,9 +79,32 @@ async function analyze(scroll=true) {
     const response=await fetch('/api/analysis',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({destinationId,year,mode}),signal:pending.signal});
     const data=await response.json();if(current!==requestId)return;if(!response.ok)throw new Error(data.error || '자료를 불러오지 못했습니다.');renderResult(data);
   } catch(error) {if(current===requestId && error.name!=='AbortError'){$('error').textContent=error.message;$('error').hidden=false;}}
-  finally {if(current===requestId)setBusy(false);}
+  finally {await visitSummary;if(current===requestId)setBusy(false);}
+}
+async function loadVisitOverview(destinationId,year,current,signal){
+  const target=$('visit-result');target.replaceChildren();target.setAttribute('aria-busy','true');
+  const query=new URLSearchParams({destination:destinationId});if(year!==null)query.set('year',String(year));
+  const browse='/visit-reviews?'+query;
+  try{
+    const response=await fetch('/api/visit-reviews/summary?'+query,{signal});
+    const data=await response.json();if(current!==requestId)return;
+    if(!response.ok)throw new Error(data.error||'방문 후기 집계를 불러오지 못했어요.');
+    const section=node('section','visit-overview'),head=node('div','section-head');head.append(node('h3','','여행자 직접 방문 후기'));
+    const link=node('a','destination-intro-link','방문 후기 읽기 →');link.href=browse;head.append(link);section.append(head);
+    if(!data.total)section.append(node('p','small','이 기간에는 승인된 직접 방문 후기가 없어요. 다녀온 경험을 남겨주세요.'));
+    else{
+      section.append(node('p','visit-facts','승인된 후기 '+data.total+'건 · 칭찬 '+data.praiseCount+'건 · 아쉬움 '+data.complaintCount+'건'),node('p','small','외부 수집 후기와 별도로 집계해요. 한 후기에 칭찬과 아쉬움이 함께 있을 수 있어요.'));
+      const grid=node('div','visitor-grid');(data.aspects||[]).forEach(a=>{const card=node('article','visitor-card '+(a.total?'':'insufficient'));card.append(node('span','card-tag',a.label));
+        if(!a.total)card.append(node('p','small','평가한 방문 후기가 아직 없어요.'));
+        else{const labels=a.key==='crowding'?['한산·원활','혼잡·대기 부담']:a.key==='service'?['좋은 응대','응대 불편']:['가격 대비 만족','가격·구성 아쉬움'];card.append(node('p','visitor-counts',labels[0]+' '+a.good+'건 · '+labels[1]+' '+a.bad+'건 · 보통 '+a.neutral+'건'),node('p','small','관련 후기 '+a.total+'건'));}grid.append(card);
+      });section.append(grid);
+    }
+    target.append(section);
+  }catch(e){if(current===requestId&&e.name!=='AbortError')target.append(node('p','small',e.message+' 후기 살펴보기를 눌러 다시 시도해주세요.'));}
+  finally{if(current===requestId)target.setAttribute('aria-busy','false');}
 }
 function renderDestinations() {
+  const selected=$('destination').value;if(selected)$('write-visit').href='/visit-reviews?destination='+encodeURIComponent(selected)+'&write=1';
   const cards=$('cards');cards.replaceChildren();
   destinations.filter(d=>activeRegion==='전체'||d.region===activeRegion).forEach(d=>{
     const card=node('article','card');const top=node('div','card-top');top.append(node('span','card-tag',d.region)); const scene=node('div','destination-scene');scene.setAttribute('aria-hidden','true');const scenery={sokcho:'market',gyeongju:'temple',jeonju:'village',busan:'beach',jeju:'island',gangneung:'coast',seomun:'night-market',yeosu:'harbor',damyang:'bamboo'};scene.classList.add(scenery[d.slug] || 'coast'); card.append(scene,top,node('h3','',d.name),node('p','',d.categories));

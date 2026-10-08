@@ -28,6 +28,10 @@ public class HomeController {
     }
     @GetMapping("/community")
     public String community() { return "community"; }
+    @GetMapping("/visit-reviews")
+    public String visitReviews(Model model) { model.addAttribute("moderation",false); return "visit-reviews"; }
+    @GetMapping("/admin/visit-reviews")
+    public String visitModeration(Model model) { model.addAttribute("moderation",true); return "visit-reviews"; }
     @GetMapping({"/support","/support/success","/support/fail","/support/cancel"})
     public String support() { return "support"; }
     @GetMapping("/chat")

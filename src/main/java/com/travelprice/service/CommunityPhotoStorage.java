@@ -16,8 +16,8 @@ import java.util.*;
 
 @Service
 public class CommunityPhotoStorage {
-    private final Path root;private final CommunityPhotoRepository photos;private final CommunityPostRepository posts;
-    public CommunityPhotoStorage(@Value("${APP_UPLOAD_DIR:./uploads/community}")String root,CommunityPhotoRepository photos,CommunityPostRepository posts){this.root=Path.of(root).toAbsolutePath().normalize();this.photos=photos;this.posts=posts;}
+    private final Path root;private final CommunityPhotoRepository photos;private final CommunityPostRepository posts;private final VisitReviewRepository visits;
+    public CommunityPhotoStorage(@Value("${APP_UPLOAD_DIR:./uploads/community}")String root,CommunityPhotoRepository photos,CommunityPostRepository posts,VisitReviewRepository visits){this.root=Path.of(root).toAbsolutePath().normalize();this.photos=photos;this.posts=posts;this.visits=visits;}
     @Transactional public String upload(MultipartFile file,Member owner){
         if(file.isEmpty() || file.getSize()>5*1024*1024)throw new ApiException(400,"사진은 5MB 이하 JPG·PNG 파일로 올려주세요.");
         String key=UUID.randomUUID().toString();Path saved=null;
@@ -43,7 +43,7 @@ public class CommunityPhotoStorage {
         if(!photo.getOwner().getId().equals(member.getId()))throw new ApiException(403,"본인이 올린 사진만 첨부할 수 있어요.");
     }
     public void deleteUnused(String key){
-        if(key==null || posts.existsByImageKey(key))return;
+        if(key==null || posts.existsByImageKey(key) || visits.existsByImageKey(key))return;
         photos.findById(key).ifPresent(photo->{
             var path=root.resolve(photo.getId()+"."+photo.getExtension());photos.delete(photo);
             TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization(){
@@ -54,7 +54,7 @@ public class CommunityPhotoStorage {
     @Transactional(readOnly=true) public PhotoResource read(String key,Member viewer){
         var photo=photos.findById(key).orElseThrow(()->new ApiException(404,"사진이 없습니다."));
         boolean owner=viewer!=null && (viewer.isAdmin() || photo.getOwner().getId().equals(viewer.getId()));
-        if(!owner && !posts.existsByImageKeyAndHiddenFalse(key))throw new ApiException(404,"사진이 없습니다.");
+        if(!owner && !posts.existsByImageKeyAndHiddenFalse(key) && !visits.existsByImageKeyAndStatus(key,VisitReview.Status.APPROVED))throw new ApiException(404,"사진이 없습니다.");
         var path=root.resolve(photo.getId()+"."+photo.getExtension());if(!Files.isRegularFile(path))throw new ApiException(404,"사진이 없습니다.");
         return new PhotoResource(new FileSystemResource(path),photo.getExtension().equals("png")?"image/png":"image/jpeg");
     }

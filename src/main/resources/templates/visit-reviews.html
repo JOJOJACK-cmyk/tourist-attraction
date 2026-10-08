@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>직접 방문 후기 | 여행온도</title>
+  <link rel="icon" href="/favicon.svg?v=travel-temperature-1" type="image/svg+xml">
+  <link rel="stylesheet" href="/css/style.css?v=visit-1">
+  <script src="/js/visit-reviews.js?v=visit-1" defer></script>
+</head>
+<body th:attr="data-moderation=${moderation}">
+<a class="skip-link" href="#visit-board">방문 후기로 바로 가기</a>
+<header class="hero community-hero"><div class="wrap">
+  <div class="topbar"><a class="brand" href="/"><span class="brand-logo-window"><img class="brand-logo" src="/images/travel-temperature-logo.png" alt="여행온도" width="2172" height="724" decoding="async"></span></a><nav aria-label="주요 메뉴"><a href="/">관광지 보기</a><a href="/community">커뮤니티</a><a href="/chat">채팅방</a><a th:if="${admin}" href="/admin/visit-reviews">방문 후기 검토</a></nav></div>
+  <div class="community-intro"><span class="eyebrow" th:text="${moderation} ? '관리자 · 방문 후기 검토' : '여행자가 직접 남긴 경험'">여행자가 직접 남긴 경험</span><h1 th:text="${moderation} ? '새로운 방문 후기를 확인해요.' : '다녀온 경험이, 다음 여행의 도움이 되도록.'">다녀온 경험이, 다음 여행의 도움이 되도록.</h1><p>방문 날짜와 이용 조건을 함께 남겨주세요. 검토 후 공개된 후기는 여행지 종합 후기에 반영돼요.</p></div>
+</div></header>
+<main><div class="wrap community-wrap">
+  <div class="community-account"><span id="visit-account-state">로그인 상태를 확인하고 있어요.</span><button id="visit-account-toggle" class="filter" type="button">로그인 · 회원가입</button></div>
+  <section id="visit-account-panel" class="community-panel" hidden aria-labelledby="visit-account-title">
+    <h2 id="visit-account-title">로그인하고 방문 경험을 남겨보세요</h2>
+    <form id="visit-account-form" class="community-form">
+      <div class="visit-two-fields"><label>아이디<input id="visit-account-id" required pattern="[a-z0-9_]{3,30}" minlength="3" maxlength="30" autocomplete="username" placeholder="영문 소문자·숫자·밑줄 3~30자"></label><label>비밀번호<input id="visit-account-password" required type="password" minlength="8" maxlength="64" autocomplete="current-password" placeholder="8자 이상"></label></div>
+      <label>비밀번호 확인 · 회원가입 시<input id="visit-account-confirm" type="password" maxlength="64" autocomplete="new-password"></label>
+      <div class="community-actions"><button class="primary" type="submit" value="login">로그인</button><button class="filter" type="submit" value="signup">회원가입</button><a href="/community">소셜 로그인 이용하기 →</a></div>
+    </form>
+  </section>
+  <p id="visit-error" class="error" role="alert" hidden></p><p id="visit-message" class="small" role="status"></p>
+  <section id="visit-editor" class="community-panel" hidden aria-labelledby="visit-editor-title">
+    <h2 id="visit-editor-title">직접 방문 후기 작성</h2><p class="small">수정한 후기는 다시 검토를 받아요. 사진에는 얼굴·전화번호·카드 정보 등 개인정보가 보이지 않도록 해주세요.</p>
+    <form id="visit-form" class="community-form">
+      <div class="visit-two-fields"><label>관광지<select id="visit-destination" required><option value="">관광지를 선택해주세요</option></select></label><label>방문일<input id="visit-date" type="date" required min="2000-01-01"></label></div>
+      <label>후기 제목<input id="visit-title" required minlength="2" maxlength="120" placeholder="어떤 방문 경험이었나요?"></label>
+      <div class="visit-three-fields"><label>구매 품목·이용 장소 · 선택<input id="visit-item" maxlength="120" placeholder="예: 칼국수 2그릇 · 시장 지하"></label><label>지출 금액 · 선택<input id="visit-spent" type="number" min="0" max="100000000" step="1" placeholder="원 · 위 품목의 실제 지출"></label><label>대기 시간 · 선택<input id="visit-wait" type="number" min="0" max="1440" step="1" placeholder="분 · 기다리지 않았다면 0"></label></div>
+      <fieldset class="visit-feelings"><legend>방문 체감 · 이용하지 않은 항목은 선택하지 않아도 돼요</legend><div class="visit-two-fields">
+        <label>식비 · 가격 대비 만족<select id="visit-food"><option value="NOT_USED">이용 안 함·평가 어려움</option><option value="SATISFIED">가격 대비 만족</option><option value="UNSATISFIED">가격·구성 아쉬움</option><option value="NEUTRAL">보통</option></select></label>
+        <label>숙박비 · 가격 대비 만족<select id="visit-lodging"><option value="NOT_USED">이용 안 함·평가 어려움</option><option value="SATISFIED">가격 대비 만족</option><option value="UNSATISFIED">가격·구성 아쉬움</option><option value="NEUTRAL">보통</option></select></label>
+        <label>서비스·응대<select id="visit-service"><option value="NOT_USED">이용 안 함·평가 어려움</option><option value="SATISFIED">좋은 응대</option><option value="UNSATISFIED">응대 불편</option><option value="NEUTRAL">보통</option></select></label>
+        <label>혼잡·대기<select id="visit-crowding"><option value="NOT_USED">평가 어려움</option><option value="SATISFIED">한산·원활한 이용</option><option value="UNSATISFIED">혼잡·대기 부담</option><option value="NEUTRAL">보통·인파는 있지만 불편하지 않음</option></select></label>
+      </div></fieldset>
+      <div class="visit-two-fields"><label>만족한 점<textarea id="visit-good" rows="4" maxlength="2000" placeholder="가격·양·응대 등 좋았던 점과 방문 조건을 적어주세요."></textarea></label><label>아쉬운 점<textarea id="visit-bad" rows="4" maxlength="2000" placeholder="불편했던 점과 이용 상황을 적어주세요. 둘 중 한 항목은 5자 이상 작성해주세요."></textarea></label></div>
+      <label>방문 사진 · 선택 · JPG·PNG 5MB 이하<input id="visit-photo" type="file" accept="image/jpeg,image/png"></label>
+      <img id="visit-photo-preview" class="community-photo" alt="첨부할 방문 사진 미리보기" hidden>
+      <label class="check-label"><input id="visit-remove-photo" type="checkbox">첨부 사진 제거</label>
+      <label class="check-label"><input id="visit-firsthand" type="checkbox" required>제가 실제 방문한 경험이며, 공개 후 익명으로 표시되는 것에 동의해요.</label>
+      <div class="community-actions"><button id="visit-save" class="primary" type="submit">검토 요청하기</button><button id="visit-cancel" class="filter" type="button">취소</button></div>
+    </form>
+  </section>
+  <section id="visit-board" aria-labelledby="visit-list-title">
+    <div class="section-head"><div><span class="eyebrow">여행 경험 나누기</span><h2 id="visit-list-title">공개 방문 후기</h2></div><button id="visit-write" class="primary" type="button">방문 후기 작성 →</button></div>
+    <div class="visit-tabs" role="group" aria-label="후기 목록 선택"><button id="visit-tab-public" class="filter" type="button" aria-pressed="true">공개 후기</button><button id="visit-tab-mine" class="filter" type="button" aria-pressed="false">내 후기·검토 상태</button><button id="visit-tab-admin" class="filter" type="button" aria-pressed="false" hidden>관리자 검토</button></div>
+    <form id="visit-filter" class="community-filters visit-filters">
+      <label>관광지<select id="visit-filter-destination"><option value="">전체 관광지</option></select></label>
+      <label id="visit-year-label">후기 작성 연도<select id="visit-filter-year"><option value="">전체 연도</option></select></label>
+      <label id="visit-status-label" hidden>검토 상태<select id="visit-filter-status"><option value="PENDING">검토 대기</option><option value="APPROVED">승인</option><option value="REJECTED">반려</option></select></label>
+      <button class="filter" type="submit">목록 새로고침</button>
+    </form>
+    <p id="visit-list-note" class="small">관리자가 승인한 후기를 익명으로 공개해요.</p>
+    <div id="visit-list" class="community-list" aria-live="polite" aria-busy="false"></div>
+    <div class="community-pagination"><button id="visit-prev" class="filter" type="button" disabled>이전</button><span id="visit-page-status"></span><button id="visit-next" class="filter" type="button" disabled>다음</button></div>
+  </section>
+</div></main>
+<th:block th:replace="~{fragments/support :: footer}"></th:block>
+</body></html>
