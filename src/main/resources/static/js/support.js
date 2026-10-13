@@ -18,7 +18,8 @@
   const error = message => { $('support-error').textContent = message; $('support-error').hidden = !message; };
   const configure = async () => {
     config = await api('/api/support/orders/config');
-    $('support-mode').textContent = !config.available ? '결제 서비스 준비 중' : config.mode === 'TEST' ? '카카오페이 테스트 결제 · 실제 청구 없음' : '선택한 금액이 실제 결제됩니다';
+    $('support-mode').textContent = !config.available ? '결제 서비스 준비 중' : config.mode === 'TEST' ? '' : '선택한 금액이 실제 결제됩니다';
+    $('support-mode').hidden = config.available && config.mode === 'TEST';
     $('support-start').disabled = !config.available;
   };
   document.querySelectorAll('[data-open-support]').forEach(link => link.addEventListener('click', async event => {
