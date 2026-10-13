@@ -9,6 +9,7 @@
 | community_member | 아이디, BCrypt 비밀번호 해시, MEMBER/ADMIN 역할 |
 | community_post | 작성자·선택 관광지 관계, 게시판·분류, 제목·본문·방문일·사진 키, 숨김 여부, 작성·수정 시각 |
 | community_comment | 글·작성자 관계, 내용, 작성 시각 |
+| community_post_reaction | 글·회원별 도움 반응과 비공개 저장 상태, 글·회원 조합 유일 제약 |
 | community_photo | 사진 UUID, 업로드한 회원, jpg/png 확장자 |
 
 Spring Security 세션 인증을 사용합니다. 로그인 성공 시 세션 ID와 CSRF 토큰을 바꾸고 인증 정보를 서버 세션에 저장합니다. 쓰기 요청은 CSRF 헤더가 필요합니다. 화면은 로그인·로그아웃 후 토큰을 다시 받아 사용합니다. Gemini 분석 API는 기존 익명 사용 흐름을 유지합니다. Ollama 분석 및 연결 상태 API(`/api/reviews/**`)와 분석 화면(`/admin/reviews`)은 관리자 전용입니다. Ollama 분석 요청에도 CSRF 헤더가 필요합니다.
@@ -24,12 +25,16 @@ Spring Security 세션 인증을 사용합니다. 로그인 성공 시 세션 ID
 | POST /api/auth/signup | `loginId`, `password`로 일반회원 가입 |
 | POST /api/auth/login | 세션 로그인 |
 | POST /api/auth/logout | 세션 로그아웃 |
-| GET /api/community/posts | 목록: `destination`, `kind`, `category`, `q`, `page`(0부터), 관리자 `includeHidden` |
+| GET /api/community/posts | 목록: `destination`, `kind`, `category`, `q`, `page`(0부터), 관리자 `includeHidden`, 본인 저장 목록 `saved=true` |
 | POST /api/community/posts | 글 작성 |
 | GET /api/community/posts/{id} | 상세 |
 | PUT /api/community/posts/{id} | 본인 글 수정 |
-| DELETE /api/community/posts/{id} | 본인 또는 관리자 삭제, 댓글 함께 삭제 |
+| DELETE /api/community/posts/{id} | 본인 또는 관리자 삭제, 댓글·반응 함께 삭제 |
 | PATCH /api/community/posts/{id}/visibility | 관리자: `{"hidden":true}` 또는 false |
+| PUT /api/community/posts/{id}/helpful | 도움됐어요 등록 (회원당 1회, 반복 요청 시 중복 집계 없음) |
+| DELETE /api/community/posts/{id}/helpful | 도움됐어요 취소 |
+| PUT /api/community/posts/{id}/saved | 본인 저장 목록에 추가 |
+| DELETE /api/community/posts/{id}/saved | 본인 저장 목록에서 제거 |
 | GET /api/community/posts/{id}/comments | 최신 댓글 최대 100건을 작성순으로 표시 |
 | POST /api/community/posts/{id}/comments | `body`로 댓글 작성 |
 | DELETE /api/community/posts/{postId}/comments/{id} | 본인 또는 관리자 댓글 삭제 |
@@ -68,3 +73,14 @@ Spring Security 세션 인증을 사용합니다. 로그인 성공 시 세션 ID
 기존 REVIEW·REPORT 행은 자유 게시판 목록에 함께 포함하고 응답 kind는 GENERAL로 표시합니다. QUESTION은 질문 게시판에 표시합니다. 글·댓글·사진의 ID와 소유권은 유지됩니다. 신규/수정 입력의 REVIEW·REPORT도 GENERAL로 정규화하므로 이전 클라이언트 요청을 거부하지 않습니다. 원래 저장 행을 일괄 변경하는 작업은 없습니다.
 
 관광지 태그는 `destinationId: null`, 빈 문자열 또는 생략으로 작성할 수 있습니다. 지정한 태그는 등록된 관광지인지 검사합니다. MySQL 기존 destination_id는 시작 시 필요한 경우에만 NULL 허용으로 변경합니다. MySQL native enum에 GENERAL이 없으면 시작 시 기존 enum 값을 유지하면서 추가합니다. 이 변경에는 DB 계정의 ALTER 권한이 필요합니다.
+
+
+## 도움 반응과 저장
+
+자유·질문 게시판의 목록과 상세에서 ‘도움됐어요’와 ‘저장’을 누릅니다. 로그인과 CSRF가 필요하며 다시 누르면 취소합니다. 공개 응답의 `helpfulCount`는 전체 도움 반응 수, `helpful`·`saved`는 현재 로그인한 회원 자신의 상태입니다. 다른 회원의 반응·저장 명단은 공개하지 않습니다. 도움 반응과 저장은 서로 독립적이며 새로고침이나 재로그인 후에도 DB에 유지됩니다.
+
+`/community?saved=1#board`의 ‘저장한 글’ 탭과 `/login` 내 계정의 ‘저장한 글 보기’에서 본인이 저장한 자유·질문 글을 함께 조회합니다. 일반 목록과 같은 검색·태그·분류 필터, 작성일 최신순 정렬, 12건 페이지 구분을 적용합니다. 숨긴 글은 저장 목록에서 제외하고 다시 공개하면 재등장합니다. 숨긴 글의 반응 변경은 막으며 삭제된 글의 저장·반응 데이터는 함께 삭제합니다.
+
+글 행의 DB 쓰기 잠금과 회원·글 유일 제약으로 동시 요청의 중복 집계를 방지합니다. PUT/DELETE는 원하는 상태를 지정하므로 반복 요청해도 결과가 유지됩니다. 목록은 집계와 본인 상태를 한 번씩 일괄 조회합니다. 시작 시 JPA ddl-auto=update가 새 반응 테이블을 생성합니다.
+
+검증: `CommunityIntegrationTest`의 반응 권한·멱등성·동시 요청·저장 목록 격리·검색·페이지 구분·숨김·삭제 테스트와 `node src/test/js/community-reactions.test.cjs`의 화면 동작 테스트.

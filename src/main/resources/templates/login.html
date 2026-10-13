@@ -30,7 +30,7 @@
     </div>
     <div id="auth-signed-in" hidden><span class="eyebrow">내 계정</span><h2>내 프로필</h2><p id="auth-account" class="community-body"></p>
       <form id="auth-nickname-form" class="community-form nickname-form"><label>닉네임<input id="auth-nickname" required minlength="2" maxlength="16" pattern="[가-힣A-Za-z0-9_]{2,16}" autocomplete="nickname" placeholder="한글·영문·숫자·밑줄 2~16자"></label><p class="small">게시판·댓글에 표시되는 이름이에요. 채팅방 참여 시 기본 이름으로 사용하며 직접 방문 후기는 익명으로 표시돼요.</p><button id="auth-nickname-save" class="filter" type="submit" disabled>닉네임 저장</button></form>
-      <div class="community-actions"><a id="auth-continue" class="primary" href="/">원래 화면으로 돌아가기 →</a><a id="auth-admin" class="filter" href="/admin/visit-reviews" hidden>관리자 후기 검토</a><button id="auth-logout" class="filter" type="button">로그아웃</button></div></div>
+      <div class="community-actions"><a id="auth-continue" class="primary" href="/">원래 화면으로 돌아가기 →</a><a class="filter" href="/community?saved=1#board">저장한 글 보기</a><a id="auth-admin" class="filter" href="/admin/visit-reviews" hidden>관리자 후기 검토</a><button id="auth-logout" class="filter" type="button">로그아웃</button></div></div>
     <p id="auth-error" class="error" role="alert" hidden></p><p id="auth-message" class="small" role="status"></p><button id="auth-retry" class="filter" type="button" hidden>연결 다시 확인</button>
     <p class="login-back"><a href="/">로그인 없이 관광지 둘러보기 →</a></p>
   </section>

@@ -15,12 +15,16 @@ import java.util.*;
 public class CommunityController {
     private final CommunityService community;private final CommunityPhotoStorage photos;private final MemberService members;
     public CommunityController(CommunityService community,CommunityPhotoStorage photos,MemberService members){this.community=community;this.photos=photos;this.members=members;}
-    @GetMapping("/posts") public PostPage list(@RequestParam(required=false)String destination,@RequestParam(required=false)Kind kind,@RequestParam(required=false)Category category,@RequestParam(required=false)String q,@RequestParam(defaultValue="false")boolean includeHidden,@RequestParam(defaultValue="0")int page,Authentication auth){return community.list(destination,kind,category,q,includeHidden,page,auth);}
+    @GetMapping("/posts") public PostPage list(@RequestParam(required=false)String destination,@RequestParam(required=false)Kind kind,@RequestParam(required=false)Category category,@RequestParam(required=false)String q,@RequestParam(defaultValue="false")boolean includeHidden,@RequestParam(defaultValue="false")boolean saved,@RequestParam(defaultValue="0")int page,Authentication auth){return community.list(destination,kind,category,q,includeHidden,saved,page,auth);}
     @GetMapping("/posts/{id}") public PostView detail(@PathVariable Long id,Authentication auth){return community.detail(id,auth);}
     @PostMapping("/posts") @ResponseStatus(HttpStatus.CREATED) public PostView create(@Valid @RequestBody PostInput input,Authentication auth){return community.create(input,auth);}
     @PutMapping("/posts/{id}") public PostView update(@PathVariable Long id,@Valid @RequestBody PostInput input,Authentication auth){return community.update(id,input,auth);}
     @DeleteMapping("/posts/{id}") @ResponseStatus(HttpStatus.NO_CONTENT) public void delete(@PathVariable Long id,Authentication auth){community.delete(id,auth);}
     @PatchMapping("/posts/{id}/visibility") @ResponseStatus(HttpStatus.NO_CONTENT) public void visibility(@PathVariable Long id,@RequestBody VisibilityInput input,Authentication auth){community.visibility(id,input.hidden(),auth);}
+    @PutMapping("/posts/{id}/helpful") public ReactionView helpful(@PathVariable Long id,Authentication auth){return community.react(id,true,true,auth);}
+    @DeleteMapping("/posts/{id}/helpful") public ReactionView undoHelpful(@PathVariable Long id,Authentication auth){return community.react(id,true,false,auth);}
+    @PutMapping("/posts/{id}/saved") public ReactionView save(@PathVariable Long id,Authentication auth){return community.react(id,false,true,auth);}
+    @DeleteMapping("/posts/{id}/saved") public ReactionView unsave(@PathVariable Long id,Authentication auth){return community.react(id,false,false,auth);}
     @GetMapping("/posts/{id}/comments") public List<CommentView> comments(@PathVariable Long id,Authentication auth){return community.comments(id,auth);}
     @PostMapping("/posts/{id}/comments") @ResponseStatus(HttpStatus.CREATED) public CommentView comment(@PathVariable Long id,@Valid @RequestBody CommentInput input,Authentication auth){return community.addComment(id,input,auth);}
     @DeleteMapping("/posts/{postId}/comments/{id}") @ResponseStatus(HttpStatus.NO_CONTENT) public void deleteComment(@PathVariable Long postId,@PathVariable Long id,Authentication auth){community.deleteComment(postId,id,auth);}

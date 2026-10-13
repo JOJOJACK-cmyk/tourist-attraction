@@ -16,14 +16,20 @@ import java.util.*;
 @Transactional
 public class CommunityService {
     private final CommunityPostRepository posts;private final CommunityCommentRepository comments;private final DestinationRepository destinations;
+    private final CommunityPostReactionRepository reactions;
     private final MemberService members;private final CommunityPhotoStorage photos;
-    public CommunityService(CommunityPostRepository posts,CommunityCommentRepository comments,DestinationRepository destinations,MemberService members,CommunityPhotoStorage photos){this.posts=posts;this.comments=comments;this.destinations=destinations;this.members=members;this.photos=photos;}
-    @Transactional(readOnly=true) public PostPage list(String destination,Kind kind,Category category,String q,boolean includeHidden,int page,Authentication auth){
-        var viewer=members.current(auth);if(includeHidden && (viewer==null || !viewer.isAdmin()))throw new ApiException(403,"관리자만 숨긴 글을 볼 수 있어요.");
+    public CommunityService(CommunityPostRepository posts,CommunityCommentRepository comments,DestinationRepository destinations,MemberService members,CommunityPhotoStorage photos,CommunityPostReactionRepository reactions){this.reactions=reactions;this.posts=posts;this.comments=comments;this.destinations=destinations;this.members=members;this.photos=photos;}
+    @Transactional(readOnly=true) public PostPage list(String destination,Kind kind,Category category,String q,boolean includeHidden,boolean saved,int page,Authentication auth){
+        var viewer=saved?members.require(auth):members.current(auth);if(includeHidden && (viewer==null || !viewer.isAdmin()))throw new ApiException(403,"관리자만 숨긴 글을 볼 수 있어요.");
         if(page<0 || page>10000 || (q!=null && q.length()>80))throw new ApiException(400,"검색 조건을 확인해주세요.");
         Specification<CommunityPost> spec=(root,query,cb)->{
             var predicates=new ArrayList<jakarta.persistence.criteria.Predicate>();
-            if(!includeHidden)predicates.add(cb.isFalse(root.get("hidden")));
+            if(saved){
+                var sub=query.subquery(Long.class);var reaction=sub.from(CommunityPostReaction.class);
+                sub.select(reaction.get("post").get("id")).where(cb.equal(reaction.get("member").get("id"),viewer.getId()),cb.isTrue(reaction.get("saved")));
+                predicates.add(root.get("id").in(sub));
+            }
+            if(saved || !includeHidden)predicates.add(cb.isFalse(root.get("hidden")));
             if(destination!=null && !destination.isBlank())predicates.add(cb.equal(root.get("destination").get("slug"),destination));
             if(kind==Kind.GENERAL)predicates.add(root.get("kind").in(Kind.GENERAL,Kind.REVIEW,Kind.REPORT));
             else if(kind!=null)predicates.add(cb.equal(root.get("kind"),kind));
@@ -35,7 +41,13 @@ public class CommunityService {
             return cb.and(predicates.toArray(jakarta.persistence.criteria.Predicate[]::new));
         };
         var result=posts.findAll(spec,PageRequest.of(page,12,Sort.by(Sort.Direction.DESC,"createdAt","id")));
-        return new PostPage(result.getContent().stream().map(p->view(p,viewer,true)).toList(),page,result.getTotalPages(),result.getTotalElements());
+        var ids=result.getContent().stream().map(CommunityPost::getId).toList();
+        var counts=new HashMap<Long,Long>();var own=new HashMap<Long,CommunityPostReaction>();
+        if(!ids.isEmpty()){
+            reactions.helpfulCounts(ids).forEach(c->counts.put(c.getPostId(),c.getHelpfulCount()));
+            if(viewer!=null)reactions.findByMemberIdAndPostIdIn(viewer.getId(),ids).forEach(r->own.put(r.getPost().getId(),r));
+        }
+        return new PostPage(result.getContent().stream().map(p->{var r=own.get(p.getId());return view(p,viewer,true,new ReactionView(counts.getOrDefault(p.getId(),0L),r!=null&&r.isHelpful(),r!=null&&r.isSaved()));}).toList(),page,result.getTotalPages(),result.getTotalElements());
     }
     @Transactional(readOnly=true) public PostView detail(Long id,Authentication auth){var viewer=members.current(auth);return view(visible(id,viewer),viewer,false);}
     public PostView create(PostInput input,Authentication auth){
@@ -48,8 +60,8 @@ public class CommunityService {
         posts.flush();if(!Objects.equals(oldImage,input.imageKey()))photos.deleteUnused(oldImage);
         return view(post,author,false);
     }
-    public void delete(Long id,Authentication auth){var author=members.require(auth);var post=visible(id,author);if(!author.isAdmin())requireOwner(post,author);var image=post.getImageKey();comments.deleteByPostId(id);posts.delete(post);posts.flush();photos.deleteUnused(image);}
-    public void visibility(Long id,boolean hidden,Authentication auth){var admin=members.require(auth);if(!admin.isAdmin())throw new ApiException(403,"관리자 권한이 필요해요.");posts.findById(id).orElseThrow(()->new ApiException(404,"글이 없습니다.")).setHidden(hidden);}
+    public void delete(Long id,Authentication auth){var author=members.require(auth);var post=locked(id);checkVisible(post,author);if(!author.isAdmin())requireOwner(post,author);var image=post.getImageKey();reactions.deleteByPostId(id);comments.deleteByPostId(id);posts.delete(post);posts.flush();photos.deleteUnused(image);}
+    public void visibility(Long id,boolean hidden,Authentication auth){var admin=members.require(auth);if(!admin.isAdmin())throw new ApiException(403,"관리자 권한이 필요해요.");locked(id).setHidden(hidden);}
     @Transactional(readOnly=true) public List<CommentView> comments(Long id,Authentication auth){
         var viewer=members.current(auth);visible(id,viewer);var list=new ArrayList<>(comments.findTop100ByPostIdOrderByCreatedAtDesc(id));Collections.reverse(list);
         return list.stream().map(c->comment(c,viewer)).toList();
@@ -70,14 +82,33 @@ public class CommunityService {
         if(input.destinationId()==null || input.destinationId().isBlank())return null;
         return destinations.findBySlug(input.destinationId().trim()).orElseThrow(()->new ApiException(400,"등록된 관광지 태그를 선택해주세요."));
     }
+    public ReactionView react(Long id,boolean helpful,boolean value,Authentication auth){
+        var member=members.require(auth);var post=locked(id);checkVisible(post,member);
+        if(post.isHidden())throw new ApiException(403,"숨긴 글에는 반응할 수 없어요.");
+        var reaction=reactions.findByPostIdAndMemberId(id,member.getId()).orElse(null);
+        if(reaction==null && !value)return state(id,member);
+        if(reaction==null)reaction=new CommunityPostReaction(post,member);
+        if(helpful)reaction.setHelpful(value);else reaction.setSaved(value);
+        if(!reaction.isHelpful() && !reaction.isSaved())reactions.delete(reaction);else reactions.save(reaction);
+        reactions.flush();return state(id,member);
+    }
+    private CommunityPost locked(Long id){return posts.lockById(id).orElseThrow(()->new ApiException(404,"글이 없습니다."));}
+    private ReactionView state(Long id,Member viewer){
+        var own=viewer==null?null:reactions.findByPostIdAndMemberId(id,viewer.getId()).orElse(null);
+        return new ReactionView(reactions.countByPostIdAndHelpfulTrue(id),own!=null&&own.isHelpful(),own!=null&&own.isSaved());
+    }
+    private void checkVisible(CommunityPost post,Member viewer){
+        if(post.isHidden() && (viewer==null || (!viewer.isAdmin() && !post.getAuthor().getId().equals(viewer.getId()))))throw new ApiException(404,"글이 없습니다.");
+    }
     private CommunityPost visible(Long id,Member viewer){
         var post=posts.findById(id).orElseThrow(()->new ApiException(404,"글이 없습니다."));
-        if(post.isHidden() && (viewer==null || (!viewer.isAdmin() && !post.getAuthor().getId().equals(viewer.getId()))))throw new ApiException(404,"글이 없습니다.");return post;
+        checkVisible(post,viewer);return post;
     }
     private void requireOwner(CommunityPost post,Member member){if(!post.getAuthor().getId().equals(member.getId()))throw new ApiException(403,"본인 글만 수정·삭제할 수 있어요.");}
-    private PostView view(CommunityPost p,Member viewer,boolean preview){
+    private PostView view(CommunityPost p,Member viewer,boolean preview){return view(p,viewer,preview,state(p.getId(),viewer));}
+    private PostView view(CommunityPost p,Member viewer,boolean preview,ReactionView state){
         boolean mine=viewer!=null && p.getAuthor().getId().equals(viewer.getId());var body=p.getBody();if(preview && body.length()>140)body=body.substring(0,140)+"…";
-        return new PostView(p.getId(),p.getDestination()==null?null:p.getDestination().getSlug(),p.getDestination()==null?null:p.getDestination().getName(),p.getKind().boardKind(),p.getCategory(),p.getTitle(),body,p.getVisitedAt(),p.getImageKey()==null?null:"/api/community/images/"+p.getImageKey(),p.getAuthor().getDisplayName(),mine,p.isHidden(),viewer!=null&&viewer.isAdmin(),p.getCreatedAt(),p.getUpdatedAt());
+        return new PostView(p.getId(),p.getDestination()==null?null:p.getDestination().getSlug(),p.getDestination()==null?null:p.getDestination().getName(),p.getKind().boardKind(),p.getCategory(),p.getTitle(),body,p.getVisitedAt(),p.getImageKey()==null?null:"/api/community/images/"+p.getImageKey(),p.getAuthor().getDisplayName(),mine,p.isHidden(),viewer!=null&&viewer.isAdmin(),p.getCreatedAt(),p.getUpdatedAt(),state.helpfulCount(),state.helpful(),state.saved());
     }
     private CommentView comment(CommunityComment c,Member viewer){return new CommentView(c.getId(),c.getBody(),c.getAuthor().getDisplayName(),viewer!=null && (viewer.isAdmin() || c.getAuthor().getId().equals(viewer.getId())),c.getCreatedAt());}
 }

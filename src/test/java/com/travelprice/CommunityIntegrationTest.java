@@ -27,6 +27,7 @@ class CommunityIntegrationTest {
     @Autowired ObjectMapper mapper;
     @Autowired MemberRepository members;
     @Autowired CommunityPostRepository posts;
+    @Autowired CommunityPostReactionRepository reactions;
     @Autowired CommunityCommentRepository comments;
     @Autowired CommunityPhotoRepository photos;
     @Autowired PasswordEncoder encoder;
@@ -34,7 +35,7 @@ class CommunityIntegrationTest {
     @Autowired ChatMembershipRepository chatMemberships;
     @Autowired ChatRoomRepository chatRooms;
     @BeforeEach void setup(){
-        chatMessages.deleteAll();chatMemberships.deleteAll();chatRooms.deleteAll();comments.deleteAll();posts.deleteAll();photos.deleteAll();members.deleteAll();
+        chatMessages.deleteAll();chatMemberships.deleteAll();chatRooms.deleteAll();comments.deleteAll();reactions.deleteAll();posts.deleteAll();photos.deleteAll();members.deleteAll();
         members.save(new Member("alice",encoder.encode("password123"),Member.Role.MEMBER));
         members.save(new Member("bob",encoder.encode("password123"),Member.Role.MEMBER));
         members.save(new Member("admin",encoder.encode("password123"),Member.Role.ADMIN));
@@ -161,5 +162,72 @@ class CommunityIntegrationTest {
         mvc.perform(get("/api/auth/social/providers")).andExpect(jsonPath("$.naver").value(false)).andExpect(jsonPath("$.google").value(false));
         mvc.perform(get("/community")).andExpect(status().isOk()).andExpect(content().string(org.hamcrest.Matchers.containsString("질문 게시판")));
         mvc.perform(get("/js/community.js")).andExpect(status().isOk());
+    }
+
+    @Test void helpfulIsIdempotentAndMemberStateIsPrivate()throws Exception{
+        long id=create("서문시장 후기","GENERAL","FOOD",null);
+        for(int i=0;i<2;i++)mvc.perform(put("/api/community/posts/"+id+"/helpful").with(user("bob")).with(csrf()))
+            .andExpect(status().isOk()).andExpect(jsonPath("$.helpfulCount").value(1)).andExpect(jsonPath("$.helpful").value(true));
+        mvc.perform(put("/api/community/posts/"+id+"/helpful").with(user("alice")).with(csrf())).andExpect(jsonPath("$.helpfulCount").value(2));
+        mvc.perform(get("/api/community/posts/"+id)).andExpect(jsonPath("$.helpfulCount").value(2)).andExpect(jsonPath("$.helpful").value(false)).andExpect(jsonPath("$.saved").value(false));
+        mvc.perform(get("/api/community/posts").with(user("bob"))).andExpect(jsonPath("$.content[0].helpful").value(true));
+        for(int i=0;i<2;i++)mvc.perform(delete("/api/community/posts/"+id+"/helpful").with(user("bob")).with(csrf()))
+            .andExpect(status().isOk()).andExpect(jsonPath("$.helpfulCount").value(1)).andExpect(jsonPath("$.helpful").value(false));
+    }
+    @Test void savedPostsArePrivateFilterableAndIndependentFromHelpful()throws Exception{
+        long id=create("주차 질문","QUESTION","PARKING",null);create("다른 글","GENERAL","FOOD",null);
+        mvc.perform(get("/api/community/posts").param("saved","true")).andExpect(status().isUnauthorized());
+        for(int i=0;i<2;i++)mvc.perform(put("/api/community/posts/"+id+"/saved").with(user("bob")).with(csrf())).andExpect(jsonPath("$.saved").value(true));
+        mvc.perform(get("/api/community/posts").param("saved","true").with(user("bob"))).andExpect(jsonPath("$.totalElements").value(1)).andExpect(jsonPath("$.content[0].id").value(id));
+        mvc.perform(get("/api/community/posts").param("saved","true").with(user("alice"))).andExpect(jsonPath("$.totalElements").value(0));
+        mvc.perform(get("/api/community/posts").param("saved","true").param("kind","GENERAL").with(user("bob"))).andExpect(jsonPath("$.totalElements").value(0));
+        mvc.perform(get("/api/community/posts").param("saved","true").param("q","주차").param("category","PARKING").with(user("bob"))).andExpect(jsonPath("$.totalElements").value(1));
+        mvc.perform(get("/api/community/posts/"+id)).andExpect(jsonPath("$.saved").value(false));
+        mvc.perform(put("/api/community/posts/"+id+"/helpful").with(user("bob")).with(csrf())).andExpect(jsonPath("$.saved").value(true));
+        mvc.perform(delete("/api/community/posts/"+id+"/saved").with(user("bob")).with(csrf())).andExpect(jsonPath("$.saved").value(false)).andExpect(jsonPath("$.helpful").value(true));
+        mvc.perform(delete("/api/community/posts/"+id+"/helpful").with(user("bob")).with(csrf()));
+        assertThat(reactions.count()).isZero();
+    }
+    @Test void reactionsRequireLoginCsrfAndVisibleExistingPost()throws Exception{
+        long id=create("반응 권한 확인","GENERAL","OTHER",null);
+        for(String type:new String[]{"helpful","saved"}){
+            mvc.perform(put("/api/community/posts/"+id+"/"+type).with(csrf())).andExpect(status().isUnauthorized());
+            mvc.perform(put("/api/community/posts/"+id+"/"+type).with(user("bob"))).andExpect(status().isForbidden());
+            mvc.perform(delete("/api/community/posts/"+id+"/"+type).with(user("bob"))).andExpect(status().isForbidden());
+            mvc.perform(put("/api/community/posts/999999/"+type).with(user("bob")).with(csrf())).andExpect(status().isNotFound());
+        }
+        mvc.perform(put("/api/community/posts/"+id+"/saved").with(user("bob")).with(csrf()));
+        mvc.perform(patch("/api/community/posts/"+id+"/visibility").with(user("admin")).with(csrf()).contentType(MediaType.APPLICATION_JSON).content("{\"hidden\":true}"));
+        mvc.perform(get("/api/community/posts").param("saved","true").with(user("bob"))).andExpect(jsonPath("$.totalElements").value(0));
+        mvc.perform(put("/api/community/posts/"+id+"/helpful").with(user("bob")).with(csrf())).andExpect(status().isNotFound());
+        mvc.perform(put("/api/community/posts/"+id+"/helpful").with(user("alice")).with(csrf())).andExpect(status().isForbidden());
+        mvc.perform(patch("/api/community/posts/"+id+"/visibility").with(user("admin")).with(csrf()).contentType(MediaType.APPLICATION_JSON).content("{\"hidden\":false}"));
+        mvc.perform(get("/api/community/posts").param("saved","true").with(user("bob"))).andExpect(jsonPath("$.totalElements").value(1));
+    }
+    @Test void deletingPostRemovesReactionsAndSavedEntry()throws Exception{
+        long id=create("삭제할 후기","GENERAL","FOOD",null);
+        mvc.perform(put("/api/community/posts/"+id+"/saved").with(user("bob")).with(csrf()));
+        mvc.perform(put("/api/community/posts/"+id+"/helpful").with(user("bob")).with(csrf()));
+        mvc.perform(delete("/api/community/posts/"+id).with(user("alice")).with(csrf())).andExpect(status().isNoContent());
+        assertThat(reactions.count()).isZero();
+        mvc.perform(get("/api/community/posts").param("saved","true").with(user("bob"))).andExpect(jsonPath("$.totalElements").value(0));
+    }
+    @Test void simultaneousHelpfulRequestsCountMemberOnce()throws Exception{
+        long id=create("동시 반응 후기","GENERAL","FOOD",null);
+        var executor=java.util.concurrent.Executors.newFixedThreadPool(4);
+        try{
+            var tasks=new java.util.ArrayList<java.util.concurrent.Callable<Void>>();
+            for(int i=0;i<8;i++)tasks.add(()->{mvc.perform(put("/api/community/posts/"+id+"/helpful").with(user("bob")).with(csrf())).andExpect(status().isOk());return null;});
+            for(var result:executor.invokeAll(tasks))result.get();
+        }finally{executor.shutdownNow();}
+        mvc.perform(get("/api/community/posts/"+id)).andExpect(jsonPath("$.helpfulCount").value(1));assertThat(reactions.count()).isEqualTo(1);
+    }
+    @Test void savedPostsUsePaginationAcrossBoards()throws Exception{
+        for(int i=0;i<13;i++){
+            long id=create("저장할 글 "+i,i%2==0?"GENERAL":"QUESTION","OTHER",null);
+            mvc.perform(put("/api/community/posts/"+id+"/saved").with(user("bob")).with(csrf())).andExpect(status().isOk());
+        }
+        mvc.perform(get("/api/community/posts").param("saved","true").with(user("bob"))).andExpect(jsonPath("$.content.length()").value(12)).andExpect(jsonPath("$.totalPages").value(2));
+        mvc.perform(get("/api/community/posts").param("saved","true").param("page","1").with(user("bob"))).andExpect(jsonPath("$.content.length()").value(1));
     }
 }

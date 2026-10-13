@@ -13,7 +13,8 @@ public final class CommunityModels {
     public record VisibilityInput(boolean hidden){}
     public record PostView(Long id,String destinationId,String destination,Kind kind,Category category,
         String title,String body,LocalDate visitedAt,String imageUrl,String author,boolean mine,boolean hidden,
-        boolean admin,LocalDateTime createdAt,LocalDateTime updatedAt){}
+        boolean admin,LocalDateTime createdAt,LocalDateTime updatedAt,long helpfulCount,boolean helpful,boolean saved){}
+    public record ReactionView(long helpfulCount,boolean helpful,boolean saved){}
     public record PostPage(List<PostView> content,int page,int totalPages,long totalElements){}
     public record CommentView(Long id,String body,String author,boolean canDelete,LocalDateTime createdAt){}
 }

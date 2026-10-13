@@ -2,6 +2,8 @@
   const get=id=>document.getElementById(id);
   const kinds={GENERAL:'자유 게시판',REVIEW:'자유 게시판',REPORT:'자유 게시판',QUESTION:'질문 게시판'};
   const boardKind=kind=>kind==='QUESTION'?'QUESTION':'GENERAL';
+  const initialSaved=new URLSearchParams(location.search).get('saved')==='1';
+  let savedOnly=false;
   const initialBoard=new URLSearchParams(location.search).get('board')==='question'?'QUESTION':'GENERAL';
   const categories={FOOD:'음식',LODGING:'숙박',PARKING:'주차',TRANSPORT:'교통',ADMISSION:'입장·체험',SHOPPING:'쇼핑',RENTAL:'대여',AMENITIES:'편의시설',OTHER:'기타'};
   let me={authenticated:false},csrf=null,page=0,pages=0,editing=null,detail=null,listVersion=0,detailVersion=0,blob=null;
@@ -29,20 +31,32 @@
   function action(text,fn,cls='filter'){const button=node('button',cls,text);button.type='button';button.addEventListener('click',async()=>{clear();button.disabled=true;try{await fn();}catch(e){error(e);}finally{button.disabled=false;}});return button;}
   function meta(post){return kinds[post.kind]+' · '+categories[post.category]+(post.destination?' · '+post.destination:'')+' · '+(post.author||'익명')+' · '+date(post.createdAt)+(post.hidden?' · 숨긴 글':'');}
   async function list(){
+    if(savedOnly)requireLogin();
     const version=++listVersion;get('post-list').setAttribute('aria-busy','true');
     const query=new URLSearchParams({page:String(page)});
     [['destination','board-destination'],['kind','board-kind'],['category','board-category'],['q','board-query']].forEach(([key,id])=>{if(get(id).value)query.set(key,get(id).value);});
+    if(savedOnly)query.set('saved','true');
     if(me.admin&&get('board-hidden').checked)query.set('includeHidden','true');
     try{
       const data=await api('/api/community/posts?'+query);if(version!==listVersion)return;
-      pages=data.totalPages;get('post-list').replaceChildren();
-      if(!data.content.length)get('post-list').append(node('p','local-empty',get('board-kind').value==='QUESTION'?'아직 질문이 없어요. 궁금한 여행 정보를 물어보세요.':'아직 글이 없어요. 첫 여행 이야기를 남겨보세요.'));
-      data.content.forEach(post=>{const card=node('article','community-post-card');const title=action(post.title,()=>show(post.id),'community-post-title');card.append(node('p','small',meta(post)),title,node('p','community-preview',post.body));get('post-list').append(card);});
+      pages=data.totalPages;if(page>0&&page>=pages){page=Math.max(0,pages-1);return await list();}get('post-list').replaceChildren();
+      if(!data.content.length)get('post-list').append(node('p','local-empty',savedOnly?'저장한 글이 없어요. 다시 보고 싶은 글을 저장해보세요.':get('board-kind').value==='QUESTION'?'아직 질문이 없어요. 궁금한 여행 정보를 물어보세요.':'아직 글이 없어요. 첫 여행 이야기를 남겨보세요.'));
+      data.content.forEach(post=>{const card=node('article','community-post-card');const title=action(post.title,()=>show(post.id),'community-post-title');card.append(node('p','small',meta(post)),title,node('p','community-preview',post.body),reactionButtons(post));get('post-list').append(card);});
       get('page-status').textContent=data.totalElements+'건 · '+(pages?page+1:0)+' / '+pages;
       get('page-prev').disabled=page===0;get('page-next').disabled=page+1>=pages;
     }finally{if(version===listVersion)get('post-list').setAttribute('aria-busy','false');}
   }
-  async function show(id){
+  function reactionButtons(post){
+    const buttons=node('div','community-actions community-reactions');
+    [['helpful',(post.helpful?'도움 취소':'도움됐어요')+' · '+(post.helpfulCount||0)],['saved',post.saved?'저장됨 · 취소':'저장']].forEach(([type,label])=>{
+      const button=action(label,async()=>{
+        requireLogin();await api('/api/community/posts/'+post.id+'/'+type,post[type]?'DELETE':'PUT');
+        if(detail?.id===post.id)await show(post.id,false);await list();
+      });
+      button.setAttribute('aria-pressed',String(Boolean(post[type])));button.disabled=Boolean(post.hidden);buttons.append(button);
+    });return buttons;
+  }
+  async function show(id,scroll=true){
     const version=++detailVersion;const [post,comments]=await Promise.all([api('/api/community/posts/'+id),api('/api/community/posts/'+id+'/comments')]);
     if(version!==detailVersion)return;detail=post;get('post-detail').hidden=false;get('post-content').replaceChildren();
     const content=get('post-content');content.append(node('p','small',meta(post)),node('h2','',post.title));
@@ -53,17 +67,17 @@
     if(post.mine)buttons.append(action('수정',()=>editor(post)));
     if(post.mine||me.admin)buttons.append(action('삭제',async()=>{if(!confirm('이 글을 삭제할까요?'))return;await api('/api/community/posts/'+id,'DELETE');detail=null;get('post-detail').hidden=true;page=0;await list();}));
     if(me.admin)buttons.append(action(post.hidden?'다시 공개':'숨기기',async()=>{await api('/api/community/posts/'+id+'/visibility','PATCH',{hidden:!post.hidden});await show(id);await list();}));
-    content.append(buttons);get('comment-list').replaceChildren();
+    content.append(reactionButtons(post),buttons);get('comment-list').replaceChildren();
     if(!comments.length)get('comment-list').append(node('p','small','첫 댓글을 남겨보세요.'));
     comments.forEach(comment=>{const card=node('article','community-comment');card.append(node('span','small',(comment.author||'익명')+' · '+date(comment.createdAt)),node('p','community-body',comment.body));if(comment.canDelete)card.append(action('댓글 삭제',async()=>{if(!confirm('댓글을 삭제할까요?'))return;await api('/api/community/posts/'+id+'/comments/'+comment.id,'DELETE');await show(id);}));get('comment-list').append(card);});
-    get('comment-form').hidden=!me.authenticated||post.hidden;get('comment-body').value='';
-    get('post-detail').scrollIntoView({behavior:'smooth',block:'start'});
+    get('comment-form').hidden=!me.authenticated||post.hidden;if(scroll)get('comment-body').value='';
+    if(scroll)get('post-detail').scrollIntoView({behavior:'smooth',block:'start'});
   }
   function editor(post=null){
     requireLogin();editing=post;get('post-form').reset();get('post-editor').hidden=false;
-    get('editor-title').textContent=post?'글 수정하기':kinds[get('board-kind').value]+' 글쓰기';get('save-post').textContent=post?'수정하기':'등록하기';
+    get('editor-title').textContent=post?'글 수정하기':kinds[boardKind(get('board-kind').value)]+' 글쓰기';get('save-post').textContent=post?'수정하기':'등록하기';
     get('post-destination').value=post?(post.destinationId||''):get('board-destination').value;
-    get('post-kind').value=post?boardKind(post.kind):get('board-kind').value;
+    get('post-kind').value=post?boardKind(post.kind):boardKind(get('board-kind').value);
     get('post-category').value=post?post.category:'OTHER';
     if(post){get('post-category').value=post.category;get('post-title').value=post.title;get('post-body').value=post.body;get('post-visited').value=post.visitedAt||'';}
     if(blob){URL.revokeObjectURL(blob);blob=null;}
@@ -78,6 +92,7 @@
     }catch{get('social-login-note').textContent='소셜 로그인 상태를 확인하지 못했어요. 아이디로 로그인할 수 있어요.';}
   }
   function selectBoard(kind){
+    savedOnly=false;get('board-saved').setAttribute('aria-pressed','false');
     get('board-kind').value=kind;
     const question=kind==='QUESTION';
     get('board-general').setAttribute('aria-pressed',String(!question));get('board-question').setAttribute('aria-pressed',String(question));
@@ -86,13 +101,24 @@
     get('write-post').textContent=question?'질문하기':'글쓰기';
     const selectedBoard=question?'question':'free';
     ['naver','google'].forEach(provider=>{get('social-'+provider).href='/auth/social/'+provider+'?board='+selectedBoard;});
-    const url=new URL(location.href);url.searchParams.set('board',selectedBoard);history.replaceState(null,'',url.pathname+url.search+url.hash);
+    const url=new URL(location.href);url.searchParams.delete('saved');url.searchParams.set('board',selectedBoard);history.replaceState(null,'',url.pathname+url.search+url.hash);
   }
+  function selectSaved(){
+    savedOnly=true;get('board-kind').value='';
+    ['board-general','board-question'].forEach(id=>get(id).setAttribute('aria-pressed','false'));
+    get('board-saved').setAttribute('aria-pressed','true');get('board-title').textContent='저장한 글';
+    get('board-description').textContent='다시 보고 싶은 여행 후기와 질문을 모아봤어요. 저장 목록은 나에게만 보여요.';
+    get('write-post').textContent='글쓰기';
+    const url=new URL(location.href);url.searchParams.set('saved','1');history.replaceState(null,'',url.pathname+url.search+url.hash);
+  }
+  get('board-saved').addEventListener('click',async()=>{
+    clear();try{requireLogin();page=0;selectSaved();++detailVersion;detail=null;get('post-detail').hidden=true;await list();}catch(e){error(e);}
+  });
   [['board-general','GENERAL'],['board-question','QUESTION']].forEach(([id,kind])=>get(id).addEventListener('click',async()=>{
     clear();page=0;selectBoard(kind);++detailVersion;detail=null;get('post-detail').hidden=true;
     try{await list();}catch(e){error(e);}
   }));
-  get('account-toggle').addEventListener('click',async()=>{clear();try{if(me.authenticated){await api('/api/auth/logout','POST');await token();await auth();get('post-editor').hidden=true;get('post-detail').hidden=true;detail=null;await list();}else get('account-panel').hidden=!get('account-panel').hidden;}catch(e){error(e);}});
+  get('account-toggle').addEventListener('click',async()=>{clear();try{if(me.authenticated){await api('/api/auth/logout','POST');await token();await auth();get('post-editor').hidden=true;get('post-detail').hidden=true;detail=null;if(savedOnly){page=0;selectBoard('GENERAL');}await list();}else get('account-panel').hidden=!get('account-panel').hidden;}catch(e){error(e);}});
   get('account-form').addEventListener('submit',async event=>{
     event.preventDefault();clear();const button=event.submitter;const type=button?.value||'login';if(button)button.disabled=true;
     try{
@@ -127,7 +153,7 @@
   get('page-prev').addEventListener('click',async()=>{clear();page=Math.max(0,page-1);try{await list();}catch(e){error(e);}});
   get('page-next').addEventListener('click',async()=>{clear();if(page+1<pages)page++;try{await list();}catch(e){error(e);}});
   (async()=>{try{
-    selectBoard(initialBoard);await token();await auth();await socialProviders();
+    selectBoard(initialBoard);if(initialSaved)selectSaved();await token();await auth();await socialProviders();
     const loginError=new URLSearchParams(location.search).get('loginError');
     if(loginError){get('account-panel').hidden=false;error(new Error(loginError==='unavailable'?'아직 연결되지 않은 소셜 로그인이에요.':'소셜 로그인을 완료하지 못했어요. 다시 시도해 주세요.'));const url=new URL(location.href);url.searchParams.delete('loginError');history.replaceState(null,'',url.pathname+url.search+url.hash);}
     const destinations=await api('/api/destinations');
