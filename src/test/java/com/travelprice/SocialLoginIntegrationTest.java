@@ -22,7 +22,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.*;
 
-@SpringBootTest(properties={"KAKAO_CLIENT_ID=test-kakao","KAKAO_CLIENT_SECRET=test-kakao-secret","GOOGLE_CLIENT_ID=test-google","GOOGLE_CLIENT_SECRET=test-google-secret"})
+@SpringBootTest(properties={"NAVER_CLIENT_ID=test-naver","NAVER_CLIENT_SECRET=test-naver-secret","GOOGLE_CLIENT_ID=test-google","GOOGLE_CLIENT_SECRET=test-google-secret"})
 @AutoConfigureMockMvc @ActiveProfiles("test")
 class SocialLoginIntegrationTest {
     @Autowired MockMvc mvc;
@@ -38,18 +38,18 @@ class SocialLoginIntegrationTest {
     @BeforeEach void cleanup(){chatMessages.deleteAll();chatMemberships.deleteAll();chatRooms.deleteAll();comments.deleteAll();posts.deleteAll();photos.deleteAll();members.deleteAll();}
     @Test void identitiesAreStableSeparateAndAlwaysNewRegularMembers(){
         var first=social.resolve("google","12345");var again=social.resolve("google","12345");
-        var other=social.resolve("kakao","12345");var caseSensitive=social.resolve("google","abc");var capital=social.resolve("google","ABC");
+        var other=social.resolve("naver","12345");var caseSensitive=social.resolve("google","abc");var capital=social.resolve("google","ABC");
         assertThat(first.getId()).isEqualTo(again.getId()).isNotEqualTo(other.getId());
         assertThat(caseSensitive.getId()).isNotEqualTo(capital.getId());
         assertThat(first.getRole()).isEqualTo(Member.Role.MEMBER);assertThat(members.count()).isEqualTo(4);
-        assertThatThrownBy(()->social.resolve("naver","12345")).isInstanceOf(OAuth2AuthenticationException.class);
+        assertThatThrownBy(()->social.resolve("unsupported","12345")).isInstanceOf(OAuth2AuthenticationException.class);
         assertThatThrownBy(()->social.resolve("google","")).isInstanceOf(OAuth2AuthenticationException.class);
     }
     @Test void socialSessionCanWriteAnonymouslyButCannotUseAdminOrPasswordLogin()throws Exception{
-        var member=social.resolve("kakao","provider-account");
+        var member=social.resolve("naver","provider-account");
         var principal=new DefaultOAuth2User(List.of(new SimpleGrantedAuthority("ROLE_MEMBER")),Map.of("localLoginId",member.getLoginId()),"localLoginId");
         mvc.perform(get("/api/auth/me").with(oauth2Login().oauth2User(principal)))
-            .andExpect(jsonPath("$.authenticated").value(true)).andExpect(jsonPath("$.authProvider").value("kakao")).andExpect(jsonPath("$.loginId").value("카카오 계정"));
+            .andExpect(jsonPath("$.authenticated").value(true)).andExpect(jsonPath("$.authProvider").value("naver")).andExpect(jsonPath("$.loginId").value("네이버 계정"));
         mvc.perform(post("/api/community/posts").with(oauth2Login().oauth2User(principal)).with(csrf()).contentType(MediaType.APPLICATION_JSON)
             .content("{\"kind\":\"GENERAL\",\"category\":\"OTHER\",\"title\":\"소셜 로그인 글\",\"body\":\"소셜 계정으로 작성한 이야기\"}"))
             .andExpect(status().isCreated()).andExpect(jsonPath("$.author").value("익명")).andExpect(jsonPath("$.mine").value(true));
@@ -59,12 +59,12 @@ class SocialLoginIntegrationTest {
             .andExpect(status().isUnauthorized());
     }
     @Test void configuredProvidersUseAuthorizationCodeRedirectsAndSafeBoardReturn()throws Exception{
-        mvc.perform(get("/api/auth/social/providers")).andExpect(jsonPath("$.kakao").value(true)).andExpect(jsonPath("$.google").value(true))
+        mvc.perform(get("/api/auth/social/providers")).andExpect(jsonPath("$.naver").value(true)).andExpect(jsonPath("$.google").value(true))
             .andExpect(content().string(org.hamcrest.Matchers.not(org.hamcrest.Matchers.containsString("secret"))));
-        var start=mvc.perform(get("/auth/social/kakao").param("board","question")).andExpect(redirectedUrl("/oauth2/authorization/kakao")).andReturn();
+        var start=mvc.perform(get("/auth/social/naver").param("board","question")).andExpect(redirectedUrl("/oauth2/authorization/naver")).andReturn();
         assertThat(start.getRequest().getSession().getAttribute(SocialLoginController.RETURN_BOARD)).isEqualTo("question");
-        mvc.perform(get("/oauth2/authorization/kakao")).andExpect(status().is3xxRedirection())
-            .andExpect(header().string("Location",org.hamcrest.Matchers.startsWith("https://kauth.kakao.com/oauth/authorize?")))
+        mvc.perform(get("/oauth2/authorization/naver")).andExpect(status().is3xxRedirection())
+            .andExpect(header().string("Location",org.hamcrest.Matchers.startsWith("https://nid.naver.com/oauth2.0/authorize?")))
             .andExpect(header().string("Location",org.hamcrest.Matchers.containsString("state=")));
         mvc.perform(get("/oauth2/authorization/google")).andExpect(status().is3xxRedirection())
             .andExpect(header().string("Location",org.hamcrest.Matchers.startsWith("https://accounts.google.com/o/oauth2/v2/auth?")));
@@ -75,7 +75,7 @@ class SocialLoginIntegrationTest {
         assertThat(request.getSession().getAttribute(SocialLoginController.RETURN_BOARD)).isNull();
     }
     @Test void unsolicitedCallbackCannotCreateAMember()throws Exception{
-        mvc.perform(get("/login/oauth2/code/kakao").param("code","untrusted").param("state","untrusted"))
+        mvc.perform(get("/login/oauth2/code/naver").param("code","untrusted").param("state","untrusted"))
             .andExpect(redirectedUrl("/community?board=free&loginError=social#board"));
         assertThat(members.count()).isZero();
     }
@@ -86,7 +86,7 @@ class SocialLoginIntegrationTest {
         assertThat(SocialLoginController.returnPath(request,false)).isEqualTo("/chat?room=12#messages");assertThat(session.getAttribute(SocialLoginController.RETURN_NEXT)).isNull();
         request.getSession().setAttribute(SocialLoginController.RETURN_NEXT,"/visit-reviews?destination=seomun");
         assertThat(SocialLoginController.returnPath(request,true)).isEqualTo("/login?next=%2Fvisit-reviews%3Fdestination%3Dseomun&loginError=social");
-        var unsafe=mvc.perform(get("/auth/social/kakao").param("next","https://evil.example")).andExpect(redirectedUrl("/oauth2/authorization/kakao")).andReturn();
+        var unsafe=mvc.perform(get("/auth/social/naver").param("next","https://evil.example")).andExpect(redirectedUrl("/oauth2/authorization/naver")).andReturn();
         assertThat(unsafe.getRequest().getSession().getAttribute(SocialLoginController.RETURN_NEXT)).isEqualTo("/");
     }
 }

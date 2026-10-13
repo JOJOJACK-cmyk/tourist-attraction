@@ -18,6 +18,7 @@ import org.springframework.security.oauth2.client.userinfo.*;
 import org.springframework.security.oauth2.client.oidc.userinfo.*;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.oauth2.core.oidc.user.OidcUser;
+import org.springframework.security.oauth2.client.endpoint.RestClientAuthorizationCodeTokenResponseClient;
 
 @Configuration
 public class SecurityConfig {
@@ -37,6 +38,7 @@ public class SecurityConfig {
     }
     @Bean SecurityFilterChain security(HttpSecurity http,SecurityContextRepository contexts,CsrfTokenRepository tokens,
             SocialLoginConfig.Registrations registrations,
+            RestClientAuthorizationCodeTokenResponseClient socialTokenResponseClient,
             OAuth2UserService<OAuth2UserRequest,OAuth2User> socialOAuthUserService,
             OAuth2UserService<OidcUserRequest,OidcUser> socialOidcUserService) throws Exception {
         http.securityContext(c->c.securityContextRepository(contexts))
@@ -54,6 +56,7 @@ public class SecurityConfig {
             .logout(l->l.logoutUrl("/api/auth/logout").logoutSuccessHandler((req,res,auth)->{res.setContentType("application/json");res.getWriter().write("{\"success\":true}");}));
         if(registrations.enabled())http.oauth2Login(o->o.clientRegistrationRepository(registrations)
             .loginPage("/login")
+            .tokenEndpoint(t->t.accessTokenResponseClient(socialTokenResponseClient))
             .userInfoEndpoint(u->u.userService(socialOAuthUserService).oidcUserService(socialOidcUserService))
             .successHandler((req,res,auth)->res.sendRedirect(SocialLoginController.returnPath(req,false)))
             .failureHandler((req,res,x)->res.sendRedirect(SocialLoginController.returnPath(req,true))));

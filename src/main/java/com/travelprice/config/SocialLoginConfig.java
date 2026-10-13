@@ -11,6 +11,8 @@ import org.springframework.security.oauth2.core.*;
 import org.springframework.security.oauth2.core.user.*;
 import org.springframework.security.oauth2.core.oidc.user.*;
 import org.springframework.security.config.oauth2.client.CommonOAuth2Provider;
+import org.springframework.security.oauth2.client.endpoint.RestClientAuthorizationCodeTokenResponseClient;
+import org.springframework.util.LinkedMultiValueMap;
 import java.util.*;
 
 @Configuration
@@ -18,13 +20,13 @@ public class SocialLoginConfig {
     public static final class Registrations implements ClientRegistrationRepository,Iterable<ClientRegistration>{
         private final Map<String,ClientRegistration> clients=new LinkedHashMap<>();
         public Registrations(Environment env){
-            var kakaoId=env.getProperty("KAKAO_CLIENT_ID","").trim();var kakaoSecret=env.getProperty("KAKAO_CLIENT_SECRET","").trim();
-            if(!kakaoId.isEmpty() && !kakaoSecret.isEmpty())clients.put("kakao",ClientRegistration.withRegistrationId("kakao")
-                .clientId(kakaoId).clientSecret(kakaoSecret).clientName("카카오")
+            var naverId=env.getProperty("NAVER_CLIENT_ID","").trim();var naverSecret=env.getProperty("NAVER_CLIENT_SECRET","").trim();
+            if(!naverId.isEmpty() && !naverSecret.isEmpty())clients.put("naver",ClientRegistration.withRegistrationId("naver")
+                .clientId(naverId).clientSecret(naverSecret).clientName("네이버")
                 .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_POST).authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
                 .redirectUri("{baseUrl}/login/oauth2/code/{registrationId}")
-                .authorizationUri("https://kauth.kakao.com/oauth/authorize").tokenUri("https://kauth.kakao.com/oauth/token")
-                .userInfoUri("https://kapi.kakao.com/v2/user/me").userNameAttributeName("id").build());
+                .authorizationUri("https://nid.naver.com/oauth2.0/authorize").tokenUri("https://nid.naver.com/oauth2.0/token")
+                .userInfoUri("https://openapi.naver.com/v1/nid/me").userNameAttributeName("response").build());
             var googleId=env.getProperty("GOOGLE_CLIENT_ID","").trim();var googleSecret=env.getProperty("GOOGLE_CLIENT_SECRET","").trim();
             if(!googleId.isEmpty() && !googleSecret.isEmpty())clients.put("google",CommonOAuth2Provider.GOOGLE.getBuilder("google")
                 .clientId(googleId).clientSecret(googleSecret).scope("openid").build());
@@ -35,13 +37,25 @@ public class SocialLoginConfig {
         public boolean enabled(){return !clients.isEmpty();}
     }
     @Bean Registrations socialRegistrations(Environment env){return new Registrations(env);}
+    @Bean RestClientAuthorizationCodeTokenResponseClient socialTokenResponseClient(){
+        var client=new RestClientAuthorizationCodeTokenResponseClient();
+        client.addParametersConverter(grant->{var parameters=new LinkedMultiValueMap<String,String>();
+            if("naver".equals(grant.getClientRegistration().getRegistrationId()))parameters.add("state",grant.getAuthorizationExchange().getAuthorizationRequest().getState());
+            return parameters;
+        });return client;
+    }
+    public static String naverSubject(Map<String,Object> attributes){
+        if(!"00".equals(attributes.get("resultcode"))||!(attributes.get("response") instanceof Map<?,?> response)||!(response.get("id") instanceof String id)||id.isBlank()||id.length()>255)
+            throw new OAuth2AuthenticationException(new OAuth2Error("invalid_naver_identity"));
+        return id;
+    }
     @Bean OAuth2UserService<OAuth2UserRequest,OAuth2User> socialOAuthUserService(SocialMemberService members){
         var delegate=new DefaultOAuth2UserService();
         return request->{
             var remote=delegate.loadUser(request);var provider=request.getClientRegistration().getRegistrationId();
-            if(!"kakao".equals(provider))throw new OAuth2AuthenticationException(new OAuth2Error("unsupported_provider"));
-            var member=members.resolve(provider,remote.getName());
-            // Only the local identity and role are retained in the Kakao session principal.
+            if(!"naver".equals(provider))throw new OAuth2AuthenticationException(new OAuth2Error("unsupported_provider"));
+            var member=members.resolve(provider,naverSubject(remote.getAttributes()));
+            // Only the local identity and role are retained in the Naver session principal.
             return new DefaultOAuth2User(List.of(new SimpleGrantedAuthority("ROLE_"+member.getRole().name())),Map.of("localLoginId",member.getLoginId()),"localLoginId");
         };
     }

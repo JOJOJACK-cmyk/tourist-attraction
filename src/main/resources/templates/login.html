@@ -4,8 +4,8 @@
   <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
   <title>로그인 · 회원가입 | 여행온도</title>
   <link rel="icon" href="/favicon.svg?v=travel-temperature-1" type="image/svg+xml">
-  <link rel="stylesheet" href="/css/style.css?v=login-1">
-  <script src="/js/login.js?v=login-1" defer></script>
+  <link rel="stylesheet" href="/css/style.css?v=naver-google-1">
+  <script src="/js/login.js?v=naver-google-1" defer></script>
 </head>
 <body class="login-page" th:attr="data-next=${loginNext}">
 <a class="skip-link" href="#auth-title">로그인으로 바로 가기</a>
@@ -17,7 +17,7 @@
       <div class="login-tabs" role="tablist" aria-label="로그인 또는 회원가입"><button id="auth-tab-login" type="button" role="tab" aria-selected="true" aria-controls="auth-panel">로그인</button><button id="auth-tab-signup" type="button" role="tab" aria-selected="false" aria-controls="auth-panel">회원가입</button></div>
       <div id="auth-panel" role="tabpanel" aria-labelledby="auth-tab-login">
         <h2 id="auth-title">로그인</h2><p id="auth-description" class="small">아이디와 비밀번호로 시작해요.</p>
-        <div class="social-login-buttons"><a id="auth-social-kakao" class="social-login kakao" href="/auth/social/kakao" hidden><span aria-hidden="true">●</span>카카오로 시작하기</a><a id="auth-social-google" class="social-login google" href="/auth/social/google" hidden><span aria-hidden="true">G</span>구글로 시작하기</a></div><p id="auth-social-note" class="small" role="status"></p>
+        <div class="social-login-buttons"><a id="auth-social-naver" class="social-login naver" href="/auth/social/naver" hidden><span aria-hidden="true">N</span>네이버로 시작하기</a><a id="auth-social-google" class="social-login google" href="/auth/social/google" hidden><span aria-hidden="true">G</span>구글로 시작하기</a></div><p id="auth-social-note" class="small" role="status"></p>
         <div class="account-divider"><span>아이디로 로그인 · 회원가입</span></div>
         <form id="auth-form" class="community-form">
           <label>아이디<input id="auth-id" autocomplete="username" required minlength="3" maxlength="30" pattern="[a-z0-9_]{3,30}" placeholder="영문 소문자·숫자·밑줄 3~30자"></label>

@@ -53,8 +53,8 @@ class LoginPageIntegrationTest {
         mvc.perform(post("/api/auth/logout").session(session).header(fresh.get("headerName").asText(),fresh.get("token").asText())).andExpect(status().isOk());
     }
     @Test void unavailableSocialLoginReturnsToTheDedicatedPage()throws Exception{
-        mvc.perform(get("/auth/social/kakao").param("next","/visit-reviews?destination=seomun"))
+        mvc.perform(get("/auth/social/naver").param("next","/visit-reviews?destination=seomun"))
             .andExpect(redirectedUrl("/login?next=%2Fvisit-reviews%3Fdestination%3Dseomun&loginError=unavailable"));
-        mvc.perform(get("/auth/social/kakao").param("next","//evil.example")).andExpect(redirectedUrl("/login?next=%2F&loginError=unavailable"));
+        mvc.perform(get("/auth/social/naver").param("next","//evil.example")).andExpect(redirectedUrl("/login?next=%2F&loginError=unavailable"));
     }
 }

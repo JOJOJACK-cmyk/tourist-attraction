@@ -73,8 +73,8 @@
   async function socialProviders(){
     try{
       const providers=await api('/api/auth/social/providers');
-      ['kakao','google'].forEach(provider=>{get('social-'+provider).hidden=!providers[provider];});
-      get('social-login-note').textContent=providers.kakao||providers.google?'소셜 로그인 후에도 글과 댓글은 익명으로 표시돼요.':'소셜 로그인은 준비 중이에요. 아이디로 로그인할 수 있어요.';
+      ['naver','google'].forEach(provider=>{get('social-'+provider).hidden=!providers[provider];});
+      get('social-login-note').textContent=providers.naver||providers.google?'소셜 로그인 후에도 글과 댓글은 익명으로 표시돼요.':'소셜 로그인은 준비 중이에요. 아이디로 로그인할 수 있어요.';
     }catch{get('social-login-note').textContent='소셜 로그인 상태를 확인하지 못했어요. 아이디로 로그인할 수 있어요.';}
   }
   function selectBoard(kind){
@@ -85,7 +85,7 @@
     get('board-description').textContent=question?'여행지, 먹거리, 가격과 주차까지 궁금한 것을 물어보세요.':'후기, 여행 팁, 소소한 일상까지 편하게 나눠보세요.';
     get('write-post').textContent=question?'질문하기':'글쓰기';
     const selectedBoard=question?'question':'free';
-    ['kakao','google'].forEach(provider=>{get('social-'+provider).href='/auth/social/'+provider+'?board='+selectedBoard;});
+    ['naver','google'].forEach(provider=>{get('social-'+provider).href='/auth/social/'+provider+'?board='+selectedBoard;});
     const url=new URL(location.href);url.searchParams.set('board',selectedBoard);history.replaceState(null,'',url.pathname+url.search+url.hash);
   }
   [['board-general','GENERAL'],['board-question','QUESTION']].forEach(([id,kind])=>get(id).addEventListener('click',async()=>{

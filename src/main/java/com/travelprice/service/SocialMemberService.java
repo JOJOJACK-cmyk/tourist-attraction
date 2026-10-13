@@ -19,7 +19,7 @@ public class SocialMemberService {
     private final MemberRepository members;private final PasswordEncoder encoder;private final TransactionTemplate transactions;
     public SocialMemberService(MemberRepository members,PasswordEncoder encoder,PlatformTransactionManager manager){this.members=members;this.encoder=encoder;this.transactions=new TransactionTemplate(manager);}
     public Member resolve(String provider,String subject){
-        if(!("kakao".equals(provider)||"google".equals(provider)) || subject==null || subject.isBlank() || subject.length()>255)
+        if(!("naver".equals(provider)||"google".equals(provider)) || subject==null || subject.isBlank() || subject.length()>255)
             throw new OAuth2AuthenticationException(new OAuth2Error("invalid_social_identity"));
         final String identity;
         try{identity=HexFormat.of().formatHex(MessageDigest.getInstance("SHA-256").digest(subject.getBytes(StandardCharsets.UTF_8)));}

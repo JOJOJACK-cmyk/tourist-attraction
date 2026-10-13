@@ -14,7 +14,7 @@ public class SocialLoginController {
     private final Registrations registrations;
     public SocialLoginController(Registrations registrations){this.registrations=registrations;}
     @GetMapping("/api/auth/social/providers") @ResponseBody
-    public Map<String,Boolean> providers(){return Map.of("kakao",registrations.available("kakao"),"google",registrations.available("google"));}
+    public Map<String,Boolean> providers(){return Map.of("naver",registrations.available("naver"),"google",registrations.available("google"));}
     @GetMapping("/auth/social/{provider}")
     public void start(@PathVariable String provider,@RequestParam(defaultValue="free")String board,@RequestParam(required=false)String next,HttpServletRequest request,HttpServletResponse response)throws IOException{
         var target="question".equals(board)?"question":"free";
