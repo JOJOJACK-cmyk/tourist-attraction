@@ -30,7 +30,7 @@ class LoginPageIntegrationTest {
             .andExpect(content().string(containsString("data-next=\"/visit-reviews?destination=seomun&amp;write=1\"")));
         mvc.perform(get("/js/login.js")).andExpect(status().isOk());
         for(String page:new String[]{"/","/community","/chat","/visit-reviews","/destinations/seomun","/support"})mvc.perform(get(page)).andExpect(status().isOk()).andExpect(content().string(containsString("로그인 · 회원가입</a>")));
-        mvc.perform(get("/visit-reviews").param("destination","seomun")).andExpect(content().string(containsString("/login?next=%2Fvisit-reviews%3Fdestination%3Dseomun")));
+        mvc.perform(get("/visit-reviews?destination=seomun")).andExpect(content().string(containsString("/login?next=%2Fvisit-reviews%3Fdestination%3Dseomun")));
     }
     @Test void returnDestinationRejectsExternalAndUnexpectedPaths()throws Exception{
         for(String path:new String[]{"https://evil.example","//evil.example","/\\evil.example","/%2f%2fevil.example","/api/auth/logout","/login?next=//evil.example","/chat\r\nX-Test: yes"}){
