@@ -15,7 +15,7 @@
     if(!response.ok)throw new Error(data.error||'요청을 처리하지 못했어요.');return data;
   }
   async function auth(){
-    me=await api('/api/auth/me');get('visit-account-state').textContent=me.authenticated?'로그인했어요 · '+me.loginId:'공개 후기는 누구나 볼 수 있고, 작성은 로그인 후 가능해요.';
+    me=await api('/api/auth/me');get('visit-account-state').textContent=me.authenticated?'로그인했어요 · '+(me.nickname||me.loginId):'공개 후기는 누구나 볼 수 있고, 작성은 로그인 후 가능해요.';
     get('visit-account-toggle').textContent=me.authenticated?'로그아웃':'로그인 · 회원가입';get('visit-account-panel').hidden=true;get('visit-tab-admin').hidden=!me.admin;
   }
   function requireLogin(){if(me.authenticated)return;get('visit-account-panel').hidden=false;get('visit-account-panel').scrollIntoView({block:'start'});throw new Error('로그인하고 방문 후기를 남겨주세요.');}

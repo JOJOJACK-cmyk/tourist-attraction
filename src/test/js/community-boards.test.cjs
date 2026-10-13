@@ -7,15 +7,15 @@ class Element{
 const ids=[...fs.readFileSync(path.join(root,'templates/community.html'),'utf8').matchAll(/id="([^"]+)"/g)].map(m=>m[1]);
 const elements=Object.fromEntries(ids.map(id=>[id,new Element()]));
 const requests=[];let saved;
-const base={id:99,kind:'GENERAL',category:'OTHER',destination:null,destinationId:null,title:'여행 이야기',body:'여행 준비 이야기',createdAt:'2026-10-02',mine:true};
+const base={id:99,kind:'GENERAL',category:'OTHER',destination:null,destinationId:null,title:'여행 이야기',body:'여행 준비 이야기',createdAt:'2026-10-02',mine:true,author:'봄여행자'};
 const ctx=vm.createContext({URL,URLSearchParams,FormData,location:{href:'http://localhost/community?board=question',search:'?board=question'},history:{replaceState(){}},document:{getElementById:id=>{assert.ok(elements[id],id);return elements[id];},createElement:()=>new Element()},fetch:async(url,options)=>{
  requests.push(url);let data;
  if(url==='/api/auth/social/providers')data={naver:true,google:false};
  else if(url==='/api/auth/csrf')data={headerName:'X-CSRF-TOKEN',token:'token'};
- else if(url==='/api/auth/me')data={authenticated:true,loginId:'alice'};
+ else if(url==='/api/auth/me')data={authenticated:true,loginId:'alice',nickname:'봄여행자'};
  else if(url==='/api/destinations')data=[{slug:'sokcho',name:'속초시장'}];
  else if(options.method==='POST'){saved=JSON.parse(options.body);assert.equal(options.headers['X-CSRF-TOKEN'],'token');data={...base,...saved};}
- else if(url.endsWith('/comments'))data=[];
+ else if(url.endsWith('/comments'))data=[{id:1,body:'함께 여행해요',author:'겨울여행자',createdAt:'2026-10-02',canDelete:false}];
  else if(url==='/api/community/posts/99')data={...base,...saved};
  else {const query=new URL(url,'http://localhost').searchParams;assert.ok(['GENERAL','QUESTION'].includes(query.get('kind')));data={content:[{...base,kind:query.get('kind')}],totalPages:2,totalElements:13};}
  return {ok:true,status:200,json:async()=>data};
@@ -31,5 +31,6 @@ const settle=async()=>{for(let i=0;i<8;i++)await new Promise(r=>setImmediate(r))
  elements['post-title'].value='여행 이야기';elements['post-body'].value='여행 준비 이야기';elements['post-kind'].value='QUESTION';
  await elements['post-form'].listeners.submit({preventDefault(){}});
  assert.equal(saved.kind,'QUESTION');assert.equal(saved.destinationId,'');assert.equal(elements['board-kind'].value,'QUESTION');assert.equal(elements['board-error'].hidden,true);
+ const walk=e=>[e,...e.children.flatMap(walk)];assert.ok(elements['account-state'].textContent.includes('봄여행자'));assert.ok(walk(elements['post-content']).some(e=>e.textContent.includes('봄여행자')));assert.ok(walk(elements['comment-list']).some(e=>e.textContent.includes('겨울여행자')));
  console.log('Community boards: direct link, tabs, pagination reset, optional tag, CSRF save and moved-board refresh passed');
 })().catch(e=>{console.error(e);process.exitCode=1});

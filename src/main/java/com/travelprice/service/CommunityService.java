@@ -77,7 +77,7 @@ public class CommunityService {
     private void requireOwner(CommunityPost post,Member member){if(!post.getAuthor().getId().equals(member.getId()))throw new ApiException(403,"본인 글만 수정·삭제할 수 있어요.");}
     private PostView view(CommunityPost p,Member viewer,boolean preview){
         boolean mine=viewer!=null && p.getAuthor().getId().equals(viewer.getId());var body=p.getBody();if(preview && body.length()>140)body=body.substring(0,140)+"…";
-        return new PostView(p.getId(),p.getDestination()==null?null:p.getDestination().getSlug(),p.getDestination()==null?null:p.getDestination().getName(),p.getKind().boardKind(),p.getCategory(),p.getTitle(),body,p.getVisitedAt(),p.getImageKey()==null?null:"/api/community/images/"+p.getImageKey(),"익명",mine,p.isHidden(),viewer!=null&&viewer.isAdmin(),p.getCreatedAt(),p.getUpdatedAt());
+        return new PostView(p.getId(),p.getDestination()==null?null:p.getDestination().getSlug(),p.getDestination()==null?null:p.getDestination().getName(),p.getKind().boardKind(),p.getCategory(),p.getTitle(),body,p.getVisitedAt(),p.getImageKey()==null?null:"/api/community/images/"+p.getImageKey(),p.getAuthor().getDisplayName(),mine,p.isHidden(),viewer!=null&&viewer.isAdmin(),p.getCreatedAt(),p.getUpdatedAt());
     }
-    private CommentView comment(CommunityComment c,Member viewer){return new CommentView(c.getId(),c.getBody(),"익명",viewer!=null && (viewer.isAdmin() || c.getAuthor().getId().equals(viewer.getId())),c.getCreatedAt());}
+    private CommentView comment(CommunityComment c,Member viewer){return new CommentView(c.getId(),c.getBody(),c.getAuthor().getDisplayName(),viewer!=null && (viewer.isAdmin() || c.getAuthor().getId().equals(viewer.getId())),c.getCreatedAt());}
 }

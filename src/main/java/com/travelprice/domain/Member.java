@@ -11,6 +11,8 @@ public class Member {
     @Enumerated(EnumType.STRING) @Column(nullable=false,length=10) private Role role;
     @Column(name="social_provider",length=16) private String socialProvider;
     @Column(name="social_subject",length=64) private String socialSubject;
+    @Column(length=16) private String nickname;
+    @Column(name="nickname_key",unique=true,length=16) private String nicknameKey;
     protected Member() {}
     public Member(String loginId,String passwordHash,Role role){this.loginId=loginId;this.passwordHash=passwordHash;this.role=role;}
     public static Member social(String loginId,String passwordHash,String provider,String subject){
@@ -21,4 +23,7 @@ public class Member {
     public Long getId(){return id;} public String getLoginId(){return loginId;}
     public String getPasswordHash(){return passwordHash;} public Role getRole(){return role;}
     public boolean isAdmin(){return role==Role.ADMIN;}
+    public String getNickname(){return nickname;}
+    public String getDisplayName(){return nickname==null||nickname.isBlank()?"익명":nickname;}
+    public void setNickname(String nickname,String key){this.nickname=nickname;this.nicknameKey=key;}
 }

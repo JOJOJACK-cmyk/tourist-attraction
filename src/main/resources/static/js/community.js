@@ -20,14 +20,14 @@
   }
   async function auth(){
     me=await api('/api/auth/me');
-    get('account-state').textContent=me.authenticated?'로그인했어요 · '+me.loginId:'글과 댓글은 로그인 후 남길 수 있어요.';
+    get('account-state').textContent=me.authenticated?'로그인했어요 · '+(me.nickname||me.loginId):'글과 댓글은 로그인 후 남길 수 있어요.';
     get('account-toggle').textContent=me.authenticated?'로그아웃':'로그인 · 회원가입';
     get('account-panel').hidden=true;get('hidden-filter-label').hidden=!me.admin;
     if(!me.admin)get('board-hidden').checked=false;
   }
   function requireLogin(){if(me.authenticated)return true;get('account-panel').hidden=false;get('account-panel').scrollIntoView({behavior:'smooth',block:'center'});throw new Error('로그인하고 경험을 나눠보세요.');}
   function action(text,fn,cls='filter'){const button=node('button',cls,text);button.type='button';button.addEventListener('click',async()=>{clear();button.disabled=true;try{await fn();}catch(e){error(e);}finally{button.disabled=false;}});return button;}
-  function meta(post){return kinds[post.kind]+' · '+categories[post.category]+(post.destination?' · '+post.destination:'')+' · 익명 · '+date(post.createdAt)+(post.hidden?' · 숨긴 글':'');}
+  function meta(post){return kinds[post.kind]+' · '+categories[post.category]+(post.destination?' · '+post.destination:'')+' · '+(post.author||'익명')+' · '+date(post.createdAt)+(post.hidden?' · 숨긴 글':'');}
   async function list(){
     const version=++listVersion;get('post-list').setAttribute('aria-busy','true');
     const query=new URLSearchParams({page:String(page)});
@@ -55,7 +55,7 @@
     if(me.admin)buttons.append(action(post.hidden?'다시 공개':'숨기기',async()=>{await api('/api/community/posts/'+id+'/visibility','PATCH',{hidden:!post.hidden});await show(id);await list();}));
     content.append(buttons);get('comment-list').replaceChildren();
     if(!comments.length)get('comment-list').append(node('p','small','첫 댓글을 남겨보세요.'));
-    comments.forEach(comment=>{const card=node('article','community-comment');card.append(node('span','small','익명 · '+date(comment.createdAt)),node('p','community-body',comment.body));if(comment.canDelete)card.append(action('댓글 삭제',async()=>{if(!confirm('댓글을 삭제할까요?'))return;await api('/api/community/posts/'+id+'/comments/'+comment.id,'DELETE');await show(id);}));get('comment-list').append(card);});
+    comments.forEach(comment=>{const card=node('article','community-comment');card.append(node('span','small',(comment.author||'익명')+' · '+date(comment.createdAt)),node('p','community-body',comment.body));if(comment.canDelete)card.append(action('댓글 삭제',async()=>{if(!confirm('댓글을 삭제할까요?'))return;await api('/api/community/posts/'+id+'/comments/'+comment.id,'DELETE');await show(id);}));get('comment-list').append(card);});
     get('comment-form').hidden=!me.authenticated||post.hidden;get('comment-body').value='';
     get('post-detail').scrollIntoView({behavior:'smooth',block:'start'});
   }
@@ -74,7 +74,7 @@
     try{
       const providers=await api('/api/auth/social/providers');
       ['naver','google'].forEach(provider=>{get('social-'+provider).hidden=!providers[provider];});
-      get('social-login-note').textContent=providers.naver||providers.google?'소셜 로그인 후에도 글과 댓글은 익명으로 표시돼요.':'소셜 로그인은 준비 중이에요. 아이디로 로그인할 수 있어요.';
+      get('social-login-note').textContent=providers.naver||providers.google?'글과 댓글은 설정한 닉네임으로 표시돼요. 내 계정에서 이름을 정할 수 있어요.':'소셜 로그인은 준비 중이에요. 아이디로 로그인할 수 있어요.';
     }catch{get('social-login-note').textContent='소셜 로그인 상태를 확인하지 못했어요. 아이디로 로그인할 수 있어요.';}
   }
   function selectBoard(kind){

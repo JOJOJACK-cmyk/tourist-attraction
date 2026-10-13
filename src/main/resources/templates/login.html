@@ -4,8 +4,8 @@
   <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
   <title>로그인 · 회원가입 | 여행온도</title>
   <link rel="icon" href="/favicon.svg?v=travel-temperature-1" type="image/svg+xml">
-  <link rel="stylesheet" href="/css/style.css?v=naver-google-1">
-  <script src="/js/login.js?v=naver-google-1" defer></script>
+  <link rel="stylesheet" href="/css/style.css?v=nickname-1">
+  <script src="/js/login.js?v=nickname-1" defer></script>
 </head>
 <body class="login-page" th:attr="data-next=${loginNext}">
 <a class="skip-link" href="#auth-title">로그인으로 바로 가기</a>
@@ -21,13 +21,16 @@
         <div class="account-divider"><span>아이디로 로그인 · 회원가입</span></div>
         <form id="auth-form" class="community-form">
           <label>아이디<input id="auth-id" autocomplete="username" required minlength="3" maxlength="30" pattern="[a-z0-9_]{3,30}" placeholder="영문 소문자·숫자·밑줄 3~30자"></label>
+          <label id="auth-signup-nickname-label" hidden>닉네임 · 선택<input id="auth-signup-nickname" minlength="2" maxlength="16" pattern="[가-힣A-Za-z0-9_]{2,16}" autocomplete="nickname" placeholder="한글·영문·숫자·밑줄 2~16자" disabled><span class="small">나중에 내 계정에서도 설정할 수 있어요.</span></label>
           <label>비밀번호<input id="auth-password" type="password" autocomplete="current-password" required minlength="8" maxlength="64" placeholder="8자 이상"></label>
           <label id="auth-confirm-label" hidden>비밀번호 확인<input id="auth-confirm" type="password" autocomplete="new-password" maxlength="64" disabled></label>
           <button id="auth-submit" class="primary" type="submit" disabled>로그인</button>
         </form>
       </div>
     </div>
-    <div id="auth-signed-in" hidden><span class="eyebrow">내 계정</span><h2>이미 로그인했어요.</h2><p id="auth-account" class="community-body"></p><div class="community-actions"><a id="auth-continue" class="primary" href="/">원래 화면으로 돌아가기 →</a><a id="auth-admin" class="filter" href="/admin/visit-reviews" hidden>관리자 후기 검토</a><button id="auth-logout" class="filter" type="button">로그아웃</button></div></div>
+    <div id="auth-signed-in" hidden><span class="eyebrow">내 계정</span><h2>내 프로필</h2><p id="auth-account" class="community-body"></p>
+      <form id="auth-nickname-form" class="community-form nickname-form"><label>닉네임<input id="auth-nickname" required minlength="2" maxlength="16" pattern="[가-힣A-Za-z0-9_]{2,16}" autocomplete="nickname" placeholder="한글·영문·숫자·밑줄 2~16자"></label><p class="small">게시판·댓글에 표시되는 이름이에요. 채팅방 참여 시 기본 이름으로 사용하며 직접 방문 후기는 익명으로 표시돼요.</p><button id="auth-nickname-save" class="filter" type="submit" disabled>닉네임 저장</button></form>
+      <div class="community-actions"><a id="auth-continue" class="primary" href="/">원래 화면으로 돌아가기 →</a><a id="auth-admin" class="filter" href="/admin/visit-reviews" hidden>관리자 후기 검토</a><button id="auth-logout" class="filter" type="button">로그아웃</button></div></div>
     <p id="auth-error" class="error" role="alert" hidden></p><p id="auth-message" class="small" role="status"></p><button id="auth-retry" class="filter" type="button" hidden>연결 다시 확인</button>
     <p class="login-back"><a href="/">로그인 없이 관광지 둘러보기 →</a></p>
   </section>

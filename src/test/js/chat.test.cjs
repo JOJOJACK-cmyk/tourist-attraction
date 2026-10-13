@@ -8,7 +8,7 @@ const room={id:1,name:'주말 여행',closed:false,owner:true,memberCount:1,invi
 const sample={id:7,body:'<script>문자 그대로</script>',alias:'친구',mine:false,createdAt:'2026-10-02T11:00:00'};
 const ctx=vm.createContext({URL,URLSearchParams,WebSocket:Socket,location:{href:'http://localhost/chat?room=1',search:'?room=1',protocol:'http:',host:'localhost',origin:'http://localhost'},navigator:{},window:{history:{replaceState(){}},addEventListener:(k,fn)=>windows[k]=fn},setTimeout,clearTimeout,setInterval,clearInterval,confirm:()=>true,document:{getElementById:id=>{assert.ok(els[id],id);return els[id];},createElement:tag=>new Element(tag)},fetch:async(url,options)=>{
  requests.push({url,...options});let data;
- if(url==='/api/auth/me')data={authenticated:true,loginId:'alice'};
+ if(url==='/api/auth/me')data={authenticated:true,loginId:'alice',nickname:'봄여행자'};
  else if(url==='/api/auth/csrf')data={headerName:'X-CSRF-TOKEN',token:'csrf'};
  else if(url==='/api/chat/rooms')data=[room];
  else if(url==='/api/chat/rooms/1')data=room;
@@ -20,7 +20,7 @@ const ctx=vm.createContext({URL,URLSearchParams,WebSocket:Socket,location:{href:
 vm.runInContext(fs.readFileSync(path.join(root,'static/js/chat.js'),'utf8'),ctx);
 const settle=async()=>{for(let i=0;i<10;i++)await new Promise(r=>setImmediate(r));};
 (async()=>{try{
- await settle();assert.equal(sockets.length,1);assert.equal(sockets[0].url,'ws://localhost/ws/chat?room=1');assert.equal(els['chat-send'].disabled,true);
+ await settle();assert.equal(els['chat-create-alias'].value,'봄여행자');assert.equal(els['chat-join-alias'].value,'봄여행자');assert.ok(els['chat-account'].textContent.includes('봄여행자'));assert.equal(sockets.length,1);assert.equal(sockets[0].url,'ws://localhost/ws/chat?room=1');assert.equal(els['chat-send'].disabled,true);
  await sockets[0].emit({type:'ready'});assert.equal(els['chat-send'].disabled,false);assert.equal(els['chat-connection'].textContent,'실시간 연결됨');
  await sockets[0].emit({type:'message',message:sample});assert.equal(els['chat-messages'].children.length,1);assert.ok(walk(els['chat-messages']).some(e=>e.textContent===sample.body));
  els['chat-message'].value='함께 출발해요';await els['chat-message-form'].listeners.submit({preventDefault(){}});await sockets[0].emit({type:'message',message:{...sample,id:8,body:'함께 출발해요',mine:true}});assert.equal(els['chat-messages'].children.length,2);assert.equal(els['chat-message'].value,'');
