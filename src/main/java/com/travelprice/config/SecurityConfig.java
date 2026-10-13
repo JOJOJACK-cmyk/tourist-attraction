@@ -53,7 +53,7 @@ public class SecurityConfig {
                 .accessDeniedHandler((req,res,x)->{res.setStatus(403);res.setContentType("application/json;charset=UTF-8");res.getWriter().write("{\"error\":\"권한 또는 로그인 상태를 확인해주세요.\"}");}))
             .logout(l->l.logoutUrl("/api/auth/logout").logoutSuccessHandler((req,res,auth)->{res.setContentType("application/json");res.getWriter().write("{\"success\":true}");}));
         if(registrations.enabled())http.oauth2Login(o->o.clientRegistrationRepository(registrations)
-            .loginPage("/community")
+            .loginPage("/login")
             .userInfoEndpoint(u->u.userService(socialOAuthUserService).oidcUserService(socialOidcUserService))
             .successHandler((req,res,auth)->res.sendRedirect(SocialLoginController.returnPath(req,false)))
             .failureHandler((req,res,x)->res.sendRedirect(SocialLoginController.returnPath(req,true))));

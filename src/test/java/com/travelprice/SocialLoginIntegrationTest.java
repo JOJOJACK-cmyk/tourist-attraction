@@ -79,4 +79,14 @@ class SocialLoginIntegrationTest {
             .andExpect(redirectedUrl("/community?board=free&loginError=social#board"));
         assertThat(members.count()).isZero();
     }
+    @Test void standaloneLoginKeepsSafeDestinationThroughSocialSuccessAndFailure()throws Exception{
+        var start=mvc.perform(get("/auth/social/google").param("next","/chat?room=12#messages")).andExpect(redirectedUrl("/oauth2/authorization/google")).andReturn();
+        var session=start.getRequest().getSession();assertThat(session.getAttribute(SocialLoginController.RETURN_NEXT)).isEqualTo("/chat?room=12#messages");
+        var request=new MockHttpServletRequest();request.setSession((org.springframework.mock.web.MockHttpSession)session);
+        assertThat(SocialLoginController.returnPath(request,false)).isEqualTo("/chat?room=12#messages");assertThat(session.getAttribute(SocialLoginController.RETURN_NEXT)).isNull();
+        request.getSession().setAttribute(SocialLoginController.RETURN_NEXT,"/visit-reviews?destination=seomun");
+        assertThat(SocialLoginController.returnPath(request,true)).isEqualTo("/login?next=%2Fvisit-reviews%3Fdestination%3Dseomun&loginError=social");
+        var unsafe=mvc.perform(get("/auth/social/kakao").param("next","https://evil.example")).andExpect(redirectedUrl("/oauth2/authorization/kakao")).andReturn();
+        assertThat(unsafe.getRequest().getSession().getAttribute(SocialLoginController.RETURN_NEXT)).isEqualTo("/");
+    }
 }

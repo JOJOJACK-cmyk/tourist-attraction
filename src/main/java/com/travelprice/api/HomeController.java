@@ -7,8 +7,10 @@ import com.travelprice.service.MemberService;
 import com.travelprice.service.DestinationGuideCatalog;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.http.HttpStatus;
+import jakarta.servlet.http.HttpServletRequest;
 @Controller
 public class HomeController {
     private final MemberService members;
@@ -16,6 +18,12 @@ public class HomeController {
     public HomeController(MemberService members, DestinationGuideCatalog guides) { this.members=members; this.guides=guides; }
     @ModelAttribute("admin")
     public boolean admin(Authentication auth) { var member=members.current(auth); return member!=null && member.isAdmin(); }
+    @ModelAttribute("signedIn")
+    public boolean signedIn(Authentication auth) { return members.current(auth)!=null; }
+    @ModelAttribute("loginUrl")
+    public String loginUrl(HttpServletRequest request) { var query=request.getQueryString(); return LoginReturnPath.login(request.getRequestURI()+(query==null?"":"?"+query),null); }
+    @GetMapping("/login")
+    public String login(@RequestParam(required=false) String next, Model model) { model.addAttribute("loginNext",LoginReturnPath.safe(next)); return "login"; }
     @GetMapping("/")
     public String home() { return "index"; }
     @GetMapping("/destinations/sokcho")
