@@ -502,7 +502,7 @@ tourist-attraction
 
 | | 이름 | 담당 |
 |:-:|:-:|---|
-| <a href="https://github.com/JOJOJACK-cmyk"><img src="https://github.com/JOJOJACK-cmyk.png" width="80" alt="JOJOJACK" /></a> | **JOJOJACK**<br />[@JOJOJACK-cmyk](https://github.com/JOJOJACK-cmyk) | 기획 · 디자인 · 개발 전반: 후기 집계와 비용 · 방문 분위기, Gemini grounding 검색, Ollama 후기 추출, 관광지 가이드, 커뮤니티, 직접 방문 후기, 그룹 채팅, 소셜 로그인, 카카오페이 후원, 테스트 · CI |
+| <a href="https://github.com/JOJOJACK-cmyk"><img src="https://github.com/JOJOJACK-cmyk.png" width="80" alt="JOJOJACK" /></a> | **박세영**<br />[@JOJOJACK-cmyk](https://github.com/JOJOJACK-cmyk) | 기획 · 디자인 · 개발 전반: 후기 집계와 비용 · 방문 분위기, Gemini grounding 검색, Ollama 후기 추출, 관광지 가이드, 커뮤니티, 직접 방문 후기, 그룹 채팅, 소셜 로그인, 카카오페이 후원, 테스트 · CI |
 
 ---
 
