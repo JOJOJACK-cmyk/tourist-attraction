@@ -4,6 +4,12 @@
 
 <h1>🌡️ 여행온도</h1>
 
+<p>
+  <a href="https://docs.google.com/presentation/d/1jQhYCtxxMoQSMmzNW6W8jJQHY5S5MG6g/edit?rtpof=true&amp;sd=true"><strong>📊 개인 프로젝트 PPT</strong></a>
+  &nbsp;·&nbsp;
+  <a href="https://travelondo2026.duckdns.org/"><strong>🌐 AWS 서비스 접속</strong></a>
+</p>
+
 **여행은 즐겁게, 지갑은 안전하게!<br />관광지 후기에서 식비·숙박비·응대·혼잡도를 한눈에 보고, 직접 다녀온 경험을 나누는 여행 준비 서비스**
 
 ![Java](https://img.shields.io/badge/Java-17%2B-007396?logo=openjdk&logoColor=white)
